@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@drawable/main_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="1080px">
+                <RelativeLayout
+                    android:layout_width="810px"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/img"
+                        android:layout_width="820px"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:text="医院介绍"
+                        android:textColor="#FFFFFF"
+                        android:gravity="center"
+                        android:background="@drawable/bg_radius_downright_right"
+                        android:layout_width="240px"
+                        android:layout_height="100px" />
+                </RelativeLayout>
+                <LinearLayout
+                    android:background="#cc46a8ba"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:textSize="25px"
+                        android:textColor="#FFFFFF"
+                        android:id="@+id/detial"
+                        android:layout_width="1100px"
+                        android:layout_height="1920px" />
+                </LinearLayout>
+            </LinearLayout>
+            <TextView
+                android:background="#cc46a8ba"
+                android:textSize="25px"
+                android:textColor="#FFFFFF"
+                android:id="@+id/detial_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

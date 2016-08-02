@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_bg"
+    android:orientation="horizontal"
+    >
+    <com.video.teach.view.ReFousListView
+        android:nextFocusRight="@+id/grid"
+        android:id="@+id/list"
+        android:layout_width="382px"
+        android:layout_height="match_parent"></com.video.teach.view.ReFousListView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.video.teach.view.SmoothGridView
+            android:nextFocusDown="@+id/up"
+            android:id="@+id/grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></com.video.teach.view.SmoothGridView>
+        <RelativeLayout
+            android:layout_marginLeft="20px"
+            android:background="#cc000000"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="50px">
+            <LinearLayout
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Button
+                    android:nextFocusLeft="@+id/grid"
+                    android:id="@+id/up"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/button_selector_gray"
+                    android:text="上一页"
+                    android:layout_width="120px"
+                    android:layout_height="40px" />
+
+                <TextView
+                    android:layout_marginLeft="20px"
+                    android:text="0"
+                    android:id="@+id/index"
+                    android:textColor="#FFFFFF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:text="/"
+                    android:textColor="#FFFFFF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/all"
+                    android:layout_marginRight="20px"
+                    android:text="0"
+                    android:textColor="#FFFFFF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:nextFocusLeft="@+id/up"
+                    android:id="@+id/down"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/button_selector_gray"
+                    android:text="下一页"
+                    android:layout_width="120px"
+                    android:layout_height="40px" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

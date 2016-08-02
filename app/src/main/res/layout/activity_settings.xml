@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/main_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+   <!-- <com.test.test.MarqueeText
+        android:id="@+id/test"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#339320"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:text="这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的"
+        android:textColor="#000000"
+        android:textSize="20dp"  />-->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_margin="20px"
+            android:focusable="false"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+            <TextView
+                android:textColor="#FFFFFF"
+                android:text="本机IP地址"
+                android:gravity="center"
+                android:layout_width="200px"
+                android:layout_height="match_parent" />
+            <TextView
+                android:textColor="#000000"
+                android:gravity="center_vertical"
+                android:enabled="false"
+                android:background="#FFFFFF"
+                android:id="@+id/ipaddress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:focusable="false"
+            android:layout_margin="20px"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+            <TextView
+                android:textColor="#FFFFFF"
+                android:text="本机MAC地址"
+                android:gravity="center"
+                android:layout_width="200px"
+                android:layout_height="match_parent" />
+            <TextView
+                android:textColor="#000000"
+                android:gravity="center_vertical"
+                android:enabled="false"
+                android:background="#FFFFFF"
+                android:id="@+id/macddress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_margin="20px"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+            <TextView
+                android:textColor="#FFFFFF"
+                android:text="服务器IP地址"
+                android:gravity="center"
+                android:layout_width="200px"
+                android:layout_height="match_parent" />
+            <EditText
+                android:imeOptions="actionDone"
+                android:focusable="true"
+                android:background="@drawable/edit_selector"
+                android:id="@+id/serverip"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_margin="20px"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+            <TextView
+                android:textColor="#FFFFFF"
+                android:text="端口"
+                android:gravity="center"
+                android:layout_width="200px"
+                android:layout_height="match_parent" />
+            <EditText
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:focusable="true"
+                android:background="@drawable/edit_selector"
+                android:id="@+id/serverport"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </LinearLayout>
+    <Button
+        android:background="@drawable/button_selector"
+        android:textColor="#FFFFFF"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/confirm"
+        android:text="保存"
+        android:layout_width="match_parent"
+        android:layout_height="100px" />
+
+</RelativeLayout>
