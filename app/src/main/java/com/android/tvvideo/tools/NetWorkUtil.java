@@ -1,10 +1,10 @@
-package com.android.tvvideo.util;
+package com.android.tvvideo.tools;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.view.WindowManager;
 
-import com.hospital.video.R;
+import com.android.tvvideo.R;
 
 
 /**

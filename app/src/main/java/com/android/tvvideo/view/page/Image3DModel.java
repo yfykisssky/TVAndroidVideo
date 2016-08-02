@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.hospital.video.R;
+import com.android.tvvideo.R;
 
 
 /**
