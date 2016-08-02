@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.android.tvvideo.R;
-import com.android.tvvideo.view.PushService;
+import com.android.tvvideo.tools.PushService;
 
 import java.util.List;
 

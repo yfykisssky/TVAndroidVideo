@@ -1,4 +1,4 @@
-package com.android.tvvideo.view;
+package com.android.tvvideo.tools;
 
 import android.app.Service;
 import android.content.Intent;
