@@ -2,6 +2,7 @@ package com.android.tvvideo.activity;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.android.tvvideo.view.SmoothGridView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.videolan.vlc.gui.video.VideoPlayerActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -306,11 +308,11 @@ public class VideoSelectActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-               /* Intent intent=new Intent();
+                String url=gridData.get(i).getVideoUrl();
+                
+                Uri uri= Uri.parse(url);
 
-                //intent.putExtra();
-
-                startActivity(intent);*/
+                VideoPlayerActivity.start(VideoSelectActivity.this,uri);
 
             }
         });
