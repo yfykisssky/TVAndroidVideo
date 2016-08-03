@@ -1,12 +1,15 @@
 package com.android.tvvideo.activity;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.android.tvvideo.R;
-import com.android.tvvideo.tools.TextViewUtil;
 
+import org.videolan.vlc.gui.video.VideoPlayerActivity;
 
 
 /**
@@ -14,30 +17,22 @@ import com.android.tvvideo.tools.TextViewUtil;
  */
 public class TestActivity extends Activity {
 
-    String text;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_test);
 
-       /* ImageView imgView=(ImageView)findViewById(R.id.img);
+        ((Button)findViewById(R.id.ok)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String data=((EditText)findViewById(R.id.url)).getText().toString();
 
-        ImageLoad.init(this);
+                Uri uri= Uri.parse(data);
 
-        ImageLoad.loadDefultImage("http://nonobank.iask.in/app/img/hospital.jpg",imgView);*/
-
-        /*Intent intent=new Intent(this,InHospitalActivity.class);
-
-        startActivity(intent);*/
-
-        TextView texR=(TextView)findViewById(R.id.detial);
-
-        TextView texB=(TextView)findViewById(R.id.detial_bottom);
-
-        //texR.setText(text);
-
-        new TextViewUtil().setText(text,texR,texB);
+                VideoPlayerActivity.start(TestActivity.this,uri);
+            }
+        });
 
     }
 }
