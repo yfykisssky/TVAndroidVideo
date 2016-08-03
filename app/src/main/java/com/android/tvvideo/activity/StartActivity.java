@@ -35,6 +35,8 @@ public class StartActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        super.setActivityName(this.getClass().getName());
+
         setContentView(R.layout.activity_start);
 
         initView();

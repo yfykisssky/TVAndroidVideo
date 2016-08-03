@@ -1,11 +1,13 @@
 package com.android.tvvideo.tools;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.view.KeyEvent;
@@ -15,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.File;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -200,6 +203,20 @@ public class SystemUtil {
 
         return serverIp+":"+serverPort;
 
+    }
+
+
+    private void installApk(String path,Context context) {
+        File apkfile = new File(path);
+        if (!apkfile.exists()) {
+            return;
+        }
+        // 通过Intent安装APK文件
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.setDataAndType(Uri.parse("file://" + apkfile.toString()),"application/vnd.android.package-archive");
+        context.startActivity(i);
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
 }

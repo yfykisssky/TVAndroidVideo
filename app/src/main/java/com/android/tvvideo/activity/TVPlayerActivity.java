@@ -1,6 +1,5 @@
 package com.android.tvvideo.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.tvvideo.R;
+import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.view.ScrollRelativeLayout;
 
 import java.lang.ref.WeakReference;
@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * Created by yangfengyuan on 16/7/29.
  */
-public class TVPlayerActivity extends Activity {
+public class TVPlayerActivity extends BaseActivity {
 
     ListView listView;
 
@@ -48,6 +48,9 @@ public class TVPlayerActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        super.setActivityName(this.getClass().getName());
+
         setContentView(R.layout.activity_tvplayer);
 
         context = this;

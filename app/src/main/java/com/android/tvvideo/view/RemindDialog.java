@@ -2,33 +2,45 @@ package com.android.tvvideo.view;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
-import java.io.File;
+import com.android.tvvideo.R;
 
 /**
  * Created by yangfengyuan on 16/7/28.
  */
 public class RemindDialog extends Dialog {
 
-    public RemindDialog(Context context) {
-        super(context);
+    TextView remindTex;
 
+    Button confirmBnt;
+
+    public RemindDialog(Context context) {
+        super(context, R.style.Base_Dialog);
+
+        initView();
+    }
+
+    private void initView() {
+
+        setContentView(R.layout.dialog_remind);
+
+        remindTex=(TextView)this.findViewById(R.id.remind);
+
+        confirmBnt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                RemindDialog.this.dismiss();
+            }
+        });
 
     }
 
-    private void installApk(String path,Context context) {
-        File apkfile = new File(path);
-        if (!apkfile.exists()) {
-            return;
-        }
-        // 通过Intent安装APK文件
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.setDataAndType(Uri.parse("file://" + apkfile.toString()),"application/vnd.android.package-archive");
-        context.startActivity(i);
-        android.os.Process.killProcess(android.os.Process.myPid());
+    public void setData(String remind){
+        remindTex.setText(remind);
     }
 
 }

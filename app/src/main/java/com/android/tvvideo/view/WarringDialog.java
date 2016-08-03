@@ -2,10 +2,6 @@ package com.android.tvvideo.view;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.android.tvvideo.R;
 
@@ -30,7 +26,7 @@ public class WarringDialog extends Dialog {
 
     private void initDialog(Context context) {
 
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    /*    this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         this.setContentView(R.layout.dialog_warring);
 
@@ -57,6 +53,6 @@ public class WarringDialog extends Dialog {
             confirm.setVisibility(View.GONE);
         }
 
-        this.setCancelable(false);
+        this.setCancelable(false);*/
     }
 }

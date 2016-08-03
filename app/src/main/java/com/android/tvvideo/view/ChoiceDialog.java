@@ -28,7 +28,7 @@ public class ChoiceDialog extends Dialog {
 
 
     public ChoiceDialog(Context context) {
-        super(context);
+        super(context,R.style.Base_Dialog);
 
         initView();
     }
@@ -65,9 +65,7 @@ public class ChoiceDialog extends Dialog {
 
     }
 
-    public void setData(String url,String name,String price,String intro){
-
-        //imageView
+    public void setData(String name,String price,String intro){
 
         nameTex.setText(name);
 

@@ -1,6 +1,5 @@
 package com.android.tvvideo.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.tvvideo.R;
+import com.android.tvvideo.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Created by yangfengyuan on 16/7/29.
  */
-public class FeedBackActivity extends Activity {
+public class FeedBackActivity extends BaseActivity {
 
     ListView listView;
 
@@ -37,6 +37,9 @@ public class FeedBackActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        super.setActivityName(this.getClass().getName());
+
         setContentView(R.layout.activity_feedback);
 
         context=this;

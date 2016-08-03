@@ -1,13 +1,24 @@
 package com.android.tvvideo.base;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.Toast;
+
+import com.android.tvvideo.tools.PushService;
+
+import java.util.List;
 
 /**
  * Created by yangfengyuan on 16/7/22.
@@ -17,6 +28,13 @@ public class BaseActivity extends Activity {
     AudioManager audio;
 
     int maxVolume;
+
+    String activityName;
+
+    protected void setActivityName(String activityName){
+        this.activityName=activityName;
+    }
+
 
     Handler baseHandler=new Handler(){
         @Override
@@ -31,6 +49,45 @@ public class BaseActivity extends Activity {
 
         }
     };
+
+    BroadcastReceiver pushReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String kind=intent.getStringExtra("kind");
+
+            switch(kind){
+                case "remind":
+                    if(isTopActivity(context,activityName)){
+                        showRemindDialog();
+                    }
+                    break;
+                case "playvideo":
+                    break;
+                case "volume":
+                    break;
+                case "onoff":
+                    break;
+                case "":
+                    break;
+            }
+
+        }
+    };
+
+    private void registerPushReceiver(){
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(PushService.BROAD_CAST_ACTION);
+        registerReceiver(pushReceiver, filter);
+    }
+
+    private void unregisterPushReceiver(){
+        unregisterReceiver(pushReceiver);
+    }
+
+    private void showRemindDialog(){
+
+    }
 
     protected void showToast(String msg){
 
@@ -47,10 +104,19 @@ public class BaseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        registerPushReceiver();
+
         audio = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
 
         //maxVolume=getMaxVolume();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        unregisterPushReceiver();
     }
 
     @Override
@@ -110,6 +176,24 @@ public class BaseActivity extends Activity {
 
     protected int getCurrentVolume(){
         return audio.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+    }
+
+    private static boolean isTopActivity(Context context, String className)
+    {
+        if (context == null || TextUtils.isEmpty(className)) {
+            return false;
+        }
+
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
+        if (list != null && list.size() > 0) {
+            ComponentName cpn = list.get(0).topActivity;
+            if (className.equals(cpn.getClassName())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
