@@ -1,6 +1,5 @@
 package com.android.tvvideo.application;
 
-import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -13,11 +12,13 @@ import com.android.tvvideo.tools.PushService;
 /**
  * Created by yfykisssky on 16/7/23.
  */
-public class MyApplication extends Application {
+public class MyApplication{
 
-    private void initPushService(Context context){
+    static double biggestVolumePercent;
 
-        Intent intent=new Intent(this,PushService.class);
+    private static void initPushService(Context context){
+
+        Intent intent=new Intent(context,PushService.class);
 
         ServiceConnection conn=new ServiceConnection() {
             @Override
@@ -35,16 +36,10 @@ public class MyApplication extends Application {
 
     }
 
-    public void initData(){
+    public static void initData(Context context){
 
-        initPushService(this);
+        initPushService(context);
 
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        initData();
-    }
 }

@@ -16,7 +16,9 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
+import com.android.tvvideo.activity.SettingsActivity;
 import com.android.tvvideo.tools.PushService;
+import com.android.tvvideo.view.RemindDialog;
 
 import java.util.List;
 
@@ -31,10 +33,27 @@ public class BaseActivity extends Activity {
 
     String activityName;
 
+    final String toSettingCode="1234567890";
+
+    String toSettingCodeTmp="";
+
     protected void setActivityName(String activityName){
         this.activityName=activityName;
     }
 
+    private void validateSettingCode(char code){
+        toSettingCodeTmp+=code;
+
+        if(toSettingCodeTmp.indexOf(toSettingCode)!=-1){
+
+            Intent intent=new Intent(this, SettingsActivity.class);
+
+            startActivity(intent);
+
+            toSettingCodeTmp="";
+
+        }
+    }
 
     Handler baseHandler=new Handler(){
         @Override
@@ -59,10 +78,11 @@ public class BaseActivity extends Activity {
             switch(kind){
                 case "remind":
                     if(isTopActivity(context,activityName)){
-                        showRemindDialog();
+                        showRemindDialog("");
                     }
                     break;
                 case "playvideo":
+                    playVideo("");
                     break;
                 case "volume":
                     break;
@@ -85,7 +105,17 @@ public class BaseActivity extends Activity {
         unregisterReceiver(pushReceiver);
     }
 
-    private void showRemindDialog(){
+    private void playVideo(String url){
+
+    }
+
+    private void showRemindDialog(String remind){
+
+        RemindDialog remindDialog=new RemindDialog(this);
+
+        remindDialog.setData(remind);
+
+        remindDialog.show();
 
     }
 
@@ -145,24 +175,34 @@ public class BaseActivity extends Activity {
 
                 return true;
             case KeyEvent.KEYCODE_0:
+                validateSettingCode('0');
                 break;
             case KeyEvent.KEYCODE_1:
+                validateSettingCode('1');
                 break;
             case KeyEvent.KEYCODE_2:
+                validateSettingCode('2');
                 break;
             case KeyEvent.KEYCODE_3:
+                validateSettingCode('3');
                 break;
             case KeyEvent.KEYCODE_4:
+                validateSettingCode('4');
                 break;
             case KeyEvent.KEYCODE_5:
+                validateSettingCode('5');
                 break;
             case KeyEvent.KEYCODE_6:
+                validateSettingCode('6');
                 break;
             case KeyEvent.KEYCODE_7:
+                validateSettingCode('7');
                 break;
             case KeyEvent.KEYCODE_8:
+                validateSettingCode('8');
                 break;
             case KeyEvent.KEYCODE_9:
+                validateSettingCode('9');
                 break;
             default:
                 break;
