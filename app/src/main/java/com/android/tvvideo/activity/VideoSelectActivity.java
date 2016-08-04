@@ -2,6 +2,7 @@ package com.android.tvvideo.activity;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.android.tvvideo.view.SmoothGridView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.videolan.vlc.gui.video.VideoPlayerActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,13 +49,13 @@ public class VideoSelectActivity extends BaseActivity {
 
     SmoothGridView gridView;
 
-    int indexGrid;
-
     GridAdapter gridAdapter;
 
     List<VideoModel> gridData=new ArrayList<>();
 
     List<VideoModel> gridAllData=new ArrayList<>();
+
+    int pageAll=0;
 
     int pageIndex=0;
 
@@ -78,7 +80,25 @@ public class VideoSelectActivity extends BaseActivity {
         context=this;
 
         initView();
+/*
 
+        for(int c=0;c<4;c++){
+            VideoModel videoModel=new VideoModel();
+
+            videoModel.setVideoUrl("");
+
+            videoModel.setTitle(String.valueOf(c));
+
+            gridAllData.add(videoModel);
+        }
+
+        allTex.setText(String.valueOf(gridData.size()));
+
+        gridData=getIndexPageData(pageIndex,pageSize);
+
+        gridAdapter.notifyDataSetChanged();
+
+*/
         getVideoMenus();
 
     }
@@ -159,7 +179,17 @@ public class VideoSelectActivity extends BaseActivity {
 
                     allTex.setText(String.valueOf(gridData.size()));
 
-                    gridData=getUpShowData(pageIndex,pageSize);
+                    pageIndex=0;
+
+                    pageAll=0;
+
+                    gridData=getIndexPageData(pageIndex,pageSize);
+
+                    pageAll=gridAllData.size()/pageSize;
+
+                    if(gridAllData.size()%pageSize!=0){
+                        pageAll++;
+                    }
 
                     gridAdapter.notifyDataSetChanged();
 
@@ -177,57 +207,21 @@ public class VideoSelectActivity extends BaseActivity {
         });
     }
 
-    List<VideoModel> getNextShowData(int index, int pageSize){
+    List<VideoModel> getIndexPageData(int index, int pageSize){
 
         List<VideoModel> datas=new ArrayList<>();
 
         int start=index*pageSize;
 
-        int end=(index+1)*pageSize-1;
+        int end=(index+1)*pageSize;
 
-        if(gridAllData.size()>=start){
-
-            if(gridAllData.size()>=end){
-                datas=gridAllData.subList(start,end);
-            }else{
-                datas=gridAllData.subList(start,gridAllData.size());
-            }
-
-            pageIndex++;
-
+        if(gridAllData.size()>=end){
+            datas=gridAllData.subList(start,end);
         }else{
-            Toast.makeText(this,"没有更多了", Toast.LENGTH_SHORT);
+            datas=gridAllData.subList(start,gridAllData.size());
         }
 
-        indexTex.setText(String.valueOf(pageIndex));
-
-        return datas;
-
-    }
-
-    List<VideoModel> getUpShowData(int index, int pageSize){
-
-        List<VideoModel> datas=new ArrayList<>();
-
-        int start=index*pageSize;
-
-        int end=(index+1)*pageSize-1;
-
-        if(gridAllData.size()>=start){
-
-            if(gridAllData.size()>=end){
-                datas=gridAllData.subList(start,end);
-            }else{
-                datas=gridAllData.subList(start,gridAllData.size());
-            }
-
-            pageIndex--;
-
-        }else{
-            Toast.makeText(this,"没有更多了", Toast.LENGTH_SHORT);
-        }
-
-        indexTex.setText(String.valueOf(pageIndex));
+        indexTex.setText(String.valueOf(pageIndex+1));
 
         return datas;
 
@@ -246,16 +240,32 @@ public class VideoSelectActivity extends BaseActivity {
         upBnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gridData=getUpShowData(pageIndex,pageSize);
+
+                if(pageIndex==0){
+                    return;
+                }else{
+                    Toast.makeText(context,"没有更多了", Toast.LENGTH_SHORT).show();
+                }
+
+                pageIndex--;
+                gridData=getIndexPageData(pageIndex,pageSize);
                 gridAdapter.notifyDataSetChanged();
             }
         });
 
         downBnt.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                gridData=getNextShowData(pageIndex,pageSize);
-                gridAdapter.notifyDataSetChanged();
+
+                if(pageIndex<pageAll-1){
+                    pageIndex++;
+                    gridData=getIndexPageData(pageIndex,pageSize);
+                    gridAdapter.notifyDataSetChanged();
+                }else{
+                    Toast.makeText(context,"没有更多了", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -287,33 +297,19 @@ public class VideoSelectActivity extends BaseActivity {
 
         gridView.setNumColumns(4);
 
-        indexGrid=0;
-
         gridAdapter=new GridAdapter();
 
         gridView.setAdapter(gridAdapter);
-
-        gridView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                indexGrid=i;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-               /* Intent intent=new Intent();
+                String url=gridData.get(i).getVideoUrl();
 
-                //intent.putExtra();
+                Uri uri= Uri.parse(url);
 
-                startActivity(intent);*/
+                VideoPlayerActivity.start(VideoSelectActivity.this,uri);
 
             }
         });
@@ -406,15 +402,5 @@ public class VideoSelectActivity extends BaseActivity {
         ImageView img;
         TextView tex;
     }
-
-/*
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == event. KEYCODE_HOME) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event); // 不会回到 home 页面
-    }
-*/
 
 }

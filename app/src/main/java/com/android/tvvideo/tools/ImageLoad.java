@@ -88,7 +88,7 @@ public class ImageLoad {
 	//加载imageloader默认配置
 	public static void loadDefultImage(String imageUrl, ImageView imageAware){
 
-		//imageUrl=SystemUtil.getServerUrl(con)+"/app/img/"+imageUrl;
+		imageUrl=SystemUtil.getServerUrl(con)+"/app/img/"+imageUrl;
 
 		ImageLoader.getInstance().displayImage(imageUrl, imageAware, options);
 	}

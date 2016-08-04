@@ -6,19 +6,19 @@
     android:background="@drawable/main_bg"
     android:orientation="horizontal"
     >
-    <com.video.teach.view.ReFousListView
+    <com.android.tvvideo.view.ReFousListView
         android:nextFocusRight="@+id/grid"
         android:id="@+id/list"
         android:layout_width="382px"
-        android:layout_height="match_parent"></com.video.teach.view.ReFousListView>
+        android:layout_height="match_parent"></com.android.tvvideo.view.ReFousListView>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.video.teach.view.SmoothGridView
+        <com.android.tvvideo.view.SmoothGridView
             android:nextFocusDown="@+id/up"
             android:id="@+id/grid"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></com.video.teach.view.SmoothGridView>
+            android:layout_height="match_parent"></com.android.tvvideo.view.SmoothGridView>
         <RelativeLayout
             android:layout_marginLeft="20px"
             android:background="#cc000000"

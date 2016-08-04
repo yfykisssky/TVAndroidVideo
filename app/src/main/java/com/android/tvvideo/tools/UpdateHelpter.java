@@ -6,10 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,7 +52,7 @@ public class UpdateHelpter {
                 downLength=msg.arg2;
             }
 
-           if(progressDialog.getMax()==msg.arg2){
+            if(progressDialog.getMax()==msg.arg2){
 
                 progressDialog.dismiss();
 
@@ -112,8 +111,6 @@ public class UpdateHelpter {
         try {
             PackageManager packageManager = context.getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(),0);
-
-            Log.e("versionOld",packageInfo.versionName);
 
             return packageInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
@@ -183,10 +180,42 @@ public class UpdateHelpter {
 
     //安装文件，一般固定写法
     void update(Context context) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(new File(Environment
-                        .getExternalStorageDirectory(),fileName)),
-                "application/vnd.android.package-archive");
+
+        String[] command = {"chmod", "777",context.getFilesDir().getAbsolutePath()};
+
+        ProcessBuilder builder = new ProcessBuilder(command);
+
+        try {
+
+            builder.start();
+
+        } catch (IOException e) {
+
+            Toast.makeText(context,"没有权限",Toast.LENGTH_SHORT).show();
+
+            e.printStackTrace();
+
+            return;
+
+        }
+
+  /*      try{
+
+            String command = "chmod 777 " + destFile.getAbsolutePath();
+            Runtime runtime = Runtime.getRuntime();
+            Process proc = runtime.exec(command);
+
+        }catch (IOException e)
+        {
+
+            e.printStackTrace();
+
+        }*/
+
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(new File(context.getFilesDir().getAbsoluteFile(),fileName)),"application/vnd.android.package-archive");
         context.startActivity(intent);
     }
 

@@ -20,9 +20,9 @@ public class HomeActivity extends BaseActivity {
     int index=0;
     TextView titleTex;
 
-    final String[] titles={"医院介绍","科室介绍","住院告知","健康宣教","医保农合政策","系统设置"};
+    final String[] titles={"医院介绍","科室介绍","住院告知","健康宣教","系统设置"};
 
-    final int[] pageViewIds={R.drawable.hosipital,R.drawable.exams,R.drawable.inhospital,R.drawable.teach,R.drawable.policy,R.drawable.settings};
+    final int[] pageViewIds={R.drawable.hosipital,R.drawable.exams,R.drawable.inhospital,R.drawable.teach,R.drawable.settings};
 
     CustomViewPager customViewPager;
 
@@ -94,9 +94,6 @@ public class HomeActivity extends BaseActivity {
                             toTeach();
                             break;
                         case 4:
-                            toPolicy();
-                            break;
-                        case 5:
                             toSettings();
                             break;
                     }
@@ -126,11 +123,6 @@ public class HomeActivity extends BaseActivity {
 
     private void toTeach(){
         Intent intent=new Intent(this,VideoSelectActivity.class);
-        startActivity(intent);
-    }
-
-    private void toPolicy(){
-        Intent intent=new Intent(this,PolicyIntroActivity.class);
         startActivity(intent);
     }
 
