@@ -183,10 +183,10 @@ public class UpdateHelpter {
 
     //安装文件，一般固定写法
     void update(Context context) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(new File(Environment
-                        .getExternalStorageDirectory(),fileName)),
-                "application/vnd.android.package-archive");
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory(),fileName)),"application/vnd.android.package-archive");
         context.startActivity(intent);
     }
 

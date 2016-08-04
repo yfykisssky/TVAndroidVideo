@@ -49,7 +49,7 @@ public class VideoSelectActivity extends BaseActivity {
 
     SmoothGridView gridView;
 
-    int indexGrid;
+    //int indexGrid;
 
     GridAdapter gridAdapter;
 
@@ -286,13 +286,13 @@ public class VideoSelectActivity extends BaseActivity {
 
         gridView.setNumColumns(4);
 
-        indexGrid=0;
+        //indexGrid=0;
 
         gridAdapter=new GridAdapter();
 
         gridView.setAdapter(gridAdapter);
 
-        gridView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    /*    gridView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 indexGrid=i;
@@ -302,7 +302,7 @@ public class VideoSelectActivity extends BaseActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });
+        });*/
 
      /*   gridView.setOnKeyListener(new View.OnKeyListener() {
             @Override
