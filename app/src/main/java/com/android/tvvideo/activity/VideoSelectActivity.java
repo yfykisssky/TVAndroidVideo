@@ -304,6 +304,18 @@ public class VideoSelectActivity extends BaseActivity {
             }
         });
 
+     /*   gridView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+
+                if(){
+
+                }
+
+                return false;
+            }
+        });*/
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

@@ -30,8 +30,6 @@ public class InHospitalActivity extends BaseActivity {
 
     GridView gridView;
 
-    int index;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +55,7 @@ public class InHospitalActivity extends BaseActivity {
 
                 Intent intent=null;
 
-                switch (index){
+                switch (i){
                     case 0:
                         intent=new Intent(context,InHospitalIntroActivity.class);
                         startActivity(intent);
