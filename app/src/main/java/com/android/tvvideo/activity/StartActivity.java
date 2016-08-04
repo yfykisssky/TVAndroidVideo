@@ -143,6 +143,7 @@ public class StartActivity extends BaseActivity {
                                 Intent intent=new Intent(StartActivity.this,HomeActivity.class);
                                 startActivity(intent);
                                 finish();
+                                System.gc();
 
                             }
                         }).start();
