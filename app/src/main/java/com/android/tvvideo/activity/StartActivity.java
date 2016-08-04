@@ -35,11 +35,22 @@ public class StartActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initAll();
+
         setContentView(R.layout.activity_start);
 
         initView();
 
         initData();
+
+
+    }
+
+    private void initAll(){
+
+        CrashHandler.getInstance().init(this.getApplicationContext());
+
+        ImageLoad.init(this);
 
     }
 
@@ -60,8 +71,6 @@ public class StartActivity extends BaseActivity {
 
     private void initData() {
 
-        ImageLoad.init(this);
-
         if(serverIp==null||serverPort==null){
 
             readSettings();
@@ -76,9 +85,8 @@ public class StartActivity extends BaseActivity {
 
         }else{
 
-            CrashHandler.getInstance().init(this.getApplicationContext());
-
             checkUpdate();
+
         }
 
 
@@ -96,13 +104,13 @@ public class StartActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==settingsIntent){
-            initData();
-        }
-
         if(resultCode==0x11){
             serverIp=data.getStringExtra("server_ip");
             serverPort=data.getStringExtra("server_port");
+        }
+
+        if(requestCode==settingsIntent){
+            initData();
         }
 
     }
