@@ -55,6 +55,8 @@ public class VideoSelectActivity extends BaseActivity {
 
     List<VideoModel> gridAllData=new ArrayList<>();
 
+    int pageAll=0;
+
     int pageIndex=0;
 
     final int pageSize=8;
@@ -75,23 +77,25 @@ public class VideoSelectActivity extends BaseActivity {
         context=this;
 
         initView();
+/*
 
-  /*      for(int c=0;c<100;c++){
+        for(int c=0;c<4;c++){
             VideoModel videoModel=new VideoModel();
 
             videoModel.setVideoUrl("");
 
-            videoModel.setTitle("");
+            videoModel.setTitle(String.valueOf(c));
 
             gridAllData.add(videoModel);
         }
 
         allTex.setText(String.valueOf(gridData.size()));
 
-        gridData=getUpShowData(pageIndex,pageSize);
+        gridData=getIndexPageData(pageIndex,pageSize);
 
-        gridAdapter.notifyDataSetChanged();*/
+        gridAdapter.notifyDataSetChanged();
 
+*/
         getVideoMenus();
 
     }
@@ -172,7 +176,17 @@ public class VideoSelectActivity extends BaseActivity {
 
                     allTex.setText(String.valueOf(gridData.size()));
 
-                    gridData=getUpShowData(pageIndex,pageSize);
+                    pageIndex=0;
+
+                    pageAll=0;
+
+                    gridData=getIndexPageData(pageIndex,pageSize);
+
+                    pageAll=gridAllData.size()/pageSize;
+
+                    if(gridAllData.size()%pageSize!=0){
+                        pageAll++;
+                    }
 
                     gridAdapter.notifyDataSetChanged();
 
@@ -190,57 +204,21 @@ public class VideoSelectActivity extends BaseActivity {
         });
     }
 
-    List<VideoModel> getNextShowData(int index, int pageSize){
+    List<VideoModel> getIndexPageData(int index, int pageSize){
 
         List<VideoModel> datas=new ArrayList<>();
 
         int start=index*pageSize;
 
-        int end=(index+1)*pageSize-1;
+        int end=(index+1)*pageSize;
 
-        if(gridAllData.size()>=start){
-
-            if(gridAllData.size()>=end){
-                datas=gridAllData.subList(start,end);
-            }else{
-                datas=gridAllData.subList(start,gridAllData.size());
-            }
-
-            pageIndex++;
-
+        if(gridAllData.size()>=end){
+            datas=gridAllData.subList(start,end);
         }else{
-            Toast.makeText(this,"没有更多了", Toast.LENGTH_SHORT);
+            datas=gridAllData.subList(start,gridAllData.size());
         }
 
-        indexTex.setText(String.valueOf(pageIndex));
-
-        return datas;
-
-    }
-
-    List<VideoModel> getUpShowData(int index, int pageSize){
-
-        List<VideoModel> datas=new ArrayList<>();
-
-        int start=index*pageSize;
-
-        int end=(index+1)*pageSize-1;
-
-        if(gridAllData.size()>=start){
-
-            if(gridAllData.size()>=end){
-                datas=gridAllData.subList(start,end);
-            }else{
-                datas=gridAllData.subList(start,gridAllData.size());
-            }
-
-            pageIndex--;
-
-        }else{
-            Toast.makeText(this,"没有更多了", Toast.LENGTH_SHORT);
-        }
-
-        indexTex.setText(String.valueOf(pageIndex));
+        indexTex.setText(String.valueOf(pageIndex+1));
 
         return datas;
 
@@ -259,16 +237,32 @@ public class VideoSelectActivity extends BaseActivity {
         upBnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gridData=getUpShowData(pageIndex,pageSize);
+
+                if(pageIndex==0){
+                    return;
+                }else{
+                    Toast.makeText(context,"没有更多了", Toast.LENGTH_SHORT).show();
+                }
+
+                pageIndex--;
+                gridData=getIndexPageData(pageIndex,pageSize);
                 gridAdapter.notifyDataSetChanged();
             }
         });
 
         downBnt.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                gridData=getNextShowData(pageIndex,pageSize);
-                gridAdapter.notifyDataSetChanged();
+
+                if(pageIndex<pageAll-1){
+                    pageIndex++;
+                    gridData=getIndexPageData(pageIndex,pageSize);
+                    gridAdapter.notifyDataSetChanged();
+                }else{
+                    Toast.makeText(context,"没有更多了", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -309,7 +303,7 @@ public class VideoSelectActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 String url=gridData.get(i).getVideoUrl();
-                
+
                 Uri uri= Uri.parse(url);
 
                 VideoPlayerActivity.start(VideoSelectActivity.this,uri);
