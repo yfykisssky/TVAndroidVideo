@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -186,7 +185,7 @@ public class UpdateHelpter {
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory(),fileName)),"application/vnd.android.package-archive");
+        intent.setDataAndType(Uri.fromFile(new File(context.getFilesDir().getAbsoluteFile(),fileName)),"application/vnd.android.package-archive");
         context.startActivity(intent);
     }
 
