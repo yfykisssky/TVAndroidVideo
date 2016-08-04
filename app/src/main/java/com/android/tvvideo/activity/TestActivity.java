@@ -27,9 +27,7 @@ public class TestActivity extends Activity {
 
         setContentView(R.layout.activity_test);
 
-        Intent intent = new Intent();
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setAction(Intent.ACTION_VIEW);
+        startActivity(new Intent(this,VideoSelectActivity.class));
 
         ((Button)findViewById(R.id.ok)).setOnClickListener(new View.OnClickListener() {
             @Override

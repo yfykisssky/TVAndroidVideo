@@ -3,11 +3,11 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:background="@drawable/main_bg"
     android:layout_height="match_parent">
-    <com.video.teach.view.SmoothGridView
+    <com.android.tvvideo.view.SmoothGridView
         android:listSelector="@null"
         android:id="@+id/select"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.video.teach.view.SmoothGridView>
+        android:layout_height="match_parent"></com.android.tvvideo.view.SmoothGridView>
 <!--<GridView
     android:listSelector="@null"
     android:id="@+id/select"

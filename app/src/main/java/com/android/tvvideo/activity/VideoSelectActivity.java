@@ -49,8 +49,6 @@ public class VideoSelectActivity extends BaseActivity {
 
     SmoothGridView gridView;
 
-    //int indexGrid;
-
     GridAdapter gridAdapter;
 
     List<VideoModel> gridData=new ArrayList<>();
@@ -77,6 +75,22 @@ public class VideoSelectActivity extends BaseActivity {
         context=this;
 
         initView();
+
+  /*      for(int c=0;c<100;c++){
+            VideoModel videoModel=new VideoModel();
+
+            videoModel.setVideoUrl("");
+
+            videoModel.setTitle("");
+
+            gridAllData.add(videoModel);
+        }
+
+        allTex.setText(String.valueOf(gridData.size()));
+
+        gridData=getUpShowData(pageIndex,pageSize);
+
+        gridAdapter.notifyDataSetChanged();*/
 
         getVideoMenus();
 
@@ -286,35 +300,9 @@ public class VideoSelectActivity extends BaseActivity {
 
         gridView.setNumColumns(4);
 
-        //indexGrid=0;
-
         gridAdapter=new GridAdapter();
 
         gridView.setAdapter(gridAdapter);
-
-    /*    gridView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                indexGrid=i;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });*/
-
-     /*   gridView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-
-                if(){
-
-                }
-
-                return false;
-            }
-        });*/
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -417,15 +405,5 @@ public class VideoSelectActivity extends BaseActivity {
         ImageView img;
         TextView tex;
     }
-
-/*
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == event. KEYCODE_HOME) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event); // 不会回到 home 页面
-    }
-*/
 
 }
