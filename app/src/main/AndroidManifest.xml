@@ -27,7 +27,7 @@
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
         android:supportsRtl="true">
         <activity android:name=".activity.StartActivity">
-          <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -48,11 +48,11 @@
         <activity android:name=".activity.RightIntroActivity"/>
         <activity android:name=".activity.InHospitalIntroActivity"/>
         <activity android:name=".activity.TestActivity">
-            <!--   <intent-filter>
-                   <action android:name="android.intent.action.MAIN" />
+            <!--    <intent-filter>
+                     <action android:name="android.intent.action.MAIN" />
 
-                   <category android:name="android.intent.category.LAUNCHER" />
-               </intent-filter>-->
+                     <category android:name="android.intent.category.LAUNCHER" />
+                 </intent-filter>-->
         </activity>
 
 

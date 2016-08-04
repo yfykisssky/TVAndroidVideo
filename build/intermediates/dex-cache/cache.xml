@@ -1,12 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" >
-
-    <item
-        jar="/Users/yangfengyuan/VLC/TVAndroidVideo/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="b106238687deec8f596dd1a67e81a679b8582c38">
-        <dex dex="/Users/yangfengyuan/VLC/TVAndroidVideo/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_749c2272170cd77accee6812ffb3290c7ecf9f7d/classes.dex" />
-    </item>
-
-</items>
+<items version="2" />

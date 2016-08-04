@@ -52,7 +52,7 @@ public class UpdateHelpter {
                 downLength=msg.arg2;
             }
 
-           if(progressDialog.getMax()==msg.arg2){
+            if(progressDialog.getMax()==msg.arg2){
 
                 progressDialog.dismiss();
 
@@ -111,8 +111,6 @@ public class UpdateHelpter {
         try {
             PackageManager packageManager = context.getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(),0);
-
-            Log.e("versionOld",packageInfo.versionName);
 
             return packageInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
@@ -182,6 +180,36 @@ public class UpdateHelpter {
 
     //安装文件，一般固定写法
     void update(Context context) {
+
+        String[] command = {"chmod", "777",context.getFilesDir().getAbsolutePath()};
+
+        ProcessBuilder builder = new ProcessBuilder(command);
+
+        try {
+
+            builder.start();
+
+        } catch (IOException e) {
+
+            // TODO Auto-generated catch block
+
+            e.printStackTrace();
+
+        }
+
+  /*      try{
+
+            String command = "chmod 777 " + destFile.getAbsolutePath();
+            Runtime runtime = Runtime.getRuntime();
+            Process proc = runtime.exec(command);
+
+        }catch (IOException e)
+        {
+
+            e.printStackTrace();
+
+        }*/
+
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);

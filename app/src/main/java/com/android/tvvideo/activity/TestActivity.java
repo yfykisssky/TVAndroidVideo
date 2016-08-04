@@ -1,6 +1,8 @@
 package com.android.tvvideo.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +23,13 @@ public class TestActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Context context=this;
+
         setContentView(R.layout.activity_test);
+
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
 
         ((Button)findViewById(R.id.ok)).setOnClickListener(new View.OnClickListener() {
             @Override
