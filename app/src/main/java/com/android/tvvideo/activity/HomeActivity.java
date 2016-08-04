@@ -20,9 +20,9 @@ public class HomeActivity extends BaseActivity {
     int index=0;
     TextView titleTex;
 
-    final String[] titles={"医院介绍","科室介绍","住院告知","健康宣教","系统设置"};
+    final String[] titles={"医院介绍","科室介绍","住院告知","健康宣教","电视节目","日常服务","患者服务","投诉建议","系统设置"};
 
-    final int[] pageViewIds={R.drawable.hosipital,R.drawable.exams,R.drawable.inhospital,R.drawable.teach,R.drawable.settings};
+    final int[] pageViewIds={R.drawable.hosipital,R.drawable.exams,R.drawable.inhospital,R.drawable.teach,R.drawable.tv,R.drawable.server,R.drawable.hospitalserve,R.drawable.feedback,R.drawable.settings};
 
     CustomViewPager customViewPager;
 
@@ -94,6 +94,18 @@ public class HomeActivity extends BaseActivity {
                             toTeach();
                             break;
                         case 4:
+                            toTV();
+                            break;
+                        case 5:
+                            toServer();
+                            break;
+                        case 6:
+                            toHospitalServer();
+                            break;
+                        case 7:
+                            toFeedBack();
+                            break;
+                        case 8:
                             toSettings();
                             break;
                     }
@@ -123,6 +135,26 @@ public class HomeActivity extends BaseActivity {
 
     private void toTeach(){
         Intent intent=new Intent(this,VideoSelectActivity.class);
+        startActivity(intent);
+    }
+
+    private void toFeedBack(){
+        Intent intent=new Intent(this,FeedBackActivity.class);
+        startActivity(intent);
+    }
+
+    private void toTV(){
+        Intent intent=new Intent(this,TVPlayerActivity.class);
+        startActivity(intent);
+    }
+
+    private void toServer(){
+        Intent intent=new Intent(this,ServerActivity.class);
+        startActivity(intent);
+    }
+
+    private void toHospitalServer(){
+        Intent intent=new Intent(this,HospitalServerActivity.class);
         startActivity(intent);
     }
 
