@@ -8,7 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -191,9 +191,11 @@ public class UpdateHelpter {
 
         } catch (IOException e) {
 
-            // TODO Auto-generated catch block
+            Toast.makeText(context,"没有权限",Toast.LENGTH_SHORT).show();
 
             e.printStackTrace();
+
+            return;
 
         }
 
