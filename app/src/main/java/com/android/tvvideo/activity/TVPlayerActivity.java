@@ -1,14 +1,15 @@
 package com.android.tvvideo.activity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
+import com.android.tvvideo.tools.ImageLoad;
 import com.android.tvvideo.view.ScrollRelativeLayout;
 
 import java.lang.ref.WeakReference;
@@ -28,6 +30,12 @@ import java.util.Map;
  * Created by yangfengyuan on 16/7/29.
  */
 public class TVPlayerActivity extends BaseActivity {
+
+    //############################################################################################################################################################################
+    //############################################################################################################################################################################
+    //############################################################################################################################################################################
+    //############################################################################################################################################################################
+    //############################################################################################################################################################################
 
     ListView listView;
 
@@ -45,6 +53,8 @@ public class TVPlayerActivity extends BaseActivity {
 
     int indexList;
 
+    WebView adWebView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +71,17 @@ public class TVPlayerActivity extends BaseActivity {
 
     }
 
+    private void showAd(String adData){
+        adWebView.loadUrl(adData);
+    }
+
+    private void hideAd(String adData){
+        adWebView.loadUrl(adData);
+    }
 
     private void initView() {
+
+        adWebView=(WebView)findViewById(R.id.adwebview);
 
         relativeLayout = (ScrollRelativeLayout) findViewById(R.id.relative);
 
@@ -75,8 +94,6 @@ public class TVPlayerActivity extends BaseActivity {
         listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                Log.e("select",String.valueOf(i));
 
                 indexList=i;
                 myAdapter.notifyDataSetChanged();
@@ -100,8 +117,7 @@ public class TVPlayerActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            // return listData.size();
-            return 20;
+           return listData.size();
         }
 
         @Override
@@ -128,13 +144,16 @@ public class TVPlayerActivity extends BaseActivity {
                 myHolder = (MyHolder)view.getTag();
             }
 
-         /*   listData.get(i).get("name");
-            listData.get(i).get("path");*/
+            String imgUrl=listData.get(i).get("path");
 
             myHolder.indexTex.setText(String.valueOf(i));
 
-            if(indexList==i){
+            ImageLoad.loadDefultImage(imgUrl,myHolder.img);
 
+            if(indexList==i){
+                view.setBackgroundColor(Color.parseColor("#ccFF0000"));
+            }else{
+                view.setBackgroundColor(Color.parseColor("#cc000000"));
             }
 
             return view;
@@ -145,10 +164,6 @@ public class TVPlayerActivity extends BaseActivity {
         TextView indexTex;
         ImageView img;
     }
-
-
-
-
 
     private void startCountTimeThread() {
         countTimeThread = new CountTimeThread(2);
@@ -229,25 +244,25 @@ public class TVPlayerActivity extends BaseActivity {
         }
     }
 
-
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         switch(keyCode){
             case KeyEvent.KEYCODE_DPAD_UP:
 
-                Log.e("up","up");
-
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
-
-                Log.e("down","down");
 
                 break;
         }
 
         return super.onKeyDown(keyCode, event);
     }
+
+    //############################################################################################################################################################################
+    //############################################################################################################################################################################
+    //############################################################################################################################################################################
+    //############################################################################################################################################################################
+    //############################################################################################################################################################################
 }
 
