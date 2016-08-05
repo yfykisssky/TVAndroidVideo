@@ -226,8 +226,8 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
             return;
         }
 
-        if (!AndroidDevices.hasTsp() && !AndroidDevices.hasPlayServices())
-            AndroidDevices.setRemoteControlReceiverEnabled(true);
+       /* if (!AndroidDevices.hasTsp() && !AndroidDevices.hasPlayServices())
+            AndroidDevices.setRemoteControlReceiverEnabled(true);*/
 
         mDetectHeadset = mSettings.getBoolean("enable_headset_detection", true);
 

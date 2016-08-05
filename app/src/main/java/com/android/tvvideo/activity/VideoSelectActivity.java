@@ -177,8 +177,6 @@ public class VideoSelectActivity extends BaseActivity {
 
                     }
 
-                    allTex.setText(String.valueOf(gridData.size()));
-
                     pageIndex=0;
 
                     pageAll=0;
@@ -190,6 +188,8 @@ public class VideoSelectActivity extends BaseActivity {
                     if(gridAllData.size()%pageSize!=0){
                         pageAll++;
                     }
+
+                    allTex.setText(String.valueOf(pageAll));
 
                     gridAdapter.notifyDataSetChanged();
 
