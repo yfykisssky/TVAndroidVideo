@@ -82,6 +82,48 @@ public class ComplainActivity extends BaseActivity {
 
     private void sendComplain() {
 
+        JSONObject postData=new JSONObject();
+        try {
+            postData.put("ipaddress", SystemUtil.getLocalHostIp());
+
+            new NetDataTool(this).sendPost(NetDataConstants.SEND_COMPLAIN,postData.toString(), new NetDataTool.IResponse() {
+                @Override
+                public void onSuccess(String data) {
+
+                    try {
+
+                        JSONArray arrays=new JSONArray(data.toString());
+
+                        for(int v=0;v<arrays.length();v++){
+
+                            Map<String,String> map=new HashMap<String, String>();
+
+                            map.put("name",arrays.getJSONObject(v).getString("name"));
+                            map.put("title",arrays.getJSONObject(v).getString("title"));
+                            map.put("path",arrays.getJSONObject(v).getString("path"));
+
+                            datas.add(map);
+
+                        }
+
+                        myAdapter.notifyDataSetChanged();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onFailed(String error) {
+                    showToast(error);
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
 
     }
@@ -141,7 +183,7 @@ public class ComplainActivity extends BaseActivity {
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
 
-            new NetDataTool(this).sendPost(NetDataConstants.GET_EXAMROOM_INFO,postData.toString(), new NetDataTool.IResponse() {
+            new NetDataTool(this).sendPost(NetDataConstants.GET_COMPLAIN,postData.toString(), new NetDataTool.IResponse() {
                 @Override
                 public void onSuccess(String data) {
 

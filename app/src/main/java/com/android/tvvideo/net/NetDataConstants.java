@@ -45,9 +45,21 @@ public class NetDataConstants {
 
     public static final String GET_TV_LIST="/app/getTvList";
 
-    public static final String GET_FEED_LIST="/app/feedBack";
+    public static final String GET_FEED_LIST="/app/feedBackList";
 
     public static final String FEED_BACK="/app/feedBack";
+
+    public static final String GET_ADVICE="/app/getAdvice";
+
+    public static final String GET_COMPLAIN="/app/getComplainList";
+
+    public static final String SEND_COMPLAIN="/app/sendComplain";
+
+    public static final String GET_FEE="/app/getFee";
+
+    public static final String SEARCH_PRICE="/app/searchPrice";
+
+    public static final String GET_PERSIONAL="/app/getPersional";
 
 
 }
