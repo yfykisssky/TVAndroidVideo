@@ -310,8 +310,8 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         super.onDestroy();
         stop();
 
-        if (!AndroidDevices.hasTsp() && !AndroidDevices.hasPlayServices())
-            AndroidDevices.setRemoteControlReceiverEnabled(false);
+     /*   if (!AndroidDevices.hasTsp() && !AndroidDevices.hasPlayServices())
+            AndroidDevices.setRemoteControlReceiverEnabled(false);*/
 
         if (mWakeLock.isHeld())
             mWakeLock.release();

@@ -19,6 +19,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.Calendar;
 import java.util.Enumeration;
 
 /**
@@ -200,6 +201,22 @@ public class SystemUtil {
 
         return serverIp+":"+serverPort;
 
+    }
+
+    interface getLocalTime{
+
+        void time(int year,int month,int day,int hour,int minute,int second);
+
+    }
+
+    public void getLocalTime(){
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+        int second=c.get(Calendar.SECOND);
     }
 
 }
