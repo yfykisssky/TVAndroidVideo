@@ -56,6 +56,23 @@ public class FeedBackActivity extends BaseActivity {
 
         listView.setAdapter(myAdapter);
 
+        comfirmBnt=(Button)findViewById(R.id.confirm);
+
+        comfirmBnt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                sendFeedBack();
+
+            }
+        });
+
+    }
+
+    private void sendFeedBack() {
+
+
+
     }
 
 

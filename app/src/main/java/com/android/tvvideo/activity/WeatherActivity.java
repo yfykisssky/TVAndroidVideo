@@ -58,10 +58,55 @@ public class WeatherActivity extends BaseActivity {
     private void getWeatherData(int index) {
 
 
-        new NetDataTool(this).sendGet(NetDataConstants.GET_VERSION, new NetDataTool.IResponse() {
+        new NetDataTool(this).sendGet(NetDataConstants.GET_WEATHER+"/"+String.valueOf(index), new NetDataTool.IResponse() {
 
             @Override
             public void onSuccess(String data) {
+
+                try {
+                    JSONObject jsonObject=new JSONObject(data);
+
+                    String version=jsonObject.getString("version");
+                    String url=jsonObject.getString("address");
+
+                    myAdapter.notifyDataSetChanged();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailed(String error) {
+
+                showToast(error);
+
+            }
+        });
+
+    }
+
+    private void getUpOrDownWeatherData(int index,final boolean upDown) {
+
+        int reqIndex;
+
+        if(upDown){
+            reqIndex=index-1;
+        }else{
+            reqIndex=index+1;
+        }
+
+        new NetDataTool(this).sendGet(NetDataConstants.GET_WEATHER+"/"+String.valueOf(reqIndex), new NetDataTool.IResponse() {
+
+            @Override
+            public void onSuccess(String data) {
+
+                if(upDown){
+                    pageIndex--;
+                }else{
+                    pageIndex++;
+                }
 
                 try {
                     JSONObject jsonObject=new JSONObject(data);
@@ -97,8 +142,7 @@ public class WeatherActivity extends BaseActivity {
         upBnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pageIndex--;
-                getWeatherData(pageIndex);
+                getUpOrDownWeatherData(pageIndex,true);
             }
         });
 
@@ -107,8 +151,7 @@ public class WeatherActivity extends BaseActivity {
         downBnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pageIndex++;
-                getWeatherData(pageIndex);
+                getUpOrDownWeatherData(pageIndex,false);
             }
         });
 

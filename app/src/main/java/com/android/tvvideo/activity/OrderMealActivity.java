@@ -80,25 +80,7 @@ public class OrderMealActivity extends BaseActivity {
         context=this;
 
         initView();
-/*
 
-        for(int c=0;c<4;c++){
-            VideoModel videoModel=new VideoModel();
-
-            videoModel.setVideoUrl("");
-
-            videoModel.setTitle(String.valueOf(c));
-
-            gridAllData.add(videoModel);
-        }
-
-        allTex.setText(String.valueOf(gridData.size()));
-
-        gridData=getIndexPageData(pageIndex,pageSize);
-
-        gridAdapter.notifyDataSetChanged();
-
-*/
         getVideoMenus();
 
     }

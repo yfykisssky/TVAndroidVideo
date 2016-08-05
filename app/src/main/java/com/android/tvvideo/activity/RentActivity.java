@@ -105,7 +105,7 @@ public class RentActivity extends BaseActivity {
 
     private void getVideoMenus(){
 
-        new NetDataTool(this).sendGet(NetDataConstants.GET_MAIL_List, new NetDataTool.IResponse() {
+        new NetDataTool(this).sendGet(NetDataConstants.GET_RENT_List, new NetDataTool.IResponse() {
             @Override
             public void onSuccess(String data) {
 

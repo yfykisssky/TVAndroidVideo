@@ -1,7 +1,9 @@
 package com.android.tvvideo.activity;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
+import com.android.tvvideo.tools.ViewTool;
 
 /**
  * Created by yfykisssky on 16/8/4.
@@ -92,6 +95,7 @@ public class ServerActivity extends BaseActivity {
             return 0;
         }
 
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             MyGridHolder holder = new MyGridHolder();
@@ -104,7 +108,7 @@ public class ServerActivity extends BaseActivity {
                 holder = (MyGridHolder) view.getTag();
             }
 
-            holder.img.setBackgroundResource(images[i]);
+            holder.img.setBackground(ViewTool.getDrawble(context,images[i]));
             holder.tex.setText(names[i]);
             return view;
         }
