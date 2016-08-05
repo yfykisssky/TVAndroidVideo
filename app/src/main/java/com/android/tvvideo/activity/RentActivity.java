@@ -9,19 +9,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
-import com.android.tvvideo.model.VideoModel;
+import com.android.tvvideo.model.OrderModel;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
-import com.android.tvvideo.tools.SystemUtil;
+import com.android.tvvideo.view.ChoiceDialog;
 import com.android.tvvideo.view.ReFousListView;
-import com.android.tvvideo.view.SmoothGridView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,13 +47,13 @@ public class RentActivity extends BaseActivity {
 
     List<Map<String,String>> listData=new ArrayList<>();
 
-    SmoothGridView gridView;
+    GridView gridView;
 
     GridAdapter gridAdapter;
 
-    List<VideoModel> gridData=new ArrayList<>();
+    List<OrderModel> gridData=new ArrayList<>();
 
-    List<VideoModel> gridAllData=new ArrayList<>();
+    List<OrderModel> gridAllData=new ArrayList<>();
 
     int pageAll=0;
 
@@ -75,7 +75,7 @@ public class RentActivity extends BaseActivity {
 
         super.setActivityName(this.getClass().getName());
 
-        setContentView(R.layout.activity_video_select);
+        setContentView(R.layout.activity_rent);
 
         context=this;
 
@@ -105,51 +105,42 @@ public class RentActivity extends BaseActivity {
 
     private void getVideoMenus(){
 
-        JSONObject postData=new JSONObject();
-        try {
-            postData.put("ipaddress", SystemUtil.getLocalHostIp());
-            //postData.put("ipaddress","192.168.1.1");
+        new NetDataTool(this).sendGet(NetDataConstants.GET_MAIL_List, new NetDataTool.IResponse() {
+            @Override
+            public void onSuccess(String data) {
 
-            new NetDataTool(this).sendPost(NetDataConstants.GET_VIDEO_KIND_LIST,postData.toString(), new NetDataTool.IResponse() {
-                @Override
-                public void onSuccess(String data) {
+                try {
 
-                    try {
+                    JSONArray array=new JSONArray(data.toString());
 
-                        JSONArray array=new JSONArray(data.toString());
+                    for(int i=0;i<array.length();i++){
 
-                        for(int i=0;i<array.length();i++){
+                        JSONObject jsonObject=array.getJSONObject(i);
 
-                            JSONObject jsonObject=array.getJSONObject(i);
+                        Map<String,String> map=new HashMap<String, String>();
 
-                            Map<String,String> map=new HashMap<String, String>();
+                        map.put("name",jsonObject.getString("name"));
 
-                            map.put("name",jsonObject.getString("name"));
+                        map.put("id",jsonObject.getString("id"));
 
-                            map.put("id",jsonObject.getString("id"));
+                        listData.add(map);
 
-                            listData.add(map);
-
-                        }
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
 
-                    listAdapter.notifyDataSetChanged();
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
-                @Override
-                public void onFailed(String error) {
-                    showToast(error);
-                }
-            });
+                listAdapter.notifyDataSetChanged();
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            }
+
+            @Override
+            public void onFailed(String error) {
+                showToast(error);
+            }
+        });
 
     }
 
@@ -166,18 +157,13 @@ public class RentActivity extends BaseActivity {
                     for(int i=0;i<array.length();i++){
                         JSONObject jsonObject=array.getJSONObject(i);
 
-                        VideoModel videoModel=new VideoModel();
+                        OrderModel model=new OrderModel();
 
-                        videoModel.setImgUrl(jsonObject.getString("imgPath"));
-                        videoModel.setTitle(jsonObject.getString("name"));
-                        videoModel.setRemark(jsonObject.getString("remark"));
-                        videoModel.setVideoUrl(jsonObject.getString("videoPath"));
 
-                        gridAllData.add(videoModel);
+
+                        gridAllData.add(model);
 
                     }
-
-                    allTex.setText(String.valueOf(gridData.size()));
 
                     pageIndex=0;
 
@@ -190,6 +176,8 @@ public class RentActivity extends BaseActivity {
                     if(gridAllData.size()%pageSize!=0){
                         pageAll++;
                     }
+
+                    allTex.setText(String.valueOf(pageAll));
 
                     gridAdapter.notifyDataSetChanged();
 
@@ -207,9 +195,9 @@ public class RentActivity extends BaseActivity {
         });
     }
 
-    List<VideoModel> getIndexPageData(int index, int pageSize){
+    List<OrderModel> getIndexPageData(int index, int pageSize){
 
-        List<VideoModel> datas=new ArrayList<>();
+        List<OrderModel> datas=new ArrayList<>();
 
         int start=index*pageSize;
 
@@ -293,7 +281,7 @@ public class RentActivity extends BaseActivity {
             }
         });
 
-        gridView=(SmoothGridView)findViewById(R.id.grid);
+        gridView=(GridView)findViewById(R.id.grid);
 
         gridView.setNumColumns(4);
 
@@ -305,11 +293,11 @@ public class RentActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-               /* String url=gridData.get(i).getVideoUrl();
+                ChoiceDialog choiceDialog=new ChoiceDialog(context);
 
-                Uri uri= Uri.parse(url);
+                choiceDialog.setData(gridData.get(i).getName(),gridData.get(i).getPrice(),gridData.get(i).getRemark(),gridData.get(i).getImgUrl());
 
-                VideoPlayerActivity.start(VideoSelectActivity.this,uri);*/
+                choiceDialog.show();
 
             }
         });
@@ -392,7 +380,7 @@ public class RentActivity extends BaseActivity {
 
             ImageLoad.loadDefultImage(gridData.get(i).getImgUrl(),holder.img);
 
-            holder.tex.setText(gridData.get(i).getTitle());
+            holder.tex.setText(gridData.get(i).getName());
 
             return view;
         }
@@ -404,4 +392,3 @@ public class RentActivity extends BaseActivity {
     }
 
 }
-

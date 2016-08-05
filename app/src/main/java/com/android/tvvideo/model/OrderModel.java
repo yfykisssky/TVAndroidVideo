@@ -3,7 +3,7 @@ package com.android.tvvideo.model;
 /**
  * Created by yangfengyuan on 16/8/5.
  */
-public class MealModel {
+public class OrderModel {
 
     String name;
 

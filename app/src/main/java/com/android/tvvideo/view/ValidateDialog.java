@@ -27,7 +27,7 @@ public class ValidateDialog extends Dialog {
 
     ValidateListener validateListener;
 
-    interface ValidateListener{
+    public interface ValidateListener{
         void validate(boolean result);
     }
 

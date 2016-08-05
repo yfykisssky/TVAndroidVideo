@@ -6,8 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.tvvideo.R;
+import com.android.tvvideo.net.NetDataConstants;
+import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
 
 /**
@@ -29,8 +32,14 @@ public class ChoiceDialog extends Dialog {
 
     String orderId;
 
+    String inHospitalNum;
+
+    Context context;
+
     public ChoiceDialog(Context context) {
         super(context,R.style.Base_Dialog);
+
+        this.context=context;
 
         initView();
     }
@@ -54,7 +63,7 @@ public class ChoiceDialog extends Dialog {
         confirmBnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendOrder();
+                sendOrder(orderId,inHospitalNum);
             }
         });
 
@@ -83,10 +92,32 @@ public class ChoiceDialog extends Dialog {
 
         this.orderId=orderId;
 
+        this.inHospitalNum=inHospitalNum;
+
     }
 
-    private void sendOrder(){
-        ChoiceDialog.this.dismiss();
+    private void sendOrder(String orderId,String inHospitalNum){
+
+        new NetDataTool(context).sendGet(NetDataConstants.GET_INFO+ NetDataConstants.INFO_EUME.HOSPITAL_INFO, new NetDataTool.IResponse() {
+            @Override
+            public void onSuccess(String data) {
+
+                Toast.makeText(context,"下单成功",Toast.LENGTH_SHORT).show();
+
+                ChoiceDialog.this.dismiss();
+
+            }
+
+            @Override
+            public void onFailed(String error) {
+
+                Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+
     }
 
 

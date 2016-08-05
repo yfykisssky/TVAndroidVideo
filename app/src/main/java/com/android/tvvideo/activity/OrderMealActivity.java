@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
-import com.android.tvvideo.model.MealModel;
+import com.android.tvvideo.model.OrderModel;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
@@ -51,9 +51,9 @@ public class OrderMealActivity extends BaseActivity {
 
     GridAdapter gridAdapter;
 
-    List<MealModel> gridData=new ArrayList<>();
+    List<OrderModel> gridData=new ArrayList<>();
 
-    List<MealModel> gridAllData=new ArrayList<>();
+    List<OrderModel> gridAllData=new ArrayList<>();
 
     int pageAll=0;
 
@@ -157,15 +157,11 @@ public class OrderMealActivity extends BaseActivity {
                     for(int i=0;i<array.length();i++){
                         JSONObject jsonObject=array.getJSONObject(i);
 
-                        MealModel model=new MealModel();
-
-
+                        OrderModel model=new OrderModel();
 
                         gridAllData.add(model);
 
                     }
-
-                    allTex.setText(String.valueOf(gridData.size()));
 
                     pageIndex=0;
 
@@ -178,6 +174,8 @@ public class OrderMealActivity extends BaseActivity {
                     if(gridAllData.size()%pageSize!=0){
                         pageAll++;
                     }
+
+                    allTex.setText(String.valueOf(pageAll));
 
                     gridAdapter.notifyDataSetChanged();
 
@@ -195,9 +193,9 @@ public class OrderMealActivity extends BaseActivity {
         });
     }
 
-    List<MealModel> getIndexPageData(int index, int pageSize){
+    List<OrderModel> getIndexPageData(int index, int pageSize){
 
-        List<MealModel> datas=new ArrayList<>();
+        List<OrderModel> datas=new ArrayList<>();
 
         int start=index*pageSize;
 
@@ -298,12 +296,6 @@ public class OrderMealActivity extends BaseActivity {
                 choiceDialog.setData(gridData.get(i).getName(),gridData.get(i).getPrice(),gridData.get(i).getRemark(),gridData.get(i).getImgUrl());
 
                 choiceDialog.show();
-
-                /*String url=gridData.get(i).getVideoUrl();
-
-                Uri uri= Uri.parse(url);
-
-                VideoPlayerActivity.start(VideoSelectActivity.this,uri);*/
 
             }
         });

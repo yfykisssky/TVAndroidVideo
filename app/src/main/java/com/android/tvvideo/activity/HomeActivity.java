@@ -1,5 +1,6 @@
 package com.android.tvvideo.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.CustomViewPager;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
+import com.android.tvvideo.view.ValidateDialog;
 import com.android.tvvideo.view.page.Image3DModel;
 import com.android.tvvideo.view.page.PagerViewAdapter;
 import com.android.tvvideo.view.page.ZoomCardPageTransformer;
@@ -28,11 +30,15 @@ public class HomeActivity extends BaseActivity {
 
     private PagerViewAdapter adapter;
 
+    Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         super.setActivityName(this.getClass().getName());
+
+        context=this;
 
         setContentView(R.layout.activity_home);
 
@@ -78,6 +84,8 @@ public class HomeActivity extends BaseActivity {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
 
+                ValidateDialog validateDialog;
+
                 if(keyEvent.getKeyCode()== KeyEvent.KEYCODE_DPAD_CENTER){
 
                     switch (index){
@@ -97,10 +105,25 @@ public class HomeActivity extends BaseActivity {
                             toTV();
                             break;
                         case 5:
-                            toServer();
+                            validateDialog=new ValidateDialog(context);
+
+                            validateDialog.setValidateListener(new ValidateDialog.ValidateListener() {
+                                @Override
+                                public void validate(boolean result) {
+                                    toServer();
+                                }
+                            });
                             break;
                         case 6:
-                            toHospitalServer();
+                            validateDialog=new ValidateDialog(context);
+
+                            validateDialog.setValidateListener(new ValidateDialog.ValidateListener() {
+                                @Override
+                                public void validate(boolean result) {
+                                    toHospitalServer();
+                                }
+                            });
+
                             break;
                         case 7:
                             toFeedBack();
