@@ -90,7 +90,6 @@ public class VideoSelectActivity extends BaseActivity {
         JSONObject postData=new JSONObject();
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
-            //postData.put("ipaddress","192.168.1.1");
 
             new NetDataTool(this).sendPost(NetDataConstants.GET_VIDEO_KIND_LIST,postData.toString(), new NetDataTool.IResponse() {
                 @Override

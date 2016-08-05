@@ -42,8 +42,6 @@ public class ComplainActivity extends BaseActivity {
 
     List<Map<String,String>> datas=new ArrayList<>();
 
-    String examRoomId;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
