@@ -61,6 +61,12 @@ public class NetDataTool {
 
     public void sendGet(String url, final IResponse iResponse){
 
+        if(serverUrl.lastIndexOf(':')<=7){
+            Toast.makeText(context,"非法链接地址",Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
         if(!CheckTool.isIP(serverUrl.substring(7,serverUrl.lastIndexOf(':')))){
 
             Toast.makeText(context,"非法链接地址",Toast.LENGTH_SHORT).show();
@@ -154,6 +160,12 @@ public class NetDataTool {
 
     public void sendPost(String url, String requestBody, final IResponse iResponse){
 
+        if(serverUrl.lastIndexOf(':')<=7){
+            Toast.makeText(context,"非法链接地址",Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
         if(!CheckTool.isIP(serverUrl.substring(7,serverUrl.lastIndexOf(':')))){
 
             Toast.makeText(context,"非法链接地址",Toast.LENGTH_SHORT).show();
@@ -246,6 +258,12 @@ public class NetDataTool {
 
     public void sendNoShowGet(String url, final IResponse iResponse){
 
+        if(serverUrl.lastIndexOf(':')<=7){
+            Toast.makeText(context,"非法链接地址",Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
         if(!CheckTool.isIP(serverUrl.substring(7,serverUrl.lastIndexOf(':')))){
 
             Toast.makeText(context,"非法链接地址",Toast.LENGTH_SHORT).show();
@@ -304,6 +322,12 @@ public class NetDataTool {
     }
 
     public void sendNoShowPost(String url, String requestBody, final IResponse iResponse){
+
+        if(serverUrl.lastIndexOf(':')<=7){
+            Toast.makeText(context,"非法链接地址",Toast.LENGTH_SHORT).show();
+
+            return;
+        }
 
         if(!CheckTool.isIP(serverUrl.substring(7,serverUrl.lastIndexOf(':')))){
 

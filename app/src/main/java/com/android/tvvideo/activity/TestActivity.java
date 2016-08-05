@@ -27,7 +27,7 @@ public class TestActivity extends Activity {
 
         setContentView(R.layout.activity_test);
 
-        startActivity(new Intent(this,VideoSelectActivity.class));
+        startActivity(new Intent(this,InHospitalActivity.class));
 
         ((Button)findViewById(R.id.ok)).setOnClickListener(new View.OnClickListener() {
             @Override
