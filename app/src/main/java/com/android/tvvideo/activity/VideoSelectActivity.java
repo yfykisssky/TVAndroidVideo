@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +23,6 @@ import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
 import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.view.ReFousListView;
-import com.android.tvvideo.view.SmoothGridView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +47,7 @@ public class VideoSelectActivity extends BaseActivity {
 
     List<Map<String,String>> listData=new ArrayList<>();
 
-    SmoothGridView gridView;
+    GridView gridView;
 
     GridAdapter gridAdapter;
 
@@ -290,7 +290,7 @@ public class VideoSelectActivity extends BaseActivity {
             }
         });
 
-        gridView=(SmoothGridView)findViewById(R.id.grid);
+        gridView=(GridView)findViewById(R.id.grid);
 
         gridView.setNumColumns(4);
 

@@ -14,11 +14,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.android.tvvideo.view.SmoothGridView
+        <GridView
             android:nextFocusDown="@+id/up"
             android:id="@+id/grid"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></com.android.tvvideo.view.SmoothGridView>
+            android:layout_height="match_parent"></GridView>
         <RelativeLayout
             android:layout_marginLeft="20px"
             android:background="#cc000000"
