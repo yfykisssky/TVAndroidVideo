@@ -16,7 +16,7 @@ import com.android.tvvideo.tools.ImageLoad;
 /**
  * Created by yangfengyuan on 16/7/29.
  */
-public class ChoiceDialog extends Dialog {
+public class ChoiceRentDialog extends Dialog {
 
     ImageView imageView;
 
@@ -36,7 +36,7 @@ public class ChoiceDialog extends Dialog {
 
     Context context;
 
-    public ChoiceDialog(Context context) {
+    public ChoiceRentDialog(Context context) {
         super(context,R.style.Base_Dialog);
 
         this.context=context;
@@ -70,7 +70,7 @@ public class ChoiceDialog extends Dialog {
         cancelBnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChoiceDialog.this.dismiss();
+                ChoiceRentDialog.this.dismiss();
             }
         });
 
@@ -98,13 +98,13 @@ public class ChoiceDialog extends Dialog {
 
     private void sendOrder(String orderId,String inHospitalNum){
 
-        new NetDataTool(context).sendGet(NetDataConstants.GET_INFO+ NetDataConstants.INFO_EUME.HOSPITAL_INFO, new NetDataTool.IResponse() {
+        new NetDataTool(context).sendGet(NetDataConstants.RENT_ORDER+"/"+orderId+"/"+inHospitalNum, new NetDataTool.IResponse() {
             @Override
             public void onSuccess(String data) {
 
                 Toast.makeText(context,"下单成功",Toast.LENGTH_SHORT).show();
 
-                ChoiceDialog.this.dismiss();
+                ChoiceRentDialog.this.dismiss();
 
             }
 

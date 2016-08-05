@@ -33,17 +33,19 @@ public class NetDataConstants {
 
     public static final String VALIDATE_ACCOUNT="/app/validateAccount";
 
-    public static final String GET_MAIL_List="/app/getMailList";
+    public static final String GET_MEAL_List="/app/getMailList";
 
     public static final String GET_RENT_List="/app/getRentList";
 
-    public static final String MAIL_ORDER="/app/mailOrder";
+    public static final String MEAL_ORDER="/app/mailOrder";
 
     public static final String RENT_ORDER="/app/rentOrder";
 
     public static final String GET_WEATHER="/app/getWeather";
 
     public static final String GET_TV_LIST="/app/getTvList";
+
+    public static final String GET_FEED_LIST="/app/feedBack";
 
     public static final String FEED_BACK="/app/feedBack";
 

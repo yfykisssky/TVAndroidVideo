@@ -14,6 +14,12 @@ import android.widget.TextView;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
+import com.android.tvvideo.net.NetDataConstants;
+import com.android.tvvideo.net.NetDataTool;
+import com.android.tvvideo.tools.SystemUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +52,48 @@ public class FeedBackActivity extends BaseActivity {
 
         initView();
 
+        getFeedBackList();
+
+    }
+
+    private void getFeedBackList() {
+
+        new NetDataTool(this).sendGet(NetDataConstants.GET_FEED_LIST, new NetDataTool.IResponse() {
+            @Override
+            public void onSuccess(String data) {
+
+              /*  try {
+
+                    JSONObject jsonObject=new JSONObject(data);
+
+                    final String remark=jsonObject.getString("remark");
+                    String path=jsonObject.getString("path");
+                    String bottomremark=jsonObject.getString("bottomremark");
+
+
+                    detial.setText(remark);
+
+                    if(bottomremark!=null){
+                        bottom.setText(bottomremark);
+                    }
+
+                    ImageLoad.loadDefultImage(path,img);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
+
+
+            }
+
+            @Override
+            public void onFailed(String error) {
+                showToast(error);
+            }
+        });
+
+
+
     }
 
     private void initView() {
@@ -71,6 +119,53 @@ public class FeedBackActivity extends BaseActivity {
 
     private void sendFeedBack() {
 
+
+        JSONObject postData=new JSONObject();
+        try {
+            postData.put("ipaddress", SystemUtil.getLocalHostIp());
+
+            new NetDataTool(this).sendPost(NetDataConstants.FEED_BACK,postData.toString(), new NetDataTool.IResponse() {
+                @Override
+                public void onSuccess(String data) {
+/*
+
+                    try {
+*/
+/*
+                        JSONObject jsonObject=new JSONObject(data);
+
+                        examRoomId= String.valueOf(jsonObject.getInt("id"));
+
+                        String remark=jsonObject.getString("remark");
+                        String path = jsonObject.getString("path");
+                        String bottomremark=jsonObject.getString("bottomremark");
+
+                        detial.setText(remark);
+
+                        if(bottomremark!=null){
+                            bottom.setText(bottomremark);
+                        }
+
+                        ImageLoad.loadDefultImage(path,img);*//*
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+*/
+
+
+                }
+
+                @Override
+                public void onFailed(String error) {
+                    showToast(error);
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
     }

@@ -84,11 +84,13 @@ public class ValidateDialog extends Dialog {
 
     private void validate(String phonenum,String inhospinum){
 
-        new NetDataTool(this.getContext()).sendGet(NetDataConstants.GET_NURSE_LIST+"/"+phonenum+"/"+inhospinum,new NetDataTool.IResponse() {
+        new NetDataTool(this.getContext()).sendGet(NetDataConstants.VALIDATE_ACCOUNT+"/"+phonenum+"/"+inhospinum,new NetDataTool.IResponse() {
             @Override
             public void onSuccess(String data) {
 
                 validateListener.validate(true);
+
+                validateListener.validate(false);
 
                 ValidateDialog.this.dismiss();
 
@@ -96,8 +98,6 @@ public class ValidateDialog extends Dialog {
 
             @Override
             public void onFailed(String error) {
-
-                validateListener.validate(false);
 
                 Toast.makeText(ValidateDialog.this.getContext(),error,Toast.LENGTH_SHORT).show();
 

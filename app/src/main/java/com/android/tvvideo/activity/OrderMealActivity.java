@@ -20,7 +20,7 @@ import com.android.tvvideo.model.OrderModel;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
-import com.android.tvvideo.view.ChoiceDialog;
+import com.android.tvvideo.view.ChoiceMealDialog;
 import com.android.tvvideo.view.ReFousListView;
 
 import org.json.JSONArray;
@@ -87,7 +87,7 @@ public class OrderMealActivity extends BaseActivity {
 
     private void getVideoMenus(){
 
-        new NetDataTool(this).sendGet(NetDataConstants.GET_MAIL_List, new NetDataTool.IResponse() {
+        new NetDataTool(this).sendGet(NetDataConstants.GET_MEAL_List, new NetDataTool.IResponse() {
             @Override
             public void onSuccess(String data) {
 
@@ -273,7 +273,7 @@ public class OrderMealActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                ChoiceDialog choiceDialog=new ChoiceDialog(context);
+                ChoiceMealDialog choiceDialog=new ChoiceMealDialog(context);
 
                 choiceDialog.setData(gridData.get(i).getName(),gridData.get(i).getPrice(),gridData.get(i).getRemark(),gridData.get(i).getImgUrl());
 

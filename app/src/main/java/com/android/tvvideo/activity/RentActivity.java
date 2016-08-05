@@ -20,7 +20,7 @@ import com.android.tvvideo.model.OrderModel;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
-import com.android.tvvideo.view.ChoiceDialog;
+import com.android.tvvideo.view.ChoiceRentDialog;
 import com.android.tvvideo.view.ReFousListView;
 
 import org.json.JSONArray;
@@ -293,7 +293,7 @@ public class RentActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                ChoiceDialog choiceDialog=new ChoiceDialog(context);
+                ChoiceRentDialog choiceDialog=new ChoiceRentDialog(context);
 
                 choiceDialog.setData(gridData.get(i).getName(),gridData.get(i).getPrice(),gridData.get(i).getRemark(),gridData.get(i).getImgUrl());
 
