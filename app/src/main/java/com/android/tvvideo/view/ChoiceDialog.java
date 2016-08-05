@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.tvvideo.R;
+import com.android.tvvideo.tools.ImageLoad;
 
 /**
  * Created by yangfengyuan on 16/7/29.
@@ -26,6 +27,7 @@ public class ChoiceDialog extends Dialog {
 
     Button cancelBnt;
 
+    String orderId;
 
     public ChoiceDialog(Context context) {
         super(context,R.style.Base_Dialog);
@@ -65,13 +67,21 @@ public class ChoiceDialog extends Dialog {
 
     }
 
-    public void setData(String name,String price,String intro){
+    public void setData(String name,String price,String intro,String imgUrl){
 
         nameTex.setText(name);
 
         priceTex.setText(price);
 
         introTex.setText(intro);
+
+        ImageLoad.loadDefultImage(imgUrl,imageView);
+
+    }
+
+    public void setUserData(String orderId,String inHospitalNum){
+
+        this.orderId=orderId;
 
     }
 
