@@ -50,7 +50,7 @@ public class PolicyIntroActivity extends BaseActivity {
 
                     String remark=jsonObject.getString("remark");
                     String path=jsonObject.getString("path");
-                    String bottomremark=jsonObject.getString("bottomremark");
+                    String bottomremark=jsonObject.getString("bottomRemark");
 
                     detial.setText(remark);
 
