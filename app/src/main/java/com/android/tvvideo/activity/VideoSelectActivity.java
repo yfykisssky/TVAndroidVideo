@@ -156,6 +156,8 @@ public class VideoSelectActivity extends BaseActivity {
             @Override
             public void onSuccess(String data) {
 
+                gridAllData.clear();
+
                 try {
 
                     JSONArray array=new JSONArray(data.toString());
