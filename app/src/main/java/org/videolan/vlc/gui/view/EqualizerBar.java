@@ -78,7 +78,7 @@ public class EqualizerBar extends LinearLayout {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             float value = (progress - RANGE) / (float) PRECISION;
-            mValue.setText(value + " dB");
+            mValue.setText(value + " Db");
             if (listener != null)
                 listener.onProgressChanged(value);
         }

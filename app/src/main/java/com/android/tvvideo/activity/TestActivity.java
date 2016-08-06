@@ -2,7 +2,6 @@ package com.android.tvvideo.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +26,8 @@ public class TestActivity extends Activity {
 
         setContentView(R.layout.activity_test);
 
-        startActivity(new Intent(this,InHospitalActivity.class));
+        //startActivity(new Intent(this,InHospitalActivity.class));
+        ((EditText)findViewById(R.id.url)).setText("rtsp://218.204.223.237:554/live/1/67A7572844E51A64/f68g2mj7wjua3la7.sdp");
 
         ((Button)findViewById(R.id.ok)).setOnClickListener(new View.OnClickListener() {
             @Override

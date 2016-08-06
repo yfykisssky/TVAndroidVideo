@@ -31,14 +31,13 @@ import android.support.v7.preference.PreferenceManager;
 
 import com.android.tvvideo.R;
 
+import org.videolan.vlc.util.AndroidDevices;
 import org.videolan.vlc.util.Util;
 import org.videolan.vlc.util.VLCInstance;
 
 public class PreferencesFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public final static String TAG = "VLC/PreferencesFragment";
-
-    public final static String PLAYBACK_HISTORY = "playback_history";
 
     @Override
     protected int getXml() {
@@ -53,6 +52,11 @@ public class PreferencesFragment extends BasePreferenceFragment implements Share
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!AndroidDevices.hasTsp()){
+            findPreference("screen_orientation").setEnabled(false);
+            findPreference("enable_black_theme").setEnabled(false);
+        }
 
         // Screen orientation
         ListPreference screenOrientationPref = (ListPreference) findPreference("screen_orientation");
@@ -77,20 +81,21 @@ public class PreferencesFragment extends BasePreferenceFragment implements Share
         if(key.equalsIgnoreCase("hardware_acceleration")
                 || key.equalsIgnoreCase("subtitle_text_encoding")) {
             VLCInstance.restart();
-            if (getActivity() != null )
-                ((PreferencesActivity)getActivity()).restartMediaPlayer();
         }
     }
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
         switch (preference.getKey()){
-        /*    case "directories":
-                Intent intent = new Intent(VLCApplication.getAppContext(), SecondaryActivity.class);
+            case "directories":
+      /*          Intent intent = new Intent(VLCApplication.getAppContext(), SecondaryActivity.class);
                 intent.putExtra("fragment", SecondaryActivity.STORAGE_BROWSER);
                 startActivity(intent);
-                getActivity().setResult(PreferencesActivity.RESULT_RESTART);
-                return true;*/
+                getActivity().setResult(PreferencesActivity.RESULT_RESTART);*/
+                return true;
+            case "enable_black_theme":
+                //((PreferencesActivity) getActivity()).exitAndRescan();
+                return true;
             case "ui_category":
                 loadFragment(new PreferencesUi());
                 break;
@@ -100,12 +105,9 @@ public class PreferencesFragment extends BasePreferenceFragment implements Share
             case "adv_category":
                 loadFragment(new Advanced());
                 break;
-         /*   case "dev_category":
+            case "dev_category":
                 loadFragment(new Developer());
-                break;*/
-            case PLAYBACK_HISTORY:
-                getActivity().setResult(PreferencesActivity.RESULT_RESTART);
-                return true;
+                break;
             default:
                 return super.onPreferenceTreeClick(preference);
         }

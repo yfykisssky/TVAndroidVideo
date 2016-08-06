@@ -1,33 +1,25 @@
 package org.videolan.vlc.media;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 
 import com.android.tvvideo.R;
 
-import org.videolan.libvlc.util.AndroidUtil;
 import org.videolan.vlc.PlaybackService;
 import org.videolan.vlc.VLCApplication;
 import org.videolan.vlc.gui.video.VideoPlayerActivity;
 import org.videolan.vlc.util.FileUtils;
 import org.videolan.vlc.util.Strings;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MediaUtils {
     public static final String ACTION_SCAN_START = Strings.buildPkgString("gui.ScanStart");
     public static final String ACTION_SCAN_STOP = Strings.buildPkgString("gui.ScanStop");
-
-   // private static SubtitlesDownloader sSubtitlesDownloader;
 
     public static void actionScanStart() {
         Intent intent = new Intent();
@@ -35,85 +27,28 @@ public class MediaUtils {
         LocalBroadcastManager.getInstance(VLCApplication.getAppContext()).sendBroadcast(intent);
     }
 
-    public static void getSubs(Activity activity, ArrayList<MediaWrapper> mediaList) {
-        //getSubs(activity, mediaList, null);
-    }
-
-  /*  public static void getSubs(Activity activity, ArrayList<MediaWrapper> mediaList) {
-    *//*    if (sSubtitlesDownloader == null)
-            sSubtitlesDownloader = new SubtitlesDownloader();
-        sSubtitlesDownloader.setActivity(activity);
-        sSubtitlesDownloader.downloadSubs(mediaList, cb);*//*
-    }*/
-
-    public static void getSubs(Activity activity, MediaWrapper media) {
-        ArrayList<MediaWrapper> mediaList = new ArrayList<>();
-        mediaList.add(media);
-        //getSubs(activity, mediaList, cb);
-    }
-
- /*   public static void getSubs(Activity activity, MediaWrapper media) {
-        ArrayList<MediaWrapper> mediaList = new ArrayList<>();
-        mediaList.add(media);
-        getSubs(activity, mediaList);
-    }*/
-
- /*   public static void updateSubsDownloaderActivity(Activity activity) {
-        if (sSubtitlesDownloader != null)
-            sSubtitlesDownloader.setActivity(activity);
-    }*/
-
     public static void actionScanStop() {
         Intent intent = new Intent();
         intent.setAction(ACTION_SCAN_STOP);
         LocalBroadcastManager.getInstance(VLCApplication.getAppContext()).sendBroadcast(intent);
     }
 
-    public static void appendMedia(final Context context, final MediaWrapper media){
-        if (media == null)
-            return;
-        new DialogCallback(context, new DialogCallback.Runnable() {
-                @Override
-                public void run(PlaybackService service) {
-                    service.append(media);
-                }
-        });
-    }
-
     public static void openMedia(final Context context, final MediaWrapper media){
-        if (media == null)
-            return;
-        new DialogCallback(context, new DialogCallback.Runnable() {
-                @Override
-                public void run(PlaybackService service) {
-                    service.load(media);
-                }
-        });
-    }
-
-    public static void openMediaNoUi(Uri uri){
-        final MediaWrapper media = new MediaWrapper(uri);
-        openMediaNoUi(VLCApplication.getAppContext(), media);
-    }
-
-    public static void openMediaNoUi(final Context context, final MediaWrapper media){
         if (media == null)
             return;
         if (media.getType() == MediaWrapper.TYPE_VIDEO)
             VideoPlayerActivity.start(context, media.getUri(), media.getTitle());
-        else
-            new BaseCallBack(context) {
+        else if (media.getType() == MediaWrapper.TYPE_AUDIO) {
+            new DialogCallback(context, new DialogCallback.Runnable() {
                 @Override
-                public void onConnected(PlaybackService service) {
+                public void run(PlaybackService service) {
                     service.load(media);
-                    mClient.disconnect();
                 }
-            };
+            });
+        }
     }
 
     public static void openList(final Context context, final List<MediaWrapper> list, final int position){
-        if (list == null || list.isEmpty())
-            return;
         new DialogCallback(context, new DialogCallback.Runnable() {
             @Override
             public void run(PlaybackService service) {
@@ -123,8 +58,6 @@ public class MediaUtils {
     }
 
     public static void openUri(final Context context, final Uri uri){
-        if (uri == null)
-            return;
         new DialogCallback(context, new DialogCallback.Runnable() {
             @Override
             public void run(PlaybackService service) {
@@ -134,8 +67,6 @@ public class MediaUtils {
     }
 
     public static void openStream(final Context context, final String uri){
-        if (uri == null)
-            return;
         new DialogCallback(context, new DialogCallback.Runnable() {
             @Override
             public void run(PlaybackService service) {
@@ -170,17 +101,13 @@ public class MediaUtils {
         return genre != null ? genre : getMediaString(ctx, R.string.unknown_genre);
     }
 
-    public static String getMediaSubtitle(MediaWrapper media) {
-        String subtitle = media.getNowPlaying() != null
-                ? media.getNowPlaying()
-                : media.getArtist();
-        if (media.getLength() > 0L) {
-            if (TextUtils.isEmpty(subtitle))
-                subtitle = Strings.millisToString(media.getLength());
-            else
-                subtitle = subtitle + "  -  " +  Strings.millisToString(media.getLength());
-        }
-        return subtitle;
+    public static String getMediaSubtitle(Context ctx, MediaWrapper media) {
+        if (media.getType() == MediaWrapper.TYPE_AUDIO)
+            return media.getNowPlaying() != null
+                    ? media.getNowPlaying()
+                    : getMediaArtist(ctx, media) + " - " + getMediaAlbum(ctx, media);
+        else
+            return "";
     }
 
     public static String getMediaTitle(MediaWrapper mediaWrapper){
@@ -190,25 +117,6 @@ public class MediaUtils {
         return title;
     }
 
-    public static Uri getContentMediaUri(Uri data) {
-        Uri uri = null;
-        try {
-            Cursor cursor = VLCApplication.getAppContext().getContentResolver().query(data,
-                    new String[]{ MediaStore.Video.Media.DATA }, null, null, null);
-            if (cursor != null) {
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
-                if (cursor.moveToFirst())
-                    uri = AndroidUtil.PathToUri(cursor.getString(column_index));
-                cursor.close();
-            } else // other content-based URI (probably file pickers)
-                uri = data;
-        } catch (Exception e) {
-            uri = data;
-            if (uri.getScheme() == null)
-                uri = AndroidUtil.PathToUri(uri.getPath());
-        }
-        return uri != null ? uri : data;
-    }
     private static String getMediaString(Context ctx, int id) {
         if (ctx != null)
             return ctx.getResources().getString(id);
@@ -226,23 +134,10 @@ public class MediaUtils {
         }
     }
 
-    private static abstract class BaseCallBack implements PlaybackService.Client.Callback {
-        protected PlaybackService.Client mClient;
-
-        private BaseCallBack(Context context) {
-            mClient = new PlaybackService.Client(context, this);
-            mClient.connect();
-        }
-
-        protected BaseCallBack() {}
-
-        @Override
-        public void onDisconnected() {}
-    }
-
-    private static class DialogCallback extends BaseCallBack {
+    private static class DialogCallback implements PlaybackService.Client.Callback {
         private final ProgressDialog dialog;
-        private final Runnable mRunnable;
+        final private PlaybackService.Client mClient;
+        final private Runnable mRunnable;
 
         private interface Runnable {
             void run(PlaybackService service);
@@ -259,22 +154,16 @@ public class MediaUtils {
             dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
-                    synchronized (this) {
-                        mClient.disconnect();
-                    }
+                    mClient.disconnect();
                 }
             });
-            synchronized (this) {
-                mClient.connect();
-            }
+            mClient.connect();
         }
 
         @Override
         public void onConnected(PlaybackService service) {
-            synchronized (this) {
-                mRunnable.run(service);
-            }
-            dialog.cancel();
+            mRunnable.run(service);
+            dialog.dismiss();
         }
 
         @Override

@@ -20,27 +20,30 @@
 
 package org.videolan.vlc.media;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
-import org.videolan.vlc.VLCApplication;
-import org.videolan.vlc.gui.helpers.BitmapUtil;
+import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressLint("ParcelCreator")
 public class MediaGroup extends MediaWrapper {
 
     public final static String TAG = "VLC/MediaGroup";
 
+    public final static int MIN_GROUP_LENGTH = 6;
+
     private ArrayList<MediaWrapper> mMedias;
 
-    public MediaGroup(MediaWrapper media) {
+    public MediaGroup(MediaWrapper media)
+    {
         super(media.getUri(),
                 media.getTime(),
                 media.getLength(),
                 MediaWrapper.TYPE_GROUP,
-                BitmapUtil.getPicture(media),
+                null,
+               // BitmapUtil.getPicture(media),
                 media.getTitle(),
                 media.getArtist(),
                 media.getGenre(),
@@ -73,10 +76,6 @@ public class MediaGroup extends MediaWrapper {
         return mMedias.get(0);
     }
 
-    public ArrayList<MediaWrapper> getAll() {
-        return mMedias;
-    }
-
     public int size() {
         return mMedias.size();
     }
@@ -93,33 +92,25 @@ public class MediaGroup extends MediaWrapper {
         return groups;
     }
 
-    private static void insertInto(ArrayList<MediaGroup> groups, MediaWrapper media) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(VLCApplication.getAppContext());
-        int minGroupLengthValue = Integer.valueOf(preferences.getString("video_min_group_length", "6"));
+    private static void insertInto(ArrayList<MediaGroup> groups, MediaWrapper media)
+    {
         for (MediaGroup mediaGroup : groups) {
             String group = mediaGroup.getTitle();
-            String title = media.getTitle();
-
-            //Handle titles starting with "The"
-            int groupOffset = group.toLowerCase().startsWith("the") ? 4 : 0;
-            if (title.toLowerCase().startsWith("the"))
-                title = title.substring(4);
+            String item = media.getTitle();
 
             // find common prefix
             int commonLength = 0;
-            String groupTitle = group.substring(groupOffset);
-            int minLength = Math.min(groupTitle.length(), title.length());
-            while (commonLength < minLength
-                    && groupTitle.toLowerCase().charAt(commonLength) == title.toLowerCase().charAt(commonLength))
+            int minLength = Math.min(group.length(), item.length());
+            while (commonLength < minLength && group.charAt(commonLength) == item.charAt(commonLength))
                 ++commonLength;
 
-            if (commonLength >= minGroupLengthValue && minGroupLengthValue != 0) {
+            if (commonLength >= MIN_GROUP_LENGTH) {
                 if (commonLength == group.length()) {
                     // same prefix name, just add
                     mediaGroup.add(media);
                 } else {
                     // not the same prefix, but close : merge
-                    mediaGroup.merge(media, group.substring(0, commonLength+groupOffset));
+                    mediaGroup.merge(media, group.substring(0, commonLength));
                 }
                 return;
             }

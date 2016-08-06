@@ -23,19 +23,15 @@
 
 package org.videolan.vlc.gui.preferences;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.TwoStatePreference;
 
 import com.android.tvvideo.R;
 
-import org.videolan.libvlc.util.AndroidUtil;
 import org.videolan.vlc.PlaybackService;
-import org.videolan.vlc.util.VLCInstance;
+import org.videolan.vlc.util.AndroidDevices;
 
-public class PreferencesUi extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-
+public class PreferencesUi extends BasePreferenceFragment {
     @Override
     protected int getXml() {
         return R.xml.preferences_ui;
@@ -47,28 +43,15 @@ public class PreferencesUi extends BasePreferenceFragment implements SharedPrefe
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        findPreference("tv_ui").setVisible(AndroidUtil.isJellyBeanMR1OrLater());
-        findPreference("languages_download_list").setVisible(AndroidUtil.isHoneycombOrLater());
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        switch (key){
-            case "subtitles_size":
-            case "subtitles_color":
-            case "subtitles_background":
-                VLCInstance.restart();
-                if (getActivity() != null )
-                    ((PreferencesActivity)getActivity()).restartMediaPlayer();
+        if (!AndroidDevices.hasTsp()){
+            findPreference("enable_clone_mode").setEnabled(false);
+            findPreference("force_list_portrait").setEnabled(false);
+            findPreference("enable_brightness_gesture").setEnabled(false);
+            findPreference("enable_headset_detection").setEnabled(false);
+            findPreference("enable_steal_remote_control").setEnabled(false);
         }
     }
 
@@ -77,21 +60,14 @@ public class PreferencesUi extends BasePreferenceFragment implements SharedPrefe
         if (preference.getKey() == null)
             return false;
         switch (preference.getKey()){
-            case "video_min_group_length":
-                getActivity().setResult(PreferencesActivity.RESULT_RESTART);
-                return true;
             case "enable_headset_detection":
-                ((PreferencesActivity)getActivity()).detectHeadset(((TwoStatePreference) preference).isChecked());
+                //((PreferencesActivity)getActivity()).detectHeadset(((TwoStatePreference) preference).isChecked());
                 return true;
             case "enable_steal_remote_control":
                 PlaybackService.Client.restartService(getActivity());
                 return true;
             case "force_list_portrait":
-            case "tv_ui":
-                ((PreferencesActivity) getActivity()).setRestart();
-                return true;
-            case "enable_black_theme":
-                ((PreferencesActivity) getActivity()).exitAndRescan();
+                //((PreferencesActivity) getActivity()).setRestart();
                 return true;
         }
         return super.onPreferenceTreeClick(preference);

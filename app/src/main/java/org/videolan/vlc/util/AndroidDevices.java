@@ -21,38 +21,27 @@
 package org.videolan.vlc.util;
 
 import android.annotation.TargetApi;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.view.InputDevice;
 import android.view.MotionEvent;
 
-import com.android.tvvideo.R;
-
 import org.videolan.libvlc.util.AndroidUtil;
-import org.videolan.vlc.RemoteControlClientReceiver;
 import org.videolan.vlc.VLCApplication;
-import org.videolan.vlc.media.MediaWrapper;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 public class AndroidDevices {
@@ -60,10 +49,7 @@ public class AndroidDevices {
     public final static String EXTERNAL_PUBLIC_DIRECTORY = Environment.getExternalStorageDirectory().getPath();
 
     final static boolean hasNavBar;
-    final static boolean hasTsp, isTv, showInternalStorage;
-    public final static boolean showMediaStyle;
-
-    final static String[] noMediaStyleManufacturers = {"huawei", "symphony teleca"};
+    final static boolean hasTsp;
 
     static {
         HashSet<String> devicesWithoutNavBar = new HashSet<String>();
@@ -74,10 +60,6 @@ public class AndroidDevices {
         hasNavBar = AndroidUtil.isICSOrLater()
                 && !devicesWithoutNavBar.contains(android.os.Build.MODEL);
         hasTsp = VLCApplication.getAppContext().getPackageManager().hasSystemFeature("android.hardware.touchscreen");
-        isTv = VLCApplication.getAppContext().getPackageManager().hasSystemFeature("android.software.leanback");
-        showInternalStorage = !TextUtils.equals(Build.BRAND, "Swisscom") && !TextUtils.equals(Build.BOARD, "sprint");
-
-        showMediaStyle = !isManufacturerBannedForMediastyleNotifications();
     }
 
     public static boolean hasExternalStorage() {
@@ -104,14 +86,6 @@ public class AndroidDevices {
 
     public static boolean hasTsp() {
         return hasTsp;
-    }
-
-    public static boolean isAndroidTv() {
-        return isTv;
-    }
-
-    public static boolean showInternalStorage() {
-        return showInternalStorage;
     }
 
     public static ArrayList<String> getStorageDirectories() {
@@ -165,22 +139,6 @@ public class AndroidDevices {
         return list;
     }
 
-    public static List<MediaWrapper> getMediaDirectoriesList() {
-        String storages[] = AndroidDevices.getMediaDirectories();
-        LinkedList<MediaWrapper> list = new LinkedList<>();
-        MediaWrapper directory;
-        for (String mediaDirLocation : storages) {
-            if (!(new File(mediaDirLocation).exists()))
-                continue;
-            directory = new MediaWrapper(AndroidUtil.PathToUri(mediaDirLocation));
-            directory.setType(MediaWrapper.TYPE_DIR);
-            if (TextUtils.equals(AndroidDevices.EXTERNAL_PUBLIC_DIRECTORY, mediaDirLocation))
-                directory.setDisplayTitle(VLCApplication.getAppResources().getString(R.string.internal_memory));
-            list.add(directory);
-        }
-        return list;
-    }
-
     public static String[] getMediaDirectories() {
         ArrayList<String> list = new ArrayList<String>();
         list.addAll(getStorageDirectories());
@@ -210,14 +168,6 @@ public class AndroidDevices {
         return 0;
     }
 
-    public static boolean hasPlayServices() {
-        try {
-            VLCApplication.getAppContext().getPackageManager().getPackageInfo("com.google.android.gsf", PackageManager.GET_SERVICES);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {}
-        return false;
-    }
-
     public static boolean hasLANConnection() {
         boolean networkEnabled = false;
         ConnectivityManager connectivity = (ConnectivityManager) (VLCApplication.getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE));
@@ -229,45 +179,5 @@ public class AndroidDevices {
             }
         }
         return networkEnabled;
-    }
-
-    public static boolean hasConnection() {
-        boolean networkEnabled = false;
-        ConnectivityManager connectivity = (ConnectivityManager) (VLCApplication.getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE));
-        if (connectivity != null) {
-            NetworkInfo networkInfo = connectivity.getActiveNetworkInfo();
-            if (networkInfo != null && networkInfo.isConnected()) {
-                networkEnabled = true;
-            }
-        }
-        return networkEnabled;
-    }
-
-    public static boolean hasMobileConnection() {
-        boolean networkEnabled = false;
-        ConnectivityManager connectivity = (ConnectivityManager) (VLCApplication.getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE));
-        if (connectivity != null) {
-            NetworkInfo networkInfo = connectivity.getActiveNetworkInfo();
-            if (networkInfo != null && networkInfo.isConnected() &&
-                    (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE)) {
-                networkEnabled = true;
-            }
-        }
-        return networkEnabled;
-    }
-
-    public static void setRemoteControlReceiverEnabled(boolean enabled) {
-        VLCApplication.getAppContext().getPackageManager().setComponentEnabledSetting(
-                new ComponentName(VLCApplication.getAppContext(), RemoteControlClientReceiver.class),
-                enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
-    }
-
-    private static boolean isManufacturerBannedForMediastyleNotifications() {
-        for (String manufacturer : noMediaStyleManufacturers)
-            if (Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains(manufacturer))
-                return true;
-        return false;
     }
 }
