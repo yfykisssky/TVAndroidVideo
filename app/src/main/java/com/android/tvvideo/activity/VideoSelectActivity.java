@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
@@ -242,8 +241,6 @@ public class VideoSelectActivity extends BaseActivity {
 
                 if(pageIndex==0){
                     return;
-                }else{
-                    Toast.makeText(context,"没有更多了", Toast.LENGTH_SHORT).show();
                 }
 
                 pageIndex--;
@@ -261,8 +258,6 @@ public class VideoSelectActivity extends BaseActivity {
                     pageIndex++;
                     gridData=getIndexPageData(pageIndex,pageSize);
                     gridAdapter.notifyDataSetChanged();
-                }else{
-                    Toast.makeText(context,"没有更多了", Toast.LENGTH_SHORT).show();
                 }
 
             }
