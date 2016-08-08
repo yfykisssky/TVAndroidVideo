@@ -51,19 +51,9 @@ public class Permissions {
     public static final int PERMISSION_STORAGE_TAG = 255;
     public static final int PERMISSION_SETTINGS_TAG = 254;
 
-
-    public static final int PERMISSION_SYSTEM_RINGTONE = 42;
-    public static final int PERMISSION_SYSTEM_BRIGHTNESS = 43;
-    public static final int PERMISSION_SYSTEM_DRAW_OVRLAYS = 44;
-
     /*
      * Marshmallow permission system management
      */
-
-    @TargetApi(Build.VERSION_CODES.M)
-    public static boolean canDrawOverlays(Context context) {
-        return !AndroidUtil.isMarshMallowOrLater() || Settings.canDrawOverlays(context);
-    }
 
     @TargetApi(Build.VERSION_CODES.M)
     public static boolean canWriteSettings(Context context) {
@@ -89,24 +79,18 @@ public class Permissions {
         }
     }
 
-    public static void checkDrawOverlaysPermission(Activity activity) {
-        if (AndroidUtil.isMarshMallowOrLater() && !canDrawOverlays(activity)) {
-            showSettingsPermissionDialog(activity, PERMISSION_SYSTEM_DRAW_OVRLAYS);
-        }
-    }
-
-    public static void checkWriteSettingsPermission(Activity activity, int mode) {
+    public static void checkWriteSettingsPermission(Activity activity) {
         if (AndroidUtil.isMarshMallowOrLater() && !canWriteSettings(activity)) {
-            showSettingsPermissionDialog(activity, mode);
+            showSettingsPermissionDialog(activity);
         }
     }
 
     private static Dialog sAlertDialog;
 
-    public static void showSettingsPermissionDialog(final Activity activity, int mode) {
+    public static void showSettingsPermissionDialog(final Activity activity) {
         if (activity.isFinishing() || (sAlertDialog != null && sAlertDialog.isShowing()))
             return;
-        sAlertDialog = createSettingsDialogCompat(activity, mode);
+        sAlertDialog = createSettingsDialogCompat(activity);
     }
 
     public static void showStoragePermissionDialog(final Activity activity, boolean exit) {
@@ -194,34 +178,16 @@ public class Permissions {
         return dialogBuilder.show();
     }
 
-    private static Dialog createSettingsDialogCompat(final Activity activity, int mode) {
-        int titleId = 0, textId = 0;
-        String action = Settings.ACTION_MANAGE_WRITE_SETTINGS;
-        switch (mode) {
-            case PERMISSION_SYSTEM_RINGTONE:
-                titleId = R.string.allow_settings_access_ringtone_title;
-                textId = R.string.allow_settings_access_ringtone_description;
-                break;
-            case PERMISSION_SYSTEM_BRIGHTNESS:
-                titleId = R.string.allow_settings_access_brightness_title;
-                textId = R.string.allow_settings_access_brightness_description;
-                break;
-            case PERMISSION_SYSTEM_DRAW_OVRLAYS:
-                titleId = R.string.allow_draw_overlays_title;
-                textId = R.string.allow_sdraw_overlays_description;
-                action = Settings.ACTION_MANAGE_OVERLAY_PERMISSION;
-                break;
-        }
-        final String finalAction = action;
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity)
-                .setTitle(activity.getString(titleId))
-                .setMessage(activity.getString(textId))
+    private static Dialog createSettingsDialogCompat(final Activity activity) {
+       /* AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity)
+                .setTitle(activity.getString(R.string.allow_settings_access_title))
+                .setMessage(activity.getString(R.string.allow_settings_access_description))
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(activity.getString(R.string.permission_ask_again), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int whichButton) {
                         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(activity);
-                        Intent i = new Intent(finalAction);
+                        Intent i = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
                         i.setData(Uri.parse("package:" + activity.getPackageName()));
                         try {
                             activity.startActivity(i);
@@ -231,7 +197,8 @@ public class Permissions {
                         Util.commitPreferences(editor);
                     }
                 });
-        return dialogBuilder.show();
+        return dialogBuilder.show();*/
+        return null;
     }
 
     private static void requestStoragePermission(Activity activity){

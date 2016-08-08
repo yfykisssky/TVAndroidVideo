@@ -34,6 +34,7 @@
 
 #include <android/api-level.h>
 
+#include "libvlcjni-modules.h"
 #include "libvlcjni-vlcobject.h"
 #include "utils.h"
 #include "native_crash_handler.h"
@@ -51,6 +52,12 @@ JNIEnv *jni_get_env(const char *name);
  * can only be one instance of this shared library in a single VM
  */
 static JavaVM *myVm;
+
+JavaVM *
+libvlc_get_jvm()
+{
+    return myVm;
+}
 
 static pthread_key_t jni_env_key;
 
@@ -169,8 +176,6 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
               "org/videolan/libvlc/Media", true);
     GET_CLASS(fields.Media.Track.clazz,
               "org/videolan/libvlc/Media$Track", true);
-    GET_CLASS(fields.Media.Slave.clazz,
-              "org/videolan/libvlc/Media$Slave", true);
     GET_CLASS(fields.MediaPlayer.clazz,
               "org/videolan/libvlc/MediaPlayer", true);
     GET_CLASS(fields.MediaPlayer.Title.clazz,
@@ -181,12 +186,6 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
               "org/videolan/libvlc/MediaPlayer$TrackDescription", true);
     GET_CLASS(fields.MediaPlayer.Equalizer.clazz,
               "org/videolan/libvlc/MediaPlayer$Equalizer", true);
-    GET_CLASS(fields.MediaDiscoverer.clazz,
-              "org/videolan/libvlc/MediaDiscoverer", true);
-    GET_CLASS(fields.MediaDiscoverer.Description.clazz,
-              "org/videolan/libvlc/MediaDiscoverer$Description", true);
-    GET_CLASS(fields.Dialog.clazz,
-              "org/videolan/libvlc/Dialog", true);
 
     GET_ID(GetStaticMethodID,
            fields.LibVLC.onNativeCrashID,
@@ -247,24 +246,10 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
            "Lorg/videolan/libvlc/Media$Track;");
 
     GET_ID(GetStaticMethodID,
-           fields.Media.createUnknownTrackFromNativeID,
-           fields.Media.clazz,
-           "createUnknownTrackFromNative",
-           "(Ljava/lang/String;Ljava/lang/String;IIIILjava/lang/String;Ljava/lang/String;)"
-           "Lorg/videolan/libvlc/Media$Track;");
-
-    GET_ID(GetStaticMethodID,
-           fields.Media.createSlaveFromNativeID,
-           fields.Media.clazz,
-           "createSlaveFromNative",
-           "(IILjava/lang/String;)"
-           "Lorg/videolan/libvlc/Media$Slave;");
-
-    GET_ID(GetStaticMethodID,
            fields.MediaPlayer.createTitleFromNativeID,
            fields.MediaPlayer.clazz,
            "createTitleFromNative",
-           "(JLjava/lang/String;I)Lorg/videolan/libvlc/MediaPlayer$Title;");
+           "(JLjava/lang/String;Z)Lorg/videolan/libvlc/MediaPlayer$Title;");
 
     GET_ID(GetStaticMethodID,
            fields.MediaPlayer.createChapterFromNativeID,
@@ -277,53 +262,6 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
            fields.MediaPlayer.clazz,
            "createTrackDescriptionFromNative",
            "(ILjava/lang/String;)Lorg/videolan/libvlc/MediaPlayer$TrackDescription;");
-
-    GET_ID(GetStaticMethodID,
-           fields.MediaDiscoverer.createDescriptionFromNativeID,
-           fields.MediaDiscoverer.clazz,
-           "createDescriptionFromNative",
-           "(Ljava/lang/String;Ljava/lang/String;I)"
-           "Lorg/videolan/libvlc/MediaDiscoverer$Description;");
-
-    GET_ID(GetStaticMethodID,
-           fields.Dialog.displayErrorFromNativeID,
-           fields.Dialog.clazz,
-           "displayErrorFromNative",
-           "(Ljava/lang/String;Ljava/lang/String;)V");
-
-    GET_ID(GetStaticMethodID,
-           fields.Dialog.displayLoginFromNativeID,
-           fields.Dialog.clazz,
-           "displayLoginFromNative",
-           "(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)"
-           "Lorg/videolan/libvlc/Dialog;");
-
-    GET_ID(GetStaticMethodID,
-           fields.Dialog.displayQuestionFromNativeID,
-           fields.Dialog.clazz,
-           "displayQuestionFromNative",
-           "(JLjava/lang/String;Ljava/lang/String;ILjava/lang/String;"
-           "Ljava/lang/String;Ljava/lang/String;)"
-           "Lorg/videolan/libvlc/Dialog;");
-
-    GET_ID(GetStaticMethodID,
-           fields.Dialog.displayProgressFromNativeID,
-           fields.Dialog.clazz,
-           "displayProgressFromNative",
-           "(JLjava/lang/String;Ljava/lang/String;ZFLjava/lang/String;)"
-           "Lorg/videolan/libvlc/Dialog;");
-
-    GET_ID(GetStaticMethodID,
-           fields.Dialog.cancelFromNativeID,
-           fields.Dialog.clazz,
-           "cancelFromNative",
-           "(Lorg/videolan/libvlc/Dialog;)V");
-
-    GET_ID(GetStaticMethodID,
-           fields.Dialog.updateProgressFromNativeID,
-           fields.Dialog.clazz,
-           "updateProgressFromNative",
-           "(Lorg/videolan/libvlc/Dialog;FLjava/lang/String;)V");
 
 #undef GET_CLASS
 #undef GET_ID
@@ -356,25 +294,13 @@ void JNI_OnUnload(JavaVM* vm, void* reserved)
 #endif
 }
 
-void Java_org_videolan_libvlc_LibVLC_nativeNew(JNIEnv *env, jobject thiz,
-                                               jobjectArray jstringArray,
-                                               jstring jhomePath)
+void Java_org_videolan_libvlc_LibVLC_nativeNew(JNIEnv *env, jobject thiz, jobjectArray jstringArray)
 {
     vlcjni_object *p_obj = NULL;
     libvlc_instance_t *p_libvlc = NULL;
     jstring *strings = NULL;
     const char **argv = NULL;
     int argc = 0;
-
-    if (jhomePath)
-    {
-        const char *psz_home = (*env)->GetStringUTFChars(env, jhomePath, 0);
-        if (psz_home)
-        {
-            setenv("HOME", psz_home, 1);
-            (*env)->ReleaseStringUTFChars(env, jhomePath, psz_home);
-        }
-    }
 
     if (jstringArray)
     {
@@ -480,4 +406,51 @@ void Java_org_videolan_libvlc_LibVLC_nativeSetUserAgent(JNIEnv* env,
 
     if (!psz_name || !psz_http)
         throw_IllegalArgumentException(env, "name or http invalid");
+}
+
+/* used by opensles module */
+int aout_get_native_sample_rate(void)
+{
+    JNIEnv *p_env;
+    if (!(p_env = jni_get_env(THREAD_NAME)))
+        return -1;
+    jclass cls = (*p_env)->FindClass (p_env, "android/media/AudioTrack");
+    jmethodID method = (*p_env)->GetStaticMethodID (p_env, cls, "getNativeOutputSampleRate", "(I)I");
+    int sample_rate = (*p_env)->CallStaticIntMethod (p_env, cls, method, 3); // AudioManager.STREAM_MUSIC
+    return sample_rate;
+}
+
+/* TODO REMOVE */
+static jobject error_obj = NULL;
+pthread_mutex_t error_obj_lock;
+
+void Java_org_videolan_libvlc_LibVLC_nativeSetOnHardwareAccelerationError(JNIEnv *env, jobject thiz, jobject error_obj_)
+{
+    pthread_mutex_lock(&error_obj_lock);
+
+    if (error_obj != NULL)
+        (*env)->DeleteGlobalRef(env, error_obj);
+    error_obj = error_obj_ ? (*env)->NewGlobalRef(env, error_obj_) : NULL;
+    pthread_mutex_unlock(&error_obj_lock);
+}
+
+void jni_EventHardwareAccelerationError()
+{
+    JNIEnv *env;
+
+    if (!(env = jni_get_env(THREAD_NAME)))
+        return;
+
+    pthread_mutex_lock(&error_obj_lock);
+    if (error_obj == NULL) {
+        pthread_mutex_unlock(&error_obj_lock);
+        return;
+    }
+
+    jclass cls = (*env)->GetObjectClass(env, error_obj);
+    jmethodID methodId = (*env)->GetMethodID(env, cls, "eventHardwareAccelerationError", "()V");
+    (*env)->CallVoidMethod(env, error_obj, methodId);
+
+    (*env)->DeleteLocalRef(env, cls);
+    pthread_mutex_unlock(&error_obj_lock);
 }

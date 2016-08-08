@@ -20,7 +20,8 @@
 
 package org.videolan.vlc.util;
 
-import org.videolan.vlc.BuildConfig;
+
+import com.android.tvvideo.BuildConfig;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -120,13 +121,6 @@ public class Strings {
         final String[] units = new String[] { "B", "KiB", "MiB", "GiB", "TiB" };
         int digitGroups = (int) (Math.log10(size)/ Math.log10(1024));
         return new DecimalFormat("#,##0.#").format(size/ Math.pow(1024, digitGroups)) + " " + units[digitGroups];
-    }
-
-    public static String readableSize(long size) {
-        if(size <= 0) return "0";
-        final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
-        int digitGroups = (int) (Math.log10(size)/ Math.log10(1000));
-        return new DecimalFormat("#,##0.#").format(size/ Math.pow(1000, digitGroups)) + " " + units[digitGroups];
     }
 
     public static String removeFileProtocole(String path){

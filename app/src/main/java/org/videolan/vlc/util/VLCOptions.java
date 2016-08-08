@@ -36,7 +36,6 @@ import org.videolan.libvlc.util.VLCUtil;
 import org.videolan.vlc.VLCApplication;
 import org.videolan.vlc.media.MediaWrapper;
 
-import java.io.File;
 import java.util.ArrayList;
 
 
@@ -53,8 +52,7 @@ public class VLCOptions {
     public static final int HW_ACCELERATION_FULL = 2;
 
     public static ArrayList<String> getLibOptions() {
-        final Context context = VLCApplication.getAppContext();
-        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(VLCApplication.getAppContext());
 
         ArrayList<String> options = new ArrayList<String>(50);
 
@@ -78,10 +76,6 @@ public class VLCOptions {
         else if (networkCaching < 0)
             networkCaching = 0;
 
-        final String freetypeRelFontsize = pref.getString("subtitles_size", "16");
-        final String freetypeColor = pref.getString("subtitles_color", "16777215");
-        final boolean freetypeBackground = pref.getBoolean("subtitles_background", false);
-
         /* CPU intensive plugin, setting for slow devices */
         options.add(timeStreching ? "--audio-time-stretch" : "--no-audio-time-stretch");
         options.add("--avcodec-skiploopfilter");
@@ -101,24 +95,7 @@ public class VLCOptions {
         options.add("--audio-resampler");
         options.add(getResampler());
 
-        options.add("--freetype-rel-fontsize=" + freetypeRelFontsize);
-        options.add("--freetype-color=" + freetypeColor);
-        if (freetypeBackground)
-            options.add("--freetype-background-opacity=128");
-        else
-            options.add("--freetype-background-opacity=0");
-
-        /* Configure keystore */
-        options.add("--keystore");
-        if (AndroidUtil.isMarshMallowOrLater())
-            options.add("file_crypt,none");
-        else
-            options.add("file_plaintext,none");
-        options.add("--keystore-file");
-        options.add(new File(context.getDir("keystore", Context.MODE_PRIVATE), "file").getAbsolutePath());
-
         options.add(verboseMode ? "-vvv" : "-vv");
-
         return options;
     }
 

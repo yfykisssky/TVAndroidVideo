@@ -192,13 +192,6 @@ static void *thumbnailer_lock(void *opaque, void **pixels)
  **/
 static void thumbnailer_unlock(void *opaque, void *picture, void *const *pixels)
 {
-    (void) opaque;
-    (void) picture;
-    (void) pixels;
-}
-
-static void thumbnailer_display(void *opaque, void *picture)
-{
     thumbnailer_sys_t *sys = opaque;
 
     /* If we have already received a thumbnail, or we are still seeking,
@@ -276,7 +269,7 @@ Java_org_videolan_libvlc_util_VLCUtil_nativeGetThumbnail(JNIEnv *env,
     sys->frameHeight = frameHeight;
     /* Set the video format and the callbacks. */
     libvlc_video_set_callbacks(mp, thumbnailer_lock, thumbnailer_unlock,
-                               thumbnailer_display, (void*)sys);
+                               NULL, (void*)sys);
     libvlc_video_set_format_callbacks(mp, thumbnailer_setup, NULL);
 
     libvlc_event_attach(libvlc_media_player_event_manager(mp),

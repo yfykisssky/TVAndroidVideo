@@ -24,15 +24,14 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.Media.Meta;
 import org.videolan.libvlc.Media.VideoTrack;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.util.Extensions;
-import org.videolan.vlc.gui.helpers.BitmapUtil;
 
 import java.util.Locale;
 
@@ -53,7 +52,6 @@ public class MediaWrapper implements Parcelable {
     public final static int MEDIA_FORCE_AUDIO = 0x8;
 
     protected String mTitle;
-    protected String mDisplayTitle;
     private String mArtist;
     private String mGenre;
     private String mCopyright;
@@ -85,7 +83,6 @@ public class MediaWrapper implements Parcelable {
     private boolean mIsPictureParsed;
     private int mFlags = 0;
     private long mLastModified = 0l;
-    private Media.Slave mSlaves[] = null;
 
     /**
      * Create a new MediaWrapper
@@ -113,12 +110,9 @@ public class MediaWrapper implements Parcelable {
 
     @Override
     public boolean equals(Object obj) {
-        Uri otherUri = ((MediaWrapper)obj).getUri();
-        if (mUri == null || otherUri == null)
-            return false;
-        if (mUri == otherUri)
+        if (mUri == ((MediaWrapper)obj).getUri())
             return true;
-        return mUri.equals(otherUri);
+        return false;
     }
 
     private void init(Media media) {
@@ -143,58 +137,36 @@ public class MediaWrapper implements Parcelable {
                 }
             }
             updateMeta(media);
-            if (mType == TYPE_ALL)
-                switch (media.getType()) {
-                    case Media.Type.Directory:
-                        mType = TYPE_DIR;
-                        break;
-                    case Media.Type.Playlist:
-                        mType = TYPE_PLAYLIST;
-                        break;
-                }
-            mSlaves = media.getSlaves();
+            if (mType == TYPE_ALL && media.getType() == Media.Type.Directory)
+                mType = TYPE_DIR;
         }
-        defineType();
-    }
 
-    public void defineType() {
-        if (mType != TYPE_ALL)
-            return;
-
-        String fileExt = null;
-        int dotIndex = mTitle != null ? mTitle.lastIndexOf(".") : -1;
-
-        if (dotIndex != -1) {
-            fileExt = mTitle.substring(dotIndex).toLowerCase(Locale.ENGLISH);
-        } else {
+        if (mType == TYPE_ALL) {
             final int index = mUri.toString().indexOf('?');
             String location;
             if (index == -1)
                 location = mUri.toString();
             else
                 location = mUri.toString().substring(0, index);
-            dotIndex = location.lastIndexOf(".");
-            if (dotIndex != -1)
-                fileExt = location.substring(dotIndex).toLowerCase(Locale.ENGLISH);
-        }
-
-        if (!TextUtils.isEmpty(fileExt)) {
-            if (Extensions.VIDEO.contains(fileExt)) {
-                mType = TYPE_VIDEO;
-            } else if (Extensions.AUDIO.contains(fileExt)) {
-                mType = TYPE_AUDIO;
-            } else if (Extensions.SUBTITLES.contains(fileExt)) {
-                mType = TYPE_SUBTITLE;
-            } else if (Extensions.PLAYLIST.contains(fileExt)) {
-                mType = TYPE_PLAYLIST;
+            int dotIndex = location.lastIndexOf(".");
+            if (dotIndex != -1) {
+                String fileExt = location.substring(dotIndex).toLowerCase(Locale.ENGLISH);
+                if( Extensions.VIDEO.contains(fileExt) ) {
+                    mType = TYPE_VIDEO;
+                } else if (Extensions.AUDIO.contains(fileExt)) {
+                    mType = TYPE_AUDIO;
+                } else if (Extensions.SUBTITLES.contains(fileExt)) {
+                    mType = TYPE_SUBTITLE;
+                } else if (Extensions.PLAYLIST.contains(fileExt)) {
+                    mType = TYPE_PLAYLIST;
+                }
             }
         }
     }
 
     private void init(long time, long length, int type,
                       Bitmap picture, String title, String artist, String genre, String album, String albumArtist,
-                      int width, int height, String artworkURL, int audio, int spu, int trackNumber, int discNumber, long lastModified,
-                      Media.Slave[] slaves) {
+                      int width, int height, String artworkURL, int audio, int spu, int trackNumber, int discNumber, long lastModified) {
         mFilename = null;
         mTime = time;
         mAudioTrack = audio;
@@ -214,7 +186,6 @@ public class MediaWrapper implements Parcelable {
         mTrackNumber = trackNumber;
         mDiscNumber = discNumber;
         mLastModified = lastModified;
-        mSlaves = slaves;
     }
 
     public MediaWrapper(Uri uri, long time, long length, int type,
@@ -222,7 +193,7 @@ public class MediaWrapper implements Parcelable {
                         int width, int height, String artworkURL, int audio, int spu, int trackNumber, int discNumber, long lastModified) {
         mUri = uri;
         init(time, length, type, picture, title, artist, genre, album, albumArtist,
-             width, height, artworkURL, audio, spu, trackNumber, discNumber, lastModified, null);
+             width, height, artworkURL, audio, spu, trackNumber, discNumber, lastModified);
     }
 
     public String getLocation() {
@@ -233,36 +204,38 @@ public class MediaWrapper implements Parcelable {
         return mUri;
     }
 
-    private static String getMetaId(Media media, String defaultMeta, int id, boolean trim) {
+    private static String getMetaId(Media media, int id, boolean trim) {
         String meta = media.getMeta(id);
-        return meta != null ? trim ? meta.trim() : meta : defaultMeta;
+        return meta != null ? trim ? meta.trim() : meta : null;
     }
 
     public void updateMeta(Media media) {
-        mTitle = getMetaId(media, mTitle, Meta.Title, true);
-        mArtist = getMetaId(media, mArtist, Meta.Artist, true);
-        mAlbum = getMetaId(media, mAlbum, Meta.Album, true);
-        mGenre = getMetaId(media, mGenre, Meta.Genre, true);
-        mAlbumArtist = getMetaId(media, mAlbumArtist, Meta.AlbumArtist, true);
-        mArtworkURL = getMetaId(media, mArtworkURL, Meta.ArtworkURL, false);
-        mNowPlaying = getMetaId(media, mNowPlaying, Meta.NowPlaying, false);
-        final String trackNumber = getMetaId(media, null, Meta.TrackNumber, false);
+        mTitle = getMetaId(media, Meta.Title, true);
+        mArtist = getMetaId(media, Meta.Artist, true);
+        mAlbum = getMetaId(media, Meta.Album, true);
+        mGenre = getMetaId(media, Meta.Genre, true);
+        mAlbumArtist = getMetaId(media, Meta.AlbumArtist, true);
+        mArtworkURL = getMetaId(media, Meta.ArtworkURL, false);
+        mNowPlaying = getMetaId(media, Meta.NowPlaying, false);
+        final String trackNumber = getMetaId(media, Meta.TrackNumber, false);
         if (!TextUtils.isEmpty(trackNumber)) {
             try {
                 mTrackNumber = Integer.parseInt(trackNumber);
             } catch (NumberFormatException ignored) {}
         }
-        final String discNumber = getMetaId(media, null, Meta.DiscNumber, false);
+        final String discNumber = getMetaId(media, Meta.DiscNumber, false);
         if (!TextUtils.isEmpty(discNumber)) {
             try {
                 mDiscNumber = Integer.parseInt(discNumber);
             } catch (NumberFormatException ignored) {}
         }
+        Log.d(TAG, "Title " + mTitle);
+        Log.d(TAG, "Artist " + mArtist);
+        Log.d(TAG, "Genre " + mGenre);
+        Log.d(TAG, "Album " + mAlbum);
     }
 
     public void updateMeta(MediaPlayer mediaPlayer) {
-        if (!TextUtils.isEmpty(mTitle) && TextUtils.isEmpty(mDisplayTitle))
-            mDisplayTitle = mTitle;
         final Media media = mediaPlayer.getMedia();
         if (media == null)
             return;
@@ -321,14 +294,6 @@ public class MediaWrapper implements Parcelable {
         return mHeight;
     }
 
-    /**
-     * Returns the raw picture object. Likely to be NULL in VLC for Android
-     * due to lazy-loading.
-     *
-     * Use {@link BitmapUtil#getPictureFromCache(MediaWrapper)} instead.
-     *
-     * @return The raw picture or NULL
-     */
     public Bitmap getPicture() {
         return mPicture;
     }
@@ -352,26 +317,26 @@ public class MediaWrapper implements Parcelable {
         mIsPictureParsed = isParsed;
     }
 
-    public void setDisplayTitle(String title){
-        mDisplayTitle = title;
-    }
-
-    public void setArtist(String artist){
-        mArtist = artist;
+    public void setTitle(String title){
+        mTitle = title;
     }
 
     public String getTitle() {
-        if (!TextUtils.isEmpty(mDisplayTitle))
-            return mDisplayTitle;
         if (!TextUtils.isEmpty(mTitle))
             return mTitle;
-        String fileName = getFileName();
-        if (fileName == null)
-            return "";
-        int end = fileName.lastIndexOf(".");
-        if (end <= 0)
-            return fileName;
-        return fileName.substring(0, end);
+        else {
+            String fileName = getFileName();
+            if (fileName == null)
+                return "";
+            int end = fileName.lastIndexOf(".");
+            if (end <= 0)
+                return fileName;
+            return fileName.substring(0, end);
+        }
+    }
+
+    public String getDisplayTitle() {
+        return getTitle();
     }
 
     public String getReferenceArtist() {
@@ -459,10 +424,6 @@ public class MediaWrapper implements Parcelable {
         return mArtworkURL;
     }
 
-    public void setArtworkURL(String url) {
-        mArtworkURL = url;
-    }
-
     public long getLastModified() {
         return mLastModified;
     }
@@ -480,16 +441,8 @@ public class MediaWrapper implements Parcelable {
     public int getFlags() {
         return mFlags;
     }
-    public boolean hasFlag(int flag) {
-        return (mFlags & flag) != 0;
-    }
     public void removeFlags(int flags) {
         mFlags &= ~flags;
-    }
-
-    @Nullable
-    public Media.Slave[] getSlaves() {
-        return mSlaves;
     }
 
     @Override
@@ -515,8 +468,7 @@ public class MediaWrapper implements Parcelable {
                 in.readInt(),
                 in.readInt(),
                 in.readInt(),
-                in.readLong(),
-                in.createTypedArray(PSlave.CREATOR));
+                in.readLong());
     }
 
     @Override
@@ -539,16 +491,6 @@ public class MediaWrapper implements Parcelable {
         dest.writeInt(getTrackNumber());
         dest.writeInt(getDiscNumber());
         dest.writeLong(getLastModified());
-
-        if (mSlaves != null) {
-            PSlave pslaves[] = new PSlave[mSlaves.length];
-            for (int i = 0; i < mSlaves.length; ++i) {
-                pslaves[i] = new PSlave(mSlaves[i]);
-            }
-            dest.writeTypedArray(pslaves, flags);
-        }
-        else
-            dest.writeTypedArray(null, flags);
     }
 
     public static final Parcelable.Creator<MediaWrapper> CREATOR = new Parcelable.Creator<MediaWrapper>() {
@@ -559,39 +501,4 @@ public class MediaWrapper implements Parcelable {
             return new MediaWrapper[size];
         }
     };
-
-    private static class PSlave extends Media.Slave implements Parcelable {
-
-        protected PSlave(Media.Slave slave) {
-            super(slave.type, slave.priority, slave.uri);
-        }
-
-        protected PSlave(Parcel in) {
-            super(in.readInt(), in.readInt(), in.readString());
-        }
-
-        public static final Creator<PSlave> CREATOR = new Creator<PSlave>() {
-            @Override
-            public PSlave createFromParcel(Parcel in) {
-                return new PSlave(in);
-            }
-
-            @Override
-            public PSlave[] newArray(int size) {
-                return new PSlave[size];
-            }
-        };
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel parcel, int flags) {
-            parcel.writeInt(type);
-            parcel.writeInt(priority);
-            parcel.writeString(uri);
-        }
-    }
 }

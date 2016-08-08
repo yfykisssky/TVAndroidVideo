@@ -27,8 +27,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -36,10 +34,10 @@ import android.support.annotation.RequiresPermission;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.tvvideo.BuildConfig;
 import com.android.tvvideo.R;
 
 import org.videolan.libvlc.util.AndroidUtil;
-import org.videolan.vlc.BuildConfig;
 import org.videolan.vlc.VLCApplication;
 import org.videolan.vlc.media.MediaUtils;
 import org.videolan.vlc.media.MediaWrapper;
@@ -82,12 +80,12 @@ public class AudioUtil {
      */
     public static String PLAYLIST_DIR = null;
 
-    public static final BitmapDrawable DEFAULT_COVER = new BitmapDrawable(VLCApplication.getAppResources(), BitmapCache.getFromResource(VLCApplication.getAppResources(), R.drawable.icon));
+    //public static final BitmapDrawable DEFAULT_COVER = new BitmapDrawable(VLCApplication.getAppResources(), BitmapCache.getFromResource(VLCApplication.getAppResources(), R.drawable.icon));
 
     @RequiresPermission(android.Manifest.permission.WRITE_SETTINGS)
     public static void setRingtone(MediaWrapper song, Activity context){
         if (!Permissions.canWriteSettings(context)) {
-            Permissions.checkWriteSettingsPermission(context, Permissions.PERMISSION_SYSTEM_RINGTONE);
+            Permissions.checkWriteSettingsPermission(context);
             return;
         }
         File newringtone = AndroidUtil.UriToFile(song.getUri());
@@ -286,16 +284,16 @@ public class AudioUtil {
     }
 
     public static Bitmap getCoverFromMemCache(Context context, MediaWrapper media, int width) {
-        if (media != null && media.getArtist() != null && media.getAlbum() != null) {
+      /*  if (media != null && media.getArtist() != null && media.getAlbum() != null) {
             final BitmapCache cache = BitmapCache.getInstance();
             return cache.getBitmapFromMemCache(getCoverCachePath(context, media, width));
-        } else
+        } else*/
             return null;
     }
 
     @SuppressLint("NewApi")
     public synchronized static Bitmap getCover(Context context, MediaWrapper media, int width) {
-        BitmapCache cache = BitmapCache.getInstance();
+       /* BitmapCache cache = BitmapCache.getInstance();
         String coverPath = null;
         Bitmap cover = null;
         String cachePath = null;
@@ -353,8 +351,8 @@ public class AudioUtil {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        return cover;
+        }*/
+        return null;
     }
 
     private static void writeBitmap(Bitmap bitmap, String path) throws IOException {
@@ -374,12 +372,15 @@ public class AudioUtil {
     }
 
     private static Bitmap readCoverBitmap(String path, int dipWidth) {
-        Bitmap cover = null;
+     /*   Bitmap cover = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
         int width = UiTools.convertDpToPx(dipWidth);
 
-        /* Get the resolution of the bitmap without allocating the memory */
+        *//* Get the resolution of the bitmap without allocating the memory *//*
         options.inJustDecodeBounds = true;
+        if (AndroidUtil.isHoneycombOrLater())
+            options.inMutable = true;
+        BitmapUtil.setInBitmap(options);
         BitmapFactory.decodeFile(path, options);
 
         if (options.outWidth > 0 && options.outHeight > 0) {
@@ -391,10 +392,11 @@ public class AudioUtil {
                 options.inSampleSize = options.inSampleSize * 2;
 
             // Decode the file (with memory allocation this time)
+            BitmapUtil.setInBitmap(options);
             cover = BitmapFactory.decodeFile(path, options);
-        }
+        }*/
 
-        return cover;
+        return null;
     }
 
     public static Bitmap getCover(Context context, ArrayList<MediaWrapper> list, int width, boolean fromMemCache) {

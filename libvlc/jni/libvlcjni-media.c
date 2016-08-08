@@ -57,7 +57,6 @@ Media_event_cb(vlcjni_object *p_obj, const libvlc_event_t *p_ev,
         /* no need to send libvlc_MediaParsedChanged when parsing is synchronous */
         if (p_sys->b_parsing_sync)
             b_dispatch = false;
-
         p_sys->b_parsing_sync = false;
         p_sys->b_parsing_async = false;
         pthread_cond_signal(&p_sys->wait);
@@ -88,8 +87,6 @@ Media_event_cb(vlcjni_object *p_obj, const libvlc_event_t *p_ev,
             break;
         case libvlc_MediaStateChanged:
             p_java_event->arg1 = p_ev->u.media_state_changed.new_state;
-        case libvlc_MediaParsedChanged:
-            p_java_event->arg1 = p_ev->u.media_parsed_changed.new_status;
     }
     p_java_event->type = p_ev->type;
     return true;
@@ -281,6 +278,9 @@ media_track_to_object(JNIEnv *env, libvlc_media_track_t *p_tracks)
     jstring jlanguage = NULL;
     jstring jdescription = NULL;
 
+    if (!p_tracks || p_tracks->i_type == libvlc_track_unknown)
+        return NULL;
+
     psz_desc = libvlc_media_get_codec_description(p_tracks->i_type,
                                                   p_tracks->i_codec);
     if (psz_desc)
@@ -347,17 +347,8 @@ media_track_to_object(JNIEnv *env, libvlc_media_track_t *p_tracks)
                                 jdescription,
                                 jencoding);
         }
-        case libvlc_track_unknown:
-            return (*env)->CallStaticObjectMethod(env, fields.Media.clazz,
-                                fields.Media.createUnknownTrackFromNativeID,
-                                jcodec,
-                                joriginalCodec,
-                                (jint)p_tracks->i_id,
-                                (jint)p_tracks->i_profile,
-                                (jint)p_tracks->i_level,
-                                (jint)p_tracks->i_bitrate,
-                                jlanguage,
-                                jdescription);
+        default:
+            return NULL;
     }
 }
 
@@ -385,7 +376,8 @@ Java_org_videolan_libvlc_Media_nativeGetTracks(JNIEnv *env, jobject thiz)
     {
         jobject jtrack = media_track_to_object(env, pp_tracks[i]);
 
-        (*env)->SetObjectArrayElement(env, array, i, jtrack);
+        if (jtrack) 
+            (*env)->SetObjectArrayElement(env, array, i, jtrack);
     }
 
 error:
@@ -396,7 +388,7 @@ error:
 
 jboolean
 Java_org_videolan_libvlc_Media_nativeParseAsync(JNIEnv *env, jobject thiz,
-                                                jint flags, jint timeout)
+                                                jint flags)
 {
     vlcjni_object *p_obj = VLCJniObject_getInstance(env, thiz);
 
@@ -407,7 +399,7 @@ Java_org_videolan_libvlc_Media_nativeParseAsync(JNIEnv *env, jobject thiz,
     p_obj->p_sys->b_parsing_async = true;
     pthread_mutex_unlock(&p_obj->p_sys->lock);
 
-    return libvlc_media_parse_with_options(p_obj->u.p_m, flags, timeout) == 0 ? true : false;
+    return libvlc_media_parse_with_options(p_obj->u.p_m, flags) == 0 ? true : false;
 }
 
 jboolean
@@ -422,7 +414,7 @@ Java_org_videolan_libvlc_Media_nativeParse(JNIEnv *env, jobject thiz, jint flags
     p_obj->p_sys->b_parsing_sync = true;
     pthread_mutex_unlock(&p_obj->p_sys->lock);
 
-    if (libvlc_media_parse_with_options(p_obj->u.p_m, flags, -1) != 0)
+    if (libvlc_media_parse_with_options(p_obj->u.p_m, flags) != 0)
         return false;
 
     pthread_mutex_lock(&p_obj->p_sys->lock);
@@ -474,81 +466,4 @@ Java_org_videolan_libvlc_Media_nativeAddOption(JNIEnv *env, jobject thiz,
     libvlc_media_add_option(p_obj->u.p_m, p_option);
 
     (*env)->ReleaseStringUTFChars(env, joption, p_option);
-}
-
-void
-Java_org_videolan_libvlc_Media_nativeAddSlave(JNIEnv *env, jobject thiz,
-                                              jint type, jint priority,
-                                              jstring juri)
-{
-    const char *psz_uri;
-    vlcjni_object *p_obj = VLCJniObject_getInstance(env, thiz);
-
-    if (!p_obj)
-        return;
-
-    if (!juri || !(psz_uri = (*env)->GetStringUTFChars(env, juri, 0)))
-    {
-        throw_IllegalArgumentException(env, "uri invalid");
-        return;
-    }
-
-    int i_ret = libvlc_media_slaves_add(p_obj->u.p_m, type, priority, psz_uri);
-
-    (*env)->ReleaseStringUTFChars(env, juri, psz_uri);
-    if (i_ret != 0)
-        throw_IllegalStateException(env, "can't add slaves to libvlc_media");
-}
-
-void
-Java_org_videolan_libvlc_Media_nativeClearSlaves(JNIEnv *env, jobject thiz)
-{
-    vlcjni_object *p_obj = VLCJniObject_getInstance(env, thiz);
-
-    if (!p_obj)
-        return;
-
-    libvlc_media_slaves_clear(p_obj->u.p_m);
-}
-
-unsigned int libvlc_media_slaves_get( libvlc_media_t *p_md,
-                                      libvlc_media_slave_t ***ppp_slaves );
-void libvlc_media_slaves_release( libvlc_media_slave_t **pp_slaves,
-                                  unsigned int i_count );
-jobject
-Java_org_videolan_libvlc_Media_nativeGetSlaves(JNIEnv *env, jobject thiz)
-{
-    vlcjni_object *p_obj = VLCJniObject_getInstance(env, thiz);
-    libvlc_media_slave_t **pp_slaves;
-    unsigned int i_slaves;
-    jobjectArray array;
-
-    if (!p_obj)
-        return NULL;
-
-    i_slaves = libvlc_media_slaves_get(p_obj->u.p_m, &pp_slaves);
-    if (i_slaves == 0)
-        return NULL;
-
-    array = (*env)->NewObjectArray(env, i_slaves, fields.Media.Slave.clazz, NULL);
-    if (array == NULL)
-        goto error;
-
-    for (unsigned int i = 0; i < i_slaves; ++i)
-    {
-        libvlc_media_slave_t *p_slave = pp_slaves[i];
-        jstring juri = (*env)->NewStringUTF(env, p_slave->psz_uri);
-
-        jobject jslave =
-            (*env)->CallStaticObjectMethod(env, fields.Media.clazz,
-                                           fields.Media.createSlaveFromNativeID,
-                                           p_slave->i_type, p_slave->i_priority,
-                                           juri);
-        (*env)->SetObjectArrayElement(env, array, i, jslave);
-    }
-
-error:
-    if (pp_slaves)
-        libvlc_media_slaves_release(pp_slaves, i_slaves);
-    return array;
 }

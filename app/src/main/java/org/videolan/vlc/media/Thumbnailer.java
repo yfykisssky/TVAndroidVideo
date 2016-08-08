@@ -20,16 +20,17 @@
 
 package org.videolan.vlc.media;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-import android.os.Process;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 
 import com.android.tvvideo.R;
 
 import org.videolan.libvlc.util.VLCUtil;
 import org.videolan.vlc.VLCApplication;
-import org.videolan.vlc.gui.helpers.BitmapUtil;
 import org.videolan.vlc.interfaces.IVideoBrowser;
 import org.videolan.vlc.util.VLCInstance;
 
@@ -47,7 +48,7 @@ public class Thumbnailer implements Runnable {
 
     private WeakReference<IVideoBrowser> mVideoBrowser;
 
-    private final Queue<MediaWrapper> mItems = new LinkedList<>();
+    private final Queue<MediaWrapper> mItems = new LinkedList<MediaWrapper>();
 
     private boolean isStopping = false;
     private final Lock lock = new ReentrantLock();
@@ -57,16 +58,17 @@ public class Thumbnailer implements Runnable {
     private int mTotalCount;
     private final String mPrefix;
 
-    public Thumbnailer() {
-        mPrefix = VLCApplication.getAppResources().getString(R.string.thumbnail);
+    public Thumbnailer(Context context, Display display) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        mPrefix = context.getResources().getString(R.string.thumbnail);
     }
 
     public void start(IVideoBrowser videoBrowser) {
         isStopping = false;
         if (mThread == null || mThread.getState() == State.TERMINATED) {
-            mVideoBrowser = new WeakReference<>(videoBrowser);
+            mVideoBrowser = new WeakReference<IVideoBrowser>(videoBrowser);
             mThread = new Thread(this);
-            mThread.setPriority(Process.THREAD_PRIORITY_DEFAULT+ Process.THREAD_PRIORITY_LESS_FAVORABLE);
             mThread.start();
         }
     }
@@ -107,7 +109,7 @@ public class Thumbnailer implements Runnable {
      * @param item media wrapper of the file browser item.
      */
     public void addJob(MediaWrapper item) {
-        if(BitmapUtil.getPicture(item) != null || item.isPictureParsed())
+       /* if(BitmapUtil.getPicture(item) != null || item.isPictureParsed())
             return;
         lock.lock();
         try {
@@ -117,7 +119,7 @@ public class Thumbnailer implements Runnable {
         } finally {
             lock.unlock();
         }
-        Log.i(TAG, "Job added!");
+        Log.i(TAG, "Job added!");*/
     }
 
     /**
@@ -125,10 +127,11 @@ public class Thumbnailer implements Runnable {
      */
     @Override
     public void run() {
-        int total, count = 0;
+        int count = 0;
+        int total = 0;
 
         Log.d(TAG, "Thumbnailer started");
-        mainloop:
+mainloop:
         while (!isStopping) {
             lock.lock();
             // Get the id of the file browser item to create its thumbnail.
@@ -192,6 +195,6 @@ public class Thumbnailer implements Runnable {
     }
 
     public void setVideoBrowser(IVideoBrowser browser){
-        mVideoBrowser = new WeakReference<>(browser);
+        mVideoBrowser = new WeakReference<IVideoBrowser>(browser);
     }
 }

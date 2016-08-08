@@ -3,8 +3,8 @@
     package="org.videolan.test" >
 
     <uses-sdk
-        android:minSdkVersion="1"
-        android:targetSdkVersion="1" />
+        android:minSdkVersion="7"
+        android:targetSdkVersion="22" />
 
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
@@ -12,6 +12,10 @@
         android:handleProfiling="false"
         android:label="Tests for org.videolan.test"
         android:targetPackage="org.videolan.test" />
+
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application>
         <uses-library android:name="android.test.runner" />

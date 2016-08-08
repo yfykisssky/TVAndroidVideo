@@ -24,7 +24,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Process;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.util.Log;
@@ -57,7 +56,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class MediaLibrary {
     public final static String TAG = "VLC/MediaLibrary";
 
-    public static final int UPDATE_ITEM = 0;
     public static final int MEDIA_ITEMS_UPDATED = 100;
 
     private static MediaLibrary mInstance;
@@ -85,15 +83,15 @@ public class MediaLibrary {
                 "/android/media",
         };
 
-        FOLDER_BLACKLIST = new HashSet<>();
+        FOLDER_BLACKLIST = new HashSet<String>();
         for (String item : folder_blacklist)
             FOLDER_BLACKLIST.add(AndroidDevices.EXTERNAL_PUBLIC_DIRECTORY + item);
     }
 
     private MediaLibrary() {
         mInstance = this;
-        mItemList = new ArrayList<>();
-        mUpdateHandler = new ArrayList<>();
+        mItemList = new ArrayList<MediaWrapper>();
+        mUpdateHandler = new ArrayList<Handler>();
         mItemListLock = new ReentrantReadWriteLock();
     }
 
@@ -112,12 +110,11 @@ public class MediaLibrary {
             isStopping = false;
             MediaUtils.actionScanStart();
             mLoadingThread = new Thread(new GetMediaItemsRunnable());
-            mLoadingThread.setPriority(Process.THREAD_PRIORITY_DEFAULT+ Process.THREAD_PRIORITY_LESS_FAVORABLE);
             mLoadingThread.start();
         }
     }
 
-    public void loadMediaItems(){
+    public void loadMedaItems(){
         VLCApplication.runBackground(new Runnable() {
             @Override
             public void run() {
@@ -135,10 +132,12 @@ public class MediaLibrary {
     }
 
     public boolean isWorking() {
-        return mLoadingThread != null &&
-                mLoadingThread.isAlive() &&
-                mLoadingThread.getState() != State.TERMINATED &&
-                mLoadingThread.getState() != State.NEW;
+        if (mLoadingThread != null &&
+            mLoadingThread.isAlive() &&
+            mLoadingThread.getState() != State.TERMINATED &&
+            mLoadingThread.getState() != State.NEW)
+            return true;
+        return false;
     }
 
     public synchronized static MediaLibrary getInstance() {
@@ -156,7 +155,7 @@ public class MediaLibrary {
     }
 
     public ArrayList<MediaWrapper> searchMedia(String query){
-        ArrayList<MediaWrapper> mediaList = new ArrayList<>();
+        ArrayList<MediaWrapper> mediaList = new ArrayList<MediaWrapper>();
         ArrayList<String> pathList = MediaDatabase.getInstance().searchMedia(query);
         if (!pathList.isEmpty()){
             for (String path : pathList) {
@@ -167,45 +166,46 @@ public class MediaLibrary {
     }
 
     public ArrayList<MediaWrapper> getVideoItems() {
-        ArrayList<MediaWrapper> videoItems = new ArrayList<>();
-        MediaWrapper item;
-        int count = mItemList.size();
-        for (int i = 0; i < count; ++i) {
-            item = mItemList.get(i);
+        ArrayList<MediaWrapper> videoItems = new ArrayList<MediaWrapper>();
+        mItemListLock.readLock().lock();
+        for (int i = 0; i < mItemList.size(); i++) {
+            MediaWrapper item = mItemList.get(i);
             if (item != null && item.getType() == MediaWrapper.TYPE_VIDEO) {
                 videoItems.add(item);
             }
         }
+        mItemListLock.readLock().unlock();
         return videoItems;
     }
 
     public ArrayList<MediaWrapper> getAudioItems() {
-        ArrayList<MediaWrapper> audioItems = new ArrayList<>();
-        MediaWrapper item;
-        int count = mItemList.size();
-        for (int i = 0; i < count; ++i) {
-            item = mItemList.get(i);
+        ArrayList<MediaWrapper> audioItems = new ArrayList<MediaWrapper>();
+        mItemListLock.readLock().lock();
+        for (int i = 0; i < mItemList.size(); i++) {
+            MediaWrapper item = mItemList.get(i);
             if (item.getType() == MediaWrapper.TYPE_AUDIO) {
                 audioItems.add(item);
             }
         }
+        mItemListLock.readLock().unlock();
         return audioItems;
     }
 
     public ArrayList<MediaWrapper> getPlaylistFilesItems() {
-        ArrayList<MediaWrapper> playlistItems = new ArrayList<>();
-        MediaWrapper item;
-        int count = mItemList.size();
-        for (int i = 0; i < count; ++i) {
-            item = mItemList.get(i);
-            if (item.getType() == MediaWrapper.TYPE_PLAYLIST)
+        ArrayList<MediaWrapper> playlistItems = new ArrayList<MediaWrapper>();
+        mItemListLock.readLock().lock();
+        for (int i = 0; i < mItemList.size(); i++) {
+            MediaWrapper item = mItemList.get(i);
+            if (item.getType() == MediaWrapper.TYPE_PLAYLIST) {
                 playlistItems.add(item);
+            }
         }
+        mItemListLock.readLock().unlock();
         return playlistItems;
     }
 
-  /*  public ArrayList<AudioBrowserListAdapter.ListItem> getPlaylistDbItems() {
-        ArrayList<AudioBrowserListAdapter.ListItem> playlistItems = new ArrayList<>();
+   /* public ArrayList<AudioBrowserListAdapter.ListItem> getPlaylistDbItems() {
+        ArrayList<AudioBrowserListAdapter.ListItem> playlistItems = new ArrayList<AudioBrowserListAdapter.ListItem>();
         AudioBrowserListAdapter.ListItem playList;
         MediaDatabase db = MediaDatabase.getInstance();
         String[] items, playlistNames = db.getPlaylists();
@@ -239,10 +239,19 @@ public class MediaLibrary {
         return null;
     }
 
+    public ArrayList<MediaWrapper> getMediaItems(List<String> pathList) {
+        ArrayList<MediaWrapper> items = new ArrayList<MediaWrapper>();
+        for (int i = 0; i < pathList.size(); i++) {
+            MediaWrapper item = getMediaItem(pathList.get(i));
+            items.add(item);
+        }
+        return items;
+    }
+
     private class GetMediaItemsRunnable implements Runnable {
 
-        private final Stack<File> directories = new Stack<>();
-        private final HashSet<String> directoriesScanned = new HashSet<>();
+        private final Stack<File> directories = new Stack<File>();
+        private final HashSet<String> directoriesScanned = new HashSet<String>();
 
         public GetMediaItemsRunnable() {
         }
@@ -274,7 +283,7 @@ public class MediaLibrary {
             ArrayMap<String, MediaWrapper> existingMedias = getStoredMedias(mediaDatabase);
 
             // list of all added files
-            HashSet<String> addedLocations = new HashSet<>();
+            HashSet<String> addedLocations = new HashSet<String>();
 
             // clear all old items
             mItemListLock.writeLock().lock();
@@ -285,9 +294,9 @@ public class MediaLibrary {
 
             int count = 0;
 
-            LinkedList<File> mediaToScan = new LinkedList<>();
+            LinkedList<File> mediaToScan = new LinkedList<File>();
             try {
-                LinkedList<String> dirsToIgnore = new LinkedList<>();
+                LinkedList<String> dirsToIgnore = new LinkedList<String>();
                 // Count total files, and stack them
                 while (!directories.isEmpty()) {
                     File dir = directories.pop();
@@ -340,7 +349,7 @@ public class MediaLibrary {
                 }
 
                 //Remove ignored files
-                HashSet<Uri> mediasToRemove = new HashSet<>();
+                HashSet<Uri> mediasToRemove = new HashSet<Uri>();
                 String path;
                 outloop:
                 for (Map.Entry<String, MediaWrapper> entry : existingMedias.entrySet()){
@@ -374,28 +383,27 @@ public class MediaLibrary {
                             // get existing media item from database
                             mItemList.add(existingMedias.get(fileURI));
                             mItemListLock.writeLock().unlock();
-                            notifyMediaUpdated(existingMedias.get(fileURI));
                             addedLocations.add(fileURI);
                         }
                     } else {
+                        mItemListLock.writeLock().lock();
                         // create new media item
                         final Media media = new Media(libVlcInstance, Uri.parse(fileURI));
                         media.parse();
                         /* skip files with .mod extension and no duration */
                         if ((media.getDuration() == 0 || (media.getTrackCount() != 0 && TextUtils.isEmpty(media.getTrack(0).codec))) &&
                             fileURI.endsWith(".mod")) {
+                            mItemListLock.writeLock().unlock();
                             media.release();
                             continue;
                         }
                         MediaWrapper mw = new MediaWrapper(media);
                         media.release();
                         mw.setLastModified(file.lastModified());
-                        mItemListLock.writeLock().lock();
                         mItemList.add(mw);
-                        mItemListLock.writeLock().unlock();
-                        notifyMediaUpdated(mw);
                         // Add this item to database
                         mediaDatabase.addMedia(mw);
+                        mItemListLock.writeLock().unlock();
                     }
                     if (isStopping) {
                         Log.d(TAG, "Stopping scan");
@@ -434,14 +442,6 @@ public class MediaLibrary {
                     restartHandler.sendEmptyMessageDelayed(1, 200);
                 }
             }
-        }
-    }
-
-    private void notifyMediaUpdated(MediaWrapper mw) {
-        // update the video and audio activities
-        for (int i = 0; i < mUpdateHandler.size(); i++) {
-            Handler h = mUpdateHandler.get(i);
-            h.obtainMessage(UPDATE_ITEM, mw).sendToTarget();
         }
     }
 
@@ -499,11 +499,9 @@ public class MediaLibrary {
     }
 
     public void setBrowser(IBrowser browser) {
-        if (browser != null) {
-            mBrowser = new WeakReference<>(browser);
-            if (isWorking() && mBrowser.get() != null)
-                mBrowser.get().showProgressBar();
-        } else
+        if (browser != null)
+            mBrowser = new WeakReference<IBrowser>(browser);
+        else
             mBrowser.clear();
     }
 }

@@ -65,6 +65,7 @@ public class HWDecoderUtil {
         /*
          * FIXME: Theses cpu crash in MediaCodec. We need to get hands on these devices in order to debug it.
          */
+        new DecoderBySOC("ro.product.board", "msm8916", Decoder.NONE), //Samsung Galaxy Core Prime
         new DecoderBySOC("ro.product.board", "MSM8225", Decoder.NONE), //Samsung Galaxy Core
         new DecoderBySOC("ro.product.board", "hawaii", Decoder.NONE), // Samsung Galaxy Ace 4
     };
@@ -76,11 +77,6 @@ public class HWDecoderUtil {
          */
         new DecoderBySOC("ro.product.brand", "SEMC", Decoder.NONE), // Xperia S
         new DecoderBySOC("ro.board.platform", "msm7627", Decoder.NONE), // QCOM S1
-
-        /*
-         * Even if omap, old Amazon devices don't work with OMX, so either use MediaCodec or SW.
-         */
-        new DecoderBySOC("ro.product.brand", "Amazon", Decoder.MEDIACODEC),
 
         /*
          * Devices working on OMX
@@ -118,7 +114,6 @@ public class HWDecoderUtil {
         /* getPlaybackHeadPosition returns an invalid position on Fire OS,
          * thus Audiotrack is not usable */
         new AudioOutputBySOC("ro.product.brand", "Amazon", AudioOutput.OPENSLES),
-        new AudioOutputBySOC("ro.product.manufacturer", "Amazon", AudioOutput.OPENSLES),
     };
 
     private static final HashMap<String, String> sSystemPropertyMap = new HashMap<String, String>();

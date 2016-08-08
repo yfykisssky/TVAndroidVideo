@@ -70,6 +70,11 @@ public class SmoothGridView extends GridView {
 
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if(iPageNum==0){
+                    return false;
+                }
+
                 // TODO Auto-generated method stub
                 if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN
                         && event.getAction() == KeyEvent.ACTION_DOWN) {

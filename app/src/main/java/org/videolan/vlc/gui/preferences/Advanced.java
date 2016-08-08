@@ -36,9 +36,7 @@ import android.text.TextUtils;
 import com.android.tvvideo.R;
 
 import org.videolan.libvlc.util.HWDecoderUtil;
-import org.videolan.vlc.BuildConfig;
 import org.videolan.vlc.gui.helpers.AudioUtil;
-import org.videolan.vlc.gui.helpers.BitmapCache;
 import org.videolan.vlc.gui.helpers.UiTools;
 import org.videolan.vlc.media.MediaDatabase;
 import org.videolan.vlc.util.Util;
@@ -60,7 +58,7 @@ public class Advanced extends BasePreferenceFragment implements SharedPreference
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (TextUtils.equals(BuildConfig.FLAVOR_target, "chrome")) {
+        if (TextUtils.equals("chrome", "chrome")) {
             findPreference("quit_app").setEnabled(false);
         }
 
@@ -159,7 +157,7 @@ public class Advanced extends BasePreferenceFragment implements SharedPreference
                 return true;
             case "clear_media_db":
                 MediaDatabase.getInstance().emptyDatabase();
-                BitmapCache.getInstance().clear();
+                //BitmapCache.getInstance().clear();
                 AudioUtil.clearCacheFolders();
                 getActivity().setResult(PreferencesActivity.RESULT_RESCAN);
                 UiTools.snacker(getView(), R.string.media_db_cleared);
@@ -178,8 +176,10 @@ public class Advanced extends BasePreferenceFragment implements SharedPreference
             case "network_caching":
             case "vout":
                 VLCInstance.restart();
-                if (getActivity() != null )
-                    ((PreferencesActivity)getActivity()).restartMediaPlayer();
+                if (getActivity() != null ){
+
+                }
+                    //((PreferencesActivity)getActivity()).restartMediaPlayer();
         }
     }
 }

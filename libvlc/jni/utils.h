@@ -56,16 +56,10 @@ struct fields {
             jclass clazz;
         } Track;
 
-        struct {
-            jclass clazz;
-        } Slave;
-
         jclass clazz;
         jmethodID createAudioTrackFromNativeID;
         jmethodID createVideoTrackFromNativeID;
         jmethodID createSubtitleTrackFromNativeID;
-        jmethodID createUnknownTrackFromNativeID;
-        jmethodID createSlaveFromNativeID;
     } Media;
     struct {
         struct {
@@ -87,22 +81,6 @@ struct fields {
         jmethodID createChapterFromNativeID;
         jmethodID createTrackDescriptionFromNativeID;
     } MediaPlayer;
-    struct {
-        struct {
-            jclass clazz;
-        } Description;
-        jclass clazz;
-        jmethodID createDescriptionFromNativeID;
-    } MediaDiscoverer;
-    struct {
-        jclass clazz;
-        jmethodID displayErrorFromNativeID;
-        jmethodID displayLoginFromNativeID;
-        jmethodID displayQuestionFromNativeID;
-        jmethodID displayProgressFromNativeID;
-        jmethodID cancelFromNativeID;
-        jmethodID updateProgressFromNativeID;
-    } Dialog;
 };
 
 extern struct fields fields;
