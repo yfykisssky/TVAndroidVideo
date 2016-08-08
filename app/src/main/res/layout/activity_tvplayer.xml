@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <com.android.tvvideo.view.MarqueeText
+        android:id="@+id/showmsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <com.midis.test.ScrollRelativeLayout
         android:id="@+id/relative"
         android:layout_width="wrap_content"

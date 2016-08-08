@@ -37,6 +37,16 @@ public class BaseActivity extends Activity {
 
     String toSettingCodeTmp="";
 
+    PushMsgListener pushMsgListener;
+
+    public interface PushMsgListener{
+       void onMsgReceive(Intent data);
+    }
+
+    protected void setOnPushMsgListener(PushMsgListener pushMsgListener){
+        this.pushMsgListener=pushMsgListener;
+    }
+
     protected void setActivityName(String activityName){
         this.activityName=activityName;
     }
@@ -74,6 +84,8 @@ public class BaseActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
 
             String kind=intent.getStringExtra("kind");
+
+            pushMsgListener.onMsgReceive(intent);
 
             switch(kind){
                 case "remind":

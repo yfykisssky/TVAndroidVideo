@@ -1,6 +1,7 @@
 package com.android.tvvideo.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +19,11 @@ import android.widget.TextView;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
+import com.android.tvvideo.net.NetDataConstants;
+import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
+import com.android.tvvideo.tools.SystemUtil;
+import com.android.tvvideo.view.MarqueeText;
 import com.android.tvvideo.view.ScrollRelativeLayout;
 
 import java.lang.ref.WeakReference;
@@ -55,6 +60,12 @@ public class TVPlayerActivity extends BaseActivity {
 
     WebView adWebView;
 
+    String adUrl;
+
+    MarqueeText showMsgTex;
+
+    String msgData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,19 +78,206 @@ public class TVPlayerActivity extends BaseActivity {
 
         initView();
 
+        getAdData();
+
+        getShowMsg();
+
+        super.setOnPushMsgListener(new PushMsgListener() {
+            @Override
+            public void onMsgReceive(Intent data) {
+
+                String kind=data.getStringExtra("kind");
+
+                if(kind.equals("adshow")){
+
+                    getAdData();
+
+                }
+
+                if(kind.equals("showmsg")){
+
+                    getShowMsg();
+
+                }
+
+            }
+        });
+
         startCountTimeThread();
 
     }
 
-    private void showAd(String adData){
-        adWebView.loadUrl(adData);
+    private void getShowMsg() {
+
+        new NetDataTool(this).sendGet(NetDataConstants.GET_MSG_DATA, new NetDataTool.IResponse() {
+            @Override
+            public void onSuccess(String data) {
+
+                msgData="";
+
+                final int startHour=0;
+                final int startMinute=0;
+
+                final int endHour=0;
+                final int endMinute=0;
+
+                SystemUtil.getLocalTime(new SystemUtil.GetLocalTime() {
+                    @Override
+                    public void time(int year, int month, int day, int hour, int minute, int second) {
+
+                        msgShowHandler.removeCallbacks(msgShowRunnable);
+
+                        msgShowHandler.removeCallbacks(msgHideRunnable);
+
+                        long startTime=((startHour-hour)*60+(startMinute-minute))*60*1000;
+
+                        long endTime=((endHour-hour)*60+(endMinute-minute))*60*1000;
+
+                        if(endTime<=0){
+
+                            msgShowHandler.post(msgHideRunnable);
+
+                            return;
+                        }
+
+                        if(startTime<=0){
+                            msgShowHandler.post(msgShowRunnable);
+                        }else{
+                            msgShowHandler.postDelayed(msgShowRunnable,startTime);
+                        }
+
+                        msgShowHandler.postDelayed(msgHideRunnable,endTime);
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailed(String error) {
+                showToast(error);
+            }
+        });
+
+
+
     }
 
-    private void hideAd(String adData){
-        adWebView.loadUrl(adData);
+    private void getAdData() {
+
+        new NetDataTool(this).sendGet(NetDataConstants.GET_AD_DATA, new NetDataTool.IResponse() {
+            @Override
+            public void onSuccess(String data) {
+
+                adUrl="";
+
+                final int startHour=0;
+                final int startMinute=0;
+
+                final int endHour=0;
+                final int endMinute=0;
+
+                SystemUtil.getLocalTime(new SystemUtil.GetLocalTime() {
+                    @Override
+                    public void time(int year, int month, int day, int hour, int minute, int second) {
+
+                        adShowHandler.removeCallbacks(adShowRunnable);
+
+                        adShowHandler.removeCallbacks(adHideRunnable);
+
+                        long startTime=((startHour-hour)*60+(startMinute-minute))*60*1000;
+
+                        long endTime=((endHour-hour)*60+(endMinute-minute))*60*1000;
+
+                        if(endTime<=0){
+
+                            adShowHandler.post(adHideRunnable);
+
+                            return;
+                        }
+
+                        if(startTime<=0){
+                            adShowHandler.post(adShowRunnable);
+                        }else{
+                            adShowHandler.postDelayed(adShowRunnable,startTime);
+                        }
+
+                        adShowHandler.postDelayed(adHideRunnable,endTime);
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailed(String error) {
+                showToast(error);
+            }
+        });
+
+    }
+
+    Handler adShowHandler=new Handler();
+
+    Runnable adShowRunnable=new Runnable() {
+
+        @Override
+        public void run() {
+            showAd();
+        }
+    };
+
+    Runnable adHideRunnable=new Runnable() {
+        @Override
+        public void run() {
+            hideAd();
+        }
+    };
+
+    private void showAd(){
+        adWebView.loadUrl(adUrl);
+        adWebView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideAd(){
+        adWebView.setVisibility(View.GONE);
+    }
+
+    Handler msgShowHandler=new Handler();
+
+    Runnable msgShowRunnable=new Runnable() {
+
+        @Override
+        public void run() {
+            showMsg();
+        }
+    };
+
+    Runnable msgHideRunnable=new Runnable() {
+        @Override
+        public void run() {
+            hideMsg();
+        }
+    };
+
+    private void showMsg(){
+
+        showMsgTex.setText(msgData);
+
+        showMsgTex.startFor0();
+
+        showMsgTex.setVisibility(View.VISIBLE);
+    }
+
+    private void hideMsg(){
+
+        showMsgTex.setVisibility(View.GONE);
+
     }
 
     private void initView() {
+
+        showMsgTex=(MarqueeText)findViewById(R.id.showmsg);
 
         adWebView=(WebView)findViewById(R.id.adwebview);
 

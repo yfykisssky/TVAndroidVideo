@@ -193,13 +193,13 @@ public class SystemUtil {
 
     }
 
-    interface getLocalTime{
+    public interface GetLocalTime{
 
         void time(int year,int month,int day,int hour,int minute,int second);
 
     }
 
-    public void getLocalTime(){
+    public static void getLocalTime(GetLocalTime getLocalTime){
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
@@ -207,6 +207,7 @@ public class SystemUtil {
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
         int second=c.get(Calendar.SECOND);
+        getLocalTime.time(year,month,day,hour,minute,second);
     }
 
 }
