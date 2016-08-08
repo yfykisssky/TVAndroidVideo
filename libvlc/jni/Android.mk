@@ -1,60 +1,53 @@
 LOCAL_PATH := $(call my-dir)
+include $(CLEAR_VARS)
 ANDROID_PRIVATE_LIBDIR := $(LOCAL_PATH)/../../android-libs
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := libvlc
-ARCH=$(APP_ABI)
-ifeq ($(ARCH), armeabi)
-	LOCAL_ARM_MODE := arm
-endif
-LOCAL_SRC_FILES += libvlcjni-modules.c libvlcjni-symbols.c
-LOCAL_LDLIBS := -L$(VLC_CONTRIB)/lib \
-	$(VLC_MODULES) \
-	$(VLC_BUILD_DIR)/lib/.libs/libvlc.a \
-	$(VLC_BUILD_DIR)/src/.libs/libvlccore.a \
-	$(VLC_BUILD_DIR)/compat/.libs/libcompat.a \
-	-ldl -lz -lm -llog \
-	-ldvbpsi -lmatroska -lebml -ltag \
-	-logg -lFLAC -ltheora -lvorbis \
-	-la52 -lsoxr \
-	-lavformat -lavcodec -lswscale -lavutil -lpostproc -lgsm -lopenjpeg \
-	-lliveMedia -lUsageEnvironment -lBasicUsageEnvironment -lgroupsock \
-	-lspeex -lspeexdsp \
-	-lxml2 -lpng -lgnutls -lgcrypt -lgpg-error \
-	-lnettle -lhogweed -lgmp \
-	-liconv -lass -lfribidi -lopus \
-	-lharfbuzz -lfreetype \
-	-lEGL -lGLESv2 -ljpeg \
-	-ldvdnav -ldvdread -ldvdcss \
-	-ldsm -ltasn1 \
-	-lmad \
-	-lzvbi \
-	-lssh2 -lnfs \
-	-lmodplug \
-	-lupnp -lthreadutil -lixml \
-	-larchive \
-	-lmpg123 \
-	-llua \
-	-lmicrodns \
-	$(EXTRA_LDFLAGS)
-
-ifeq ($(HAVE_LIBCOMPAT), 1)
-LOCAL_SHARED_LIBRARIES:= libcompat.7
-endif
-include $(BUILD_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
 LOCAL_MODULE    := libvlcjni
 
 LOCAL_SRC_FILES := libvlcjni.c
 LOCAL_SRC_FILES += libvlcjni-mediaplayer.c
 LOCAL_SRC_FILES += libvlcjni-vlcobject.c
 LOCAL_SRC_FILES += libvlcjni-media.c libvlcjni-medialist.c libvlcjni-mediadiscoverer.c
-LOCAL_SRC_FILES += libvlcjni-dialog.c
 LOCAL_SRC_FILES += native_crash_handler.c thumbnailer.c
 LOCAL_SRC_FILES += std_logger.c
 
-LOCAL_LDLIBS := -llog
+ifneq ($(APP_PLATFORM),android-21)
+# compat functions not needed after android-21
+LOCAL_SRC_FILES += compat/pthread-condattr.c compat/pthread-rwlocks.c
+LOCAL_SRC_FILES += compat/pthread-once.c compat/eventfd.c compat/sem.c compat/pipe2.c
+LOCAL_SRC_FILES += compat/localtime.c
+LOCAL_SRC_FILES += compat/wchar/wcpcpy.c
+LOCAL_SRC_FILES += compat/wchar/wcpncpy.c
+LOCAL_SRC_FILES += compat/wchar/wcscasecmp.c
+LOCAL_SRC_FILES += compat/wchar/wcscat.c
+LOCAL_SRC_FILES += compat/wchar/wcschr.c
+LOCAL_SRC_FILES += compat/wchar/wcscmp.c
+LOCAL_SRC_FILES += compat/wchar/wcscoll.c
+LOCAL_SRC_FILES += compat/wchar/wcscpy.c
+LOCAL_SRC_FILES += compat/wchar/wcscspn.c
+LOCAL_SRC_FILES += compat/wchar/wcsdup.c
+LOCAL_SRC_FILES += compat/wchar/wcslcat.c
+LOCAL_SRC_FILES += compat/wchar/wcslcpy.c
+LOCAL_SRC_FILES += compat/wchar/wcslen.c
+LOCAL_SRC_FILES += compat/wchar/wcsncasecmp.c
+LOCAL_SRC_FILES += compat/wchar/wcsncat.c
+LOCAL_SRC_FILES += compat/wchar/wcsncmp.c
+LOCAL_SRC_FILES += compat/wchar/wcsncpy.c
+LOCAL_SRC_FILES += compat/wchar/wcsnlen.c
+LOCAL_SRC_FILES += compat/wchar/wcspbrk.c
+LOCAL_SRC_FILES += compat/wchar/wcsrchr.c
+LOCAL_SRC_FILES += compat/wchar/wcsspn.c
+LOCAL_SRC_FILES += compat/wchar/wcsstr.c
+LOCAL_SRC_FILES += compat/wchar/wcstok.c
+LOCAL_SRC_FILES += compat/wchar/wcswidth.c
+LOCAL_SRC_FILES += compat/wchar/wcsxfrm.c
+LOCAL_SRC_FILES += compat/wchar/wmemchr.c
+LOCAL_SRC_FILES += compat/wchar/wmemcmp.c
+LOCAL_SRC_FILES += compat/wchar/wmemcpy.c
+LOCAL_SRC_FILES += compat/wchar/wmemmove.c
+LOCAL_SRC_FILES += compat/wchar/wmemset.c
+endif
+
 LOCAL_C_INCLUDES := $(VLC_SRC_DIR)/include
 
 ARCH=$(APP_ABI)
@@ -69,20 +62,34 @@ endif
 ifeq ($(ARCH), armeabi-v7a)
 	LOCAL_CFLAGS += -DHAVE_ARMEABI_V7A
 endif
+LOCAL_LDLIBS := -L$(VLC_CONTRIB)/lib \
+	$(VLC_MODULES) \
+	$(VLC_BUILD_DIR)/lib/.libs/libvlc.a \
+	$(VLC_BUILD_DIR)/src/.libs/libvlccore.a \
+	$(VLC_BUILD_DIR)/compat/.libs/libcompat.a \
+	-ldl -lz -lm -llog \
+	-ldvbpsi -lmatroska -lebml -ltag \
+	-logg -lFLAC -ltheora -lvorbis \
+	-la52 -lsoxr \
+	-lavformat -lavcodec -lswscale -lavutil -lpostproc -lgsm -lopenjpeg \
+	-lliveMedia -lUsageEnvironment -lBasicUsageEnvironment -lgroupsock \
+	-lspeex -lspeexdsp \
+	-lxml2 -lpng -lgnutls -lgcrypt -lgpg-error \
+	-lnettle -lhogweed -lgmp \
+	-lharfbuzz -lfreetype -liconv -lass -lfribidi -lopus \
+	-lEGL -lGLESv2 -ljpeg \
+	-ldvdnav -ldvdread -ldvdcss \
+	-ldsm -ltasn1 \
+	-lmad \
+	-lzvbi \
+	-lssh2 \
+	-lmodplug \
+	-lupnp -lthreadutil -lixml \
+	-larchive \
+	$(EXTRA_LDFLAGS)
 
-LOCAL_SHARED_LIBRARIES:= libvlc
-
+$(TARGET_OUT)/$(LOCAL_MODULE).so: $(ANDROID_PRIVATE_LIBS)
 include $(BUILD_SHARED_LIBRARY)
-
-####################
-# DUMMY COMPAT LIB #
-####################
-
-ifeq ($(HAVE_LIBCOMPAT), 1)
-include $(CLEAR_VARS)
-LOCAL_MODULE := libcompat.7
-include $(BUILD_SHARED_LIBRARY)
-endif
 
 ################
 # PRIVATE LIBS #

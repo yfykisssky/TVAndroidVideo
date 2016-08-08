@@ -21,8 +21,6 @@
 package org.videolan.libvlc.util;
 
 import android.net.Uri;
-import android.support.annotation.MainThread;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -32,7 +30,18 @@ import org.videolan.libvlc.MediaDiscoverer;
 import org.videolan.libvlc.MediaList;
 
 public class MediaBrowser {
-    private static final String TAG = "MediaBrowser";
+    private static final String TAG = "LibVLC/util/MediaBrowser";
+
+    public static enum Discover {
+        UPNP("upnp"),
+        SMB("dsm")
+        ;
+
+        private final String str;
+        Discover(String str) {
+            this.str = str;
+        }
+    }
 
     private final LibVLC mLibVlc;
     private final ArrayList<MediaDiscoverer> mMediaDiscoverers = new ArrayList<MediaDiscoverer>();
@@ -45,13 +54,6 @@ public class MediaBrowser {
     private static final String IGNORE_LIST_OPTION =  ":ignore-filetypes=";
     private String mIgnoreList = "db,nfo,ini,jpg,jpeg,ljpg,gif,png,pgm,pgmyuv,pbm,pam,tga,bmp,pnm,xpm,xcf,pcx,tif,tiff,lbm,sfv,txt,sub,idx,srt,cue,ssa";
 
-    public static class Flag {
-        /** If this flag is set, browse() could fire up dialogs */
-        public final static int Interact = 1;
-        /** If this flag is set, slaves won't be attached to medias but will be added as a media. */
-        public final static int NoSlavesAutodetect = 1 << 1;
-    }
-
     /**
      * Listener called when medias are added or removed.
      */
@@ -61,19 +63,19 @@ public class MediaBrowser {
          * @param index
          * @param media
          */
-        void onMediaAdded(int index, Media media);
+        public void onMediaAdded(int index, Media media);
         /**
          * Received when a media is removed (Happens only when you discover networks)
          * @param index
          * @param media Released media, but cached attributes are still
          * available (like media.getMrl())
          */
-        void onMediaRemoved(int index, Media media);
+        public void onMediaRemoved(int index, Media media);
         /**
          * Called when browse ended.
          * It won't be called when you discover networks
          */
-        void onBrowseEnd();
+        public void onBrowseEnd();
     }
 
     public MediaBrowser(LibVLC libvlc, EventListener listener) {
@@ -83,7 +85,7 @@ public class MediaBrowser {
         mAlive = true;
     }
 
-    private void reset() {
+    private synchronized void reset() {
         for (MediaDiscoverer md : mMediaDiscoverers)
             md.release();
         mMediaDiscoverers.clear();
@@ -102,8 +104,7 @@ public class MediaBrowser {
     /**
      * Release the MediaBrowser.
      */
-    @MainThread
-    public void release() {
+    public synchronized void release() {
         reset();
         if (!mAlive)
             throw new IllegalStateException("MediaBrowser released more than one time");
@@ -115,8 +116,7 @@ public class MediaBrowser {
      * Reset this media browser and register a new EventListener
      * @param eventListener new EventListener for this browser
      */
-    @MainThread
-    public void changeEventListener(EventListener eventListener){
+    public synchronized void changeEventListener(EventListener eventListener){
         reset();
         mEventListener = eventListener;
     }
@@ -131,42 +131,32 @@ public class MediaBrowser {
     }
 
     /**
-     * Discover all networks shares
+     * Discover networks shares using a list of Discoverers
      */
-    @MainThread
-    public void discoverNetworkShares() {
+    public synchronized void discoverNetworkShares(Discover discovers[]) {
         reset();
-
-        final MediaDiscoverer.Description descriptions[] =
-                MediaDiscoverer.list(mLibVlc, MediaDiscoverer.Description.Category.Lan);
-        if (descriptions == null)
-            return;
-        for (MediaDiscoverer.Description description : descriptions) {
-            Log.i(TAG, "starting " + description.name + " discover (" + description.longName + ")");
-            startMediaDiscoverer(description.name);
-        }
+        for (Discover discover : discovers)
+            startMediaDiscoverer(discover.str);
     }
 
     /**
      * Discover networks shares using a specified Discoverer
-     * @param serviceName see {@link MediaDiscoverer.Description.Category#name}
+     * @param discovererName
      */
-    @MainThread
-    public void discoverNetworkShares(String serviceName) {
-        reset();
-        startMediaDiscoverer(serviceName);
+    public synchronized void discoverNetworkShares(Discover discover) {
+        Discover discovers[] = new Discover[1];
+        discovers[0] = discover;
+        discoverNetworkShares(discovers);
     }
 
     /**
      * Browse to the specified local path starting with '/'.
      *
      * @param path
-     * @param flags see {@link MediaBrowser.Flag}
      */
-    @MainThread
-    public void browse(String path, int flags) {
+    public synchronized void browse(String path) {
         final Media media = new Media(mLibVlc, path);
-        browse(media, flags);
+        browse(media);
         media.release();
     }
 
@@ -174,12 +164,10 @@ public class MediaBrowser {
      * Browse to the specified uri.
      *
      * @param uri
-     * @param flags see {@link MediaBrowser.Flag}
      */
-    @MainThread
-    public void browse(Uri uri, int flags) {
+    public synchronized void browse(Uri uri) {
         final Media media = new Media(mLibVlc, uri);
-        browse(media, flags);
+        browse(media);
         media.release();
     }
 
@@ -187,40 +175,31 @@ public class MediaBrowser {
      * Browse to the specified media.
      *
      * @param media Can be a media returned by MediaBrowser.
-     * @param flags see {@link MediaBrowser.Flag}
      */
-    @MainThread
-    public void browse(Media media, int flags) {
+    public synchronized void browse(Media media) {
         /* media can be associated with a medialist,
          * so increment ref count in order to don't clean it with the medialist
          */
         media.retain();
-        media.addOption(IGNORE_LIST_OPTION + mIgnoreList);
-        if ((flags & Flag.NoSlavesAutodetect) != 0)
-            media.addOption(":no-sub-autodetect-file");
-        int mediaFlags = Media.Parse.ParseNetwork;
-        if ((flags & Flag.Interact) != 0)
-            mediaFlags |= Media.Parse.DoInteract;
+        media.addOption(IGNORE_LIST_OPTION+mIgnoreList);
         reset();
         mBrowserMediaList = media.subItems();
         mBrowserMediaList.setEventListener(mBrowserMediaListEventListener);
-        media.parseAsync(mediaFlags, 0);
+        media.parseAsync(Media.Parse.ParseNetwork);
         mMedia = media;
     }
 
     /**
      * Get the number or media.
      */
-    @MainThread
-    public int getMediaCount() {
+    public synchronized int getMediaCount() {
         return mBrowserMediaList != null ? mBrowserMediaList.getCount() : mDiscovererMediaArray.size();
     }
 
     /**
      * Get a media at a specified index. Should be released with {@link #release()}.
      */
-    @MainThread
-    public Media getMediaAt(int index) {
+    public synchronized Media getMediaAt(int index) {
         if (index < 0 || index >= getMediaCount())
             throw new IndexOutOfBoundsException();
         final Media media = mBrowserMediaList != null ? mBrowserMediaList.getMediaAt(index) :
@@ -235,8 +214,7 @@ public class MediaBrowser {
      *
      * @param list files extensions to be ignored by browser
      */
-    @MainThread
-    public void setIgnoreFileTypes(String list) {
+    public synchronized void setIgnoreFileTypes(String list) {
         mIgnoreList = list;
     }
 
@@ -245,8 +223,11 @@ public class MediaBrowser {
         public void onEvent(MediaList.Event event) {
             if (mEventListener == null)
                 return;
-            final MediaList.Event mlEvent = event;
+            final MediaList.Event mlEvent = (MediaList.Event) event;
 
+            /*
+             * We use an intermediate array here since more than one MediaDiscoverer can be used
+             */
             switch (mlEvent.type) {
             case MediaList.Event.ItemAdded:
                 mEventListener.onMediaAdded(mlEvent.index, mlEvent.media);
@@ -265,7 +246,7 @@ public class MediaBrowser {
         public void onEvent(MediaList.Event event) {
             if (mEventListener == null)
                 return;
-            final MediaList.Event mlEvent = event;
+            final MediaList.Event mlEvent = (MediaList.Event) event;
             int index = -1;
 
             /*
@@ -273,24 +254,29 @@ public class MediaBrowser {
              */
             switch (mlEvent.type) {
             case MediaList.Event.ItemAdded:
-                /* one item can be found by severals discoverers */
-                boolean found = false;
-                for (Media media : mDiscovererMediaArray) {
-                    if (media.getUri().toString().equalsIgnoreCase(mlEvent.media.getUri().toString())) {
-                        found = true;
-                        break;
+                synchronized (MediaBrowser.this) {
+                    /* one item can be found by severals discoverers */
+                    boolean found = false;
+                    for (Media media : mDiscovererMediaArray) {
+                        if (media.getUri().equals(mlEvent.media.getUri())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        mDiscovererMediaArray.add(mlEvent.media);
+                        index = mDiscovererMediaArray.size() - 1;
                     }
                 }
-                if (!found) {
-                    mDiscovererMediaArray.add(mlEvent.media);
-                    index = mDiscovererMediaArray.size() - 1;
-                }if (index != -1)
+                if (index != -1)
                     mEventListener.onMediaAdded(index, mlEvent.media);
                 break;
             case MediaList.Event.ItemDeleted:
-                index = mDiscovererMediaArray.indexOf(mlEvent.media);
-                if (index != -1)
-                    mDiscovererMediaArray.remove(index);
+                synchronized (MediaBrowser.this) {
+                    index = mDiscovererMediaArray.indexOf(mlEvent.media);
+                    if (index != -1)
+                        mDiscovererMediaArray.remove(index);
+                }
                 if (index != -1)
                     mEventListener.onMediaRemoved(index, mlEvent.media);
                 break;

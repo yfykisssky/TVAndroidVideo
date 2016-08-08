@@ -20,15 +20,14 @@
 
 package org.videolan.libvlc;
 
-import android.content.Context;
+import java.util.ArrayList;
+
 import android.os.Build;
 import android.util.Log;
+import android.view.Surface;
 
 import org.videolan.libvlc.util.HWDecoderUtil;
 
-import java.util.ArrayList;
-
-@SuppressWarnings("unused, JniMissingFunction")
 public class LibVLC extends VLCObject<LibVLC.Event> {
     private static final String TAG = "VLC/LibVLC";
 
@@ -41,14 +40,16 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
     /** Native crash handler */
     private static OnNativeCrashListener sOnNativeCrashListener;
 
+    public interface HardwareAccelerationError {
+        void eventHardwareAccelerationError(); // TODO REMOVE
+    }
+
     /**
      * Create a LibVLC withs options
      *
      * @param options
      */
-    public LibVLC(Context context, ArrayList<String> options) {
-        loadLibraries();
-
+    public LibVLC(ArrayList<String> options) {
         boolean setAout = true, setChroma = true;
         // check if aout/vout options are already set
         if (options != null) {
@@ -79,15 +80,20 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
             }
         }
 
-        nativeNew(options.toArray(new String[options.size()]), context.getDir("vlc", Context.MODE_PRIVATE).getAbsolutePath());
+        nativeNew(options.toArray(new String[options.size()]));
     }
 
     /**
      * Create a LibVLC
      */
-    public LibVLC(Context context) {
-        this(context, null);
+    public LibVLC() {
+        this(null);
     }
+
+    public void setOnHardwareAccelerationError(HardwareAccelerationError error) {
+        nativeSetOnHardwareAccelerationError(error);
+    }
+    private native void nativeSetOnHardwareAccelerationError(HardwareAccelerationError error);
 
     /**
      * Get the libVLC version
@@ -117,8 +123,8 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
         nativeRelease();
     }
 
-    public interface OnNativeCrashListener {
-        void onNativeCrash();
+    public static interface OnNativeCrashListener {
+        public void onNativeCrash();
     }
 
     public static void setOnNativeCrashListener(OnNativeCrashListener l) {
@@ -142,17 +148,12 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
     }
 
     /* JNI */
-    private native void nativeNew(String[] options, String homePath);
+    private native void nativeNew(String[] options);
     private native void nativeRelease();
     private native void nativeSetUserAgent(String name, String http);
 
-    private static boolean sLoaded = false;
-
-    static synchronized void loadLibraries() {
-        if (sLoaded)
-            return;
-        sLoaded = true;
-
+    /* Load library before object instantiation */
+    static {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD_MR1) {
             try {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB_MR1)
@@ -166,7 +167,7 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
                 else
                     System.loadLibrary("anw.21");
             } catch (Throwable t) {
-                Log.d(TAG, "anw library not loaded");
+                Log.w(TAG, "Unable to load the anw library: " + t);
             }
 
             try {
@@ -188,11 +189,6 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
         }
 
         try {
-            System.loadLibrary("compat.7");
-        } catch (Throwable ignored) {}
-
-        try {
-            System.loadLibrary("vlc");
             System.loadLibrary("vlcjni");
         } catch (UnsatisfiedLinkError ule) {
             Log.e(TAG, "Can't load vlcjni library: " + ule);

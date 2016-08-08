@@ -26,11 +26,10 @@
 
 #define THREAD_NAME "libvlcjni"
 JNIEnv *jni_get_env(const char *name);
+extern JavaVM *libvlc_get_jvm();
 
 static const libvlc_event_type_t mp_events[] = {
-    libvlc_MediaPlayerMediaChanged,
     libvlc_MediaPlayerOpening,
-    libvlc_MediaPlayerBuffering,
     libvlc_MediaPlayerPlaying,
     libvlc_MediaPlayerPaused,
     libvlc_MediaPlayerStopped,
@@ -76,9 +75,6 @@ MediaPlayer_event_cb(vlcjni_object *p_obj, const libvlc_event_t *p_ev,
 {
     switch (p_ev->type)
     {
-        case libvlc_MediaPlayerBuffering:
-            p_java_event->arg2 = p_ev->u.media_player_buffering.new_cache;
-            break;
         case libvlc_MediaPlayerPositionChanged:
             p_java_event->arg2 = p_ev->u.media_player_position_changed.new_position;
             break;
@@ -122,7 +118,8 @@ MediaPlayer_newCommon(JNIEnv *env, jobject thiz, vlcjni_object *p_obj,
         throw_IllegalStateException(env, "can't create MediaPlayer instance");
         return;
     }
-    libvlc_media_player_set_android_context(p_obj->u.p_mp, p_obj->p_sys->jwindow);
+    libvlc_media_player_set_android_context(p_obj->u.p_mp, libvlc_get_jvm(),
+                                            p_obj->p_sys->jwindow);
 
     VLCJniObject_attachEvents(p_obj, MediaPlayer_event_cb,
                               libvlc_media_player_event_manager(p_obj->u.p_mp),
@@ -295,7 +292,7 @@ Java_org_videolan_libvlc_MediaPlayer_pause(JNIEnv *env, jobject thiz)
     if (!p_obj)
         return;
 
-    libvlc_media_player_set_pause(p_obj->u.p_mp, 1);
+    libvlc_media_player_pause(p_obj->u.p_mp);
 }
 
 jint
@@ -532,7 +529,7 @@ mediaplayer_title_to_object(JNIEnv *env, libvlc_title_description_t *p_title)
                         fields.MediaPlayer.createTitleFromNativeID,
                         p_title->i_duration,
                         jname,
-                        p_title->i_flags);
+                        p_title->b_menu);
 }
 
 jobject
@@ -882,25 +879,25 @@ Java_org_videolan_libvlc_MediaPlayer_nativeSetSpuDelay(JNIEnv *env,
 }
 
 jboolean
-Java_org_videolan_libvlc_MediaPlayer_nativeAddSlave(JNIEnv *env,
-                                                    jobject thiz, jint type,
-                                                    jstring jmrl, jboolean select)
+Java_org_videolan_libvlc_MediaPlayer_nativeSetSubtitleFile(JNIEnv *env,
+                                                           jobject thiz,
+                                                           jstring jpath)
 {
     vlcjni_object *p_obj = VLCJniObject_getInstance(env, thiz);
-    const char* psz_mrl;
+    const char* psz_path;
+
+    if (!jpath || !(psz_path = (*env)->GetStringUTFChars(env, jpath, 0)))
+    {
+        throw_IllegalArgumentException(env, "path invalid");
+        return false;
+    }
 
     if (!p_obj)
         return false;
 
-    if (!jmrl || !(psz_mrl = (*env)->GetStringUTFChars(env, jmrl, 0)))
-    {
-        throw_IllegalArgumentException(env, "mrl invalid");
-        return false;
-    }
+    jboolean ret = libvlc_video_set_subtitle_file(p_obj->u.p_mp, psz_path);
 
-    jboolean ret = libvlc_media_player_add_slave(p_obj->u.p_mp, type, psz_mrl, select) == 0;
-
-    (*env)->ReleaseStringUTFChars(env, jmrl, psz_mrl);
+    (*env)->ReleaseStringUTFChars(env, jpath, psz_path);
     return ret;
 }
 
