@@ -16,8 +16,8 @@ import com.android.tvvideo.model.WeatherModel;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
 
+import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,10 +64,26 @@ public class WeatherActivity extends BaseActivity {
             public void onSuccess(String data) {
 
                 try {
-                    JSONObject jsonObject=new JSONObject(data);
 
-                    String version=jsonObject.getString("version");
-                    String url=jsonObject.getString("address");
+                    listData.clear();
+
+                    JSONArray array=new JSONArray(data);
+
+                    for(int c=0;c<array.length();c++){
+
+                        WeatherModel weatherModel=new WeatherModel();
+
+                        weatherModel.setCity(array.getJSONObject(c).getString("city"));
+
+                        weatherModel.setHumidity(array.getJSONObject(c).getString("humidity"));
+
+                        weatherModel.setTemperature(array.getJSONObject(c).getString("temperature"));
+
+                        weatherModel.setWeather(array.getJSONObject(c).getString("weather"));
+
+                        listData.add(weatherModel);
+
+                    }
 
                     myAdapter.notifyDataSetChanged();
 
@@ -109,10 +125,26 @@ public class WeatherActivity extends BaseActivity {
                 }
 
                 try {
-                    JSONObject jsonObject=new JSONObject(data);
 
-                    String version=jsonObject.getString("version");
-                    String url=jsonObject.getString("address");
+                    listData.clear();
+
+                    JSONArray array=new JSONArray(data);
+
+                    for(int c=0;c<array.length();c++){
+
+                        WeatherModel weatherModel=new WeatherModel();
+
+                        weatherModel.setCity(array.getJSONObject(c).getString("city"));
+
+                        weatherModel.setHumidity(array.getJSONObject(c).getString("humidity"));
+
+                        weatherModel.setTemperature(array.getJSONObject(c).getString("temperature"));
+
+                        weatherModel.setWeather(array.getJSONObject(c).getString("weather"));
+
+                        listData.add(weatherModel);
+
+                    }
 
                     myAdapter.notifyDataSetChanged();
 

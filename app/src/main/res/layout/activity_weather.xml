@@ -33,12 +33,57 @@
         android:layout_gravity="center_horizontal"
         android:layout_width="1000px"
         android:layout_height="match_parent">
-        <ListView
-            android:id="@+id/list"
-            android:background="@drawable/bg_radius_transwhite"
+        <LinearLayout
             android:layout_marginBottom="50px"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></ListView>
+            android:orientation="vertical"
+            android:background="#cc000000"
+            android:layout_width="1000px"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="100px">
+                <TextView
+                    android:textSize="40px"
+                    android:text="城市名称"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:textSize="40px"
+                    android:text="天气"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:textSize="40px"
+                    android:text="温度"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:textSize="40px"
+                    android:text="湿度"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <ListView
+                android:layout_margin="20px"
+                android:id="@+id/list"
+                android:background="@drawable/bg_radius_transwhite"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></ListView>
+        </LinearLayout>
         <RelativeLayout
             android:background="#cc000000"
             android:orientation="vertical"

@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/Users/yangfengyuan/VLC/TVAndroidVideo/libvlc/src/main/jniLibs"/><source path="/Users/yangfengyuan/VLC/TVAndroidVideo/libvlc/jniLibs"/></dataSet><dataSet config="debug"><source path="/Users/yangfengyuan/VLC/TVAndroidVideo/libvlc/src/debug/jniLibs"/></dataSet></merger>

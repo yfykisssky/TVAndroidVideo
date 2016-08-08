@@ -117,21 +117,23 @@ public class TVPlayerActivity extends BaseActivity {
 
                 final int startHour=0;
                 final int startMinute=0;
+                final int startSecond=0;
 
                 final int endHour=0;
                 final int endMinute=0;
+                final int endSecond=0;
 
                 SystemUtil.getLocalTime(new SystemUtil.GetLocalTime() {
                     @Override
                     public void time(int year, int month, int day, int hour, int minute, int second) {
+                        
+                        long startTime=(((startHour-hour)*60+(startMinute-minute))*60+startSecond)*1000;
+
+                        long endTime=(((endHour-hour)*60+(endMinute-minute))*60+endSecond)*1000;
 
                         msgShowHandler.removeCallbacks(msgShowRunnable);
 
                         msgShowHandler.removeCallbacks(msgHideRunnable);
-
-                        long startTime=((startHour-hour)*60+(startMinute-minute))*60*1000;
-
-                        long endTime=((endHour-hour)*60+(endMinute-minute))*60*1000;
 
                         if(endTime<=0){
 
@@ -159,8 +161,6 @@ public class TVPlayerActivity extends BaseActivity {
             }
         });
 
-
-
     }
 
     private void getAdData() {
@@ -173,21 +173,23 @@ public class TVPlayerActivity extends BaseActivity {
 
                 final int startHour=0;
                 final int startMinute=0;
+                final int startSecond=0;
 
                 final int endHour=0;
                 final int endMinute=0;
+                final int endSecond=0;
 
                 SystemUtil.getLocalTime(new SystemUtil.GetLocalTime() {
                     @Override
                     public void time(int year, int month, int day, int hour, int minute, int second) {
 
+                        long startTime=(((startHour-hour)*60+(startMinute-minute))*60+startSecond)*1000;
+
+                        long endTime=(((endHour-hour)*60+(endMinute-minute))*60+endSecond)*1000;
+
                         adShowHandler.removeCallbacks(adShowRunnable);
 
                         adShowHandler.removeCallbacks(adHideRunnable);
-
-                        long startTime=((startHour-hour)*60+(startMinute-minute))*60*1000;
-
-                        long endTime=((endHour-hour)*60+(endMinute-minute))*60*1000;
 
                         if(endTime<=0){
 
