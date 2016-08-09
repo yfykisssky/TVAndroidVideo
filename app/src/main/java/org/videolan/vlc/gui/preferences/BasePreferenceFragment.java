@@ -28,7 +28,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat {
     }
 
     protected void loadFragment(Fragment fragment) {
-       /* getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_placeholder, fragment)
+      /*  getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_placeholder, fragment)
                 .addToBackStack("main")
                 .commit();*/
     }
