@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -130,12 +129,9 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
     private PlaybackService mService;
     private View mRootView;
     private SurfaceView mSurfaceView = null;
-    //private SurfaceView mSubtitlesSurfaceView = null;
     private FrameLayout mSurfaceFrame;
-/*    private MediaRouter mMediaRouter;
-    private MediaRouter.SimpleCallback mMediaRouterCallback;*/
     private Uri mUri;
-    private boolean mAskResume = true;
+    //private boolean mAskResume = true;
     private GestureDetectorCompat mDetector = null;
 
     private static final int SURFACE_BEST_FIT = 0;
@@ -285,7 +281,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
         mAudioMax = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 
         mEnableCloneMode = mSettings.getBoolean("enable_clone_mode", false);
-        //createPresentation();
+
         setContentView(R.layout.activity_player);
 
         mRootView = findViewById(R.id.player_root);
@@ -339,7 +335,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
         mHardwareAccelerationError = false;
         mEndReached = false;
 
-        mAskResume = mSettings.getBoolean("dialog_confirm_resume", false);
+        //mAskResume = mSettings.getBoolean("dialog_confirm_resume", false);
         // Clear the resume time, since it is only used for resumes in external
         // videos.
         SharedPreferences.Editor editor = mSettings.edit();
@@ -626,56 +622,8 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
             return;
         }
 
-        final boolean isPaused = !mService.isPlaying();
-        long time = getTime();
-        long length = mService.getLength();
-        //remove saved position if in the last 5 seconds
-        if (length - time < 5000)
-            time = 0;
-        else
-            time -= 2000; // go back 2 seconds, to compensate loading time
         mService.stop();
-/*
 
-        SharedPreferences.Editor editor = mSettings.edit();
-        // Save position
-        if (mService.isSeekable()) {
-            if(MediaDatabase.getInstance().mediaItemExists(mUri)) {
-                MediaDatabase.getInstance().updateMedia(
-                        mUri,
-                        MediaDatabase.INDEX_MEDIA_TIME,
-                        time);
-            } else {
-                // Video file not in media library, store time just for onResume()
-                editor.putLong(PreferencesActivity.VIDEO_RESUME_TIME, time);
-            }
-        }
-        if(isPaused)
-            Log.d(TAG, "Video paused - saving flag");
-        editor.putBoolean(PreferencesActivity.VIDEO_PAUSED, isPaused);
-*/
-
-        // Save selected subtitles
-        String subtitleList_serialized = null;
-    /*    if(mSubtitleSelectedFiles.size() > 0) {
-            Log.d(TAG, "Saving selected subtitle files");
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            try {
-                ObjectOutputStream oos = new ObjectOutputStream(bos);
-                oos.writeObject(mSubtitleSelectedFiles);
-                subtitleList_serialized = bos.toString();
-            } catch(IOException e) {}
-        }*/
-   /*     editor.putString(PreferencesActivity.VIDEO_SUBTITLE_FILES, subtitleList_serialized);
-
-        if (mUri != null)
-            editor.putString(PreferencesActivity.VIDEO_LAST, mUri.toString());
-
-        // Save user playback speed and restore normal speed
-        editor.putFloat(PreferencesActivity.VIDEO_SPEED, mService.getRate());
-        mService.setRate(1.0f);
-
-        Util.commitPreferences(editor);*/
     }
 
     public static void start(Context context, Uri uri) {
@@ -801,7 +749,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
             return super.onKeyDown(keyCode, event);
         if (mIsLoading) {
             switch (keyCode) {
-               // case KeyEvent.KEYCODE_S:
+                // case KeyEvent.KEYCODE_S:
                 case KeyEvent.KEYCODE_MEDIA_STOP:
                     exitOK();
                     return true;
@@ -2160,7 +2108,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
      */
     @SuppressWarnings({ "unchecked" })
     private void loadMedia(boolean fromStart) {
-        mAskResume = false;
+        //mAskResume = false;
         getIntent().putExtra(PLAY_EXTRA_FROM_START, fromStart);
         loadMedia();
     }
@@ -2175,13 +2123,13 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
         if (mService == null)
             return;
         mUri = null;
-       // String title = getResources().getString(R.string.title);
+        // String title = getResources().getString(R.string.title);
         boolean fromStart = false;
-        int openedPosition = -1;
+        //int openedPosition = -1;
         Uri data;
         //String itemTitle = null;
-        long intentPosition = -1; // position passed in by intent (ms)
-        long mediaLength = 0l;
+        //long intentPosition = -1; // position passed in by intent (ms)
+        //long mediaLength = 0l;
         Intent intent = getIntent();
         String action = intent.getAction();
         Bundle extras = getIntent().getExtras();
@@ -2306,112 +2254,33 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
                 return;
             }
 
-            // Try to get the position
+          /*  // Try to get the position
             if(extras != null)
-                intentPosition = extras.getLong("position", -1);
+                intentPosition = extras.getLong("position", -1);*/
         } /* ACTION_VIEW */
         /* Started from VideoListActivity */
         else if(TextUtils.equals(action, PLAY_FROM_VIDEOGRID) && extras != null) {
             mUri = extras.getParcelable(PLAY_EXTRA_ITEM_LOCATION);
             fromStart = extras.getBoolean(PLAY_EXTRA_FROM_START);
-            mAskResume &= !fromStart;
-            openedPosition = extras.getInt(PLAY_EXTRA_OPENED_POSITION, -1);
-        }
-
-       /* if (intent.hasExtra(PLAY_EXTRA_SUBTITLES_LOCATION))
-            mSubtitleSelectedFiles.add(extras.getString(PLAY_EXTRA_SUBTITLES_LOCATION));*/
-   /*     if (intent.hasExtra(PLAY_EXTRA_ITEM_TITLE))
-            itemTitle = extras.getString(PLAY_EXTRA_ITEM_TITLE);*/
-
-        if (openedPosition != -1) {
-            // Provided externally from AudioService
-            Log.d(TAG, "Continuing playback from AudioService at index " + openedPosition);
-            MediaWrapper openedMedia = mService.getCurrentMediaWrapper();
-            if (openedMedia == null) {
-                encounteredError();
-                return;
-            }
-            mUri = openedMedia.getUri();
-            //itemTitle = openedMedia.getTitle();
-            savedIndexPosition = openedPosition;
-            updateSeekable(mService.isSeekable());
-            updatePausable(mService.isPausable());
+            //mAskResume &= !fromStart;
+            //openedPosition = extras.getInt(PLAY_EXTRA_OPENED_POSITION, -1);
         }
 
         if (mUri != null) {
-            // restore last position
-            //MediaWrapper media = MediaDatabase.getInstance().getMedia(mUri);
-          /*  if(media != null) {
-                // in media library
-                if(media.getTime() > 0 && !fromStart && openedPosition == -1) {
-                    if (mAskResume) {
-                        //showConfirmResumeDialog();
-                        return;
-                    } else {
-                        intentPosition = media.getTime();
-                        mediaLength = media.getLength();
-                    }
-                }
-                // Consume fromStart option after first use to prevent
-                // restarting again when playback is paused.
-                intent.putExtra(PLAY_EXTRA_FROM_START, false);
-
-                mLastAudioTrack = media.getAudioTrack();
-                mLastSpuTrack = media.getSpuTrack();
-            } else */if (openedPosition == -1) {
-                // not in media library
-
-                if (intentPosition > 0 && mAskResume) {
-                    //showConfirmResumeDialog();
-                    return;
-                } else {
-                    long rTime = mSettings.getLong(PreferencesActivity.VIDEO_RESUME_TIME, -1);
-                    if (rTime > 0 && !fromStart) {
-                        if (mAskResume) {
-                            //showConfirmResumeDialog();
-                            return;
-                        } else {
-                            Editor editor = mSettings.edit();
-                            editor.putLong(PreferencesActivity.VIDEO_RESUME_TIME, -1);
-                            Util.commitPreferences(editor);
-                            intentPosition = rTime;
-                        }
-                    }
-                }
-            }
-
-            // Start playback & seek
-            if (openedPosition == -1) {
                 /* prepare playback */
-                mService.stop();
-                final MediaWrapper mw = new MediaWrapper(mUri);
-                if (wasPaused)
-                    mw.addFlags(MediaWrapper.MEDIA_PAUSED);
-                if (mHardwareAccelerationError || intent.hasExtra(PLAY_DISABLE_HARDWARE))
-                    mw.addFlags(MediaWrapper.MEDIA_NO_HWACCEL);
-                mw.removeFlags(MediaWrapper.MEDIA_FORCE_AUDIO);
-                mw.addFlags(MediaWrapper.MEDIA_VIDEO);
-                mService.addCallback(this);
-                mService.load(mw);
-                savedIndexPosition = mService.getCurrentMediaPosition();
-                if (intentPosition > 0 && mediaLength >= 0l)
-                    seek(intentPosition, mediaLength);
-            } else {
-                mService.addCallback(this);
-                // AudioService-transitioned playback for item after sleep and resume
-                if(!mService.isPlaying())
-                    mService.playIndex(savedIndexPosition);
-                else
-                    onPlaying();
-            }
-
-          /*  // Get the title
-            if (itemTitle == null)
-                title = mUri.getLastPathSegment();*/
+            mService.stop();
+            final MediaWrapper mw = new MediaWrapper(mUri);
+            if (wasPaused)
+                mw.addFlags(MediaWrapper.MEDIA_PAUSED);
+            if (mHardwareAccelerationError || intent.hasExtra(PLAY_DISABLE_HARDWARE))
+                mw.addFlags(MediaWrapper.MEDIA_NO_HWACCEL);
+            mw.removeFlags(MediaWrapper.MEDIA_FORCE_AUDIO);
+            mw.addFlags(MediaWrapper.MEDIA_VIDEO);
+            mService.addCallback(this);
+            mService.load(mw);
+            savedIndexPosition = mService.getCurrentMediaPosition();
         }
-   /*     if (itemTitle != null)
-            title = itemTitle;*/
-        // mTitle.setText(title);
+
     }
 
     @SuppressWarnings("deprecation")
