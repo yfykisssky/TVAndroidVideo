@@ -16,14 +16,15 @@
             android:layout_width="200px"
             android:layout_height="100px" />
         <TextView
+            android:textSize="40px"
             android:id="@+id/remind"
             android:gravity="center"
             android:textColor="#000000"
-            android:text="手机号码:"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
     <Button
+        android:textColor="#FFFFFF"
         android:focusable="true"
         android:layout_margin="20px"
         android:layout_centerHorizontal="true"

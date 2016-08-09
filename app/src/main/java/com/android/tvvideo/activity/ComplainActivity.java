@@ -151,7 +151,7 @@ public class ComplainActivity extends BaseActivity {
             ViewHolder viewHolder;
             if (convertView == null)
             {
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_doctors_select,null);
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_complain_grid,null);
                 viewHolder = new ViewHolder();
                 viewHolder.headImg=(ImageView) convertView.findViewById(R.id.head);
                 viewHolder.nameTex=(TextView) convertView.findViewById(R.id.name);

@@ -14,9 +14,23 @@ import com.android.tvvideo.tools.PushService;
  */
 public class MyApplication{
 
-    static double biggestVolumePercent;
+    static MyApplication myApplication;
 
-    private static void initPushService(Context context){
+    Context context;
+
+    public static MyApplication getInstance(){
+
+        if(myApplication==null){
+            myApplication=new MyApplication();
+        }
+        return myApplication;
+    }
+
+    public void init(Context context){
+        this.context=context.getApplicationContext();
+    }
+
+    private void initPushService(Context context){
 
         Intent intent=new Intent(context,PushService.class);
 
@@ -36,9 +50,13 @@ public class MyApplication{
 
     }
 
-    public static void initData(Context context){
+    public void initData(Context context){
 
         initPushService(context);
+
+    }
+
+    public void getTimeLimited(){
 
     }
 

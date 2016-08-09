@@ -26,7 +26,6 @@ import com.android.tvvideo.view.ReFousListView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.videolan.vlc.gui.video.VideoPlayerActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -287,7 +286,7 @@ public class VideoSelectActivity extends BaseActivity {
 
                 Uri uri= Uri.parse(url);
 
-                VideoPlayerActivity.start(VideoSelectActivity.this,uri);
+               // VideoPlayerActivity.start(VideoSelectActivity.this,uri);
 
             }
         });
