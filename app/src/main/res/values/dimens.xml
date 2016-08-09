@@ -1,6 +1,4 @@
 <resources>
-    <dimen name="grid_card_thumb_width">160dp</dimen>
-    <dimen name="grid_card_thumb_height">100dp</dimen>
 
     <!-- Video Player -->
     <dimen name="overlay_padding_bottom">8dip</dimen>

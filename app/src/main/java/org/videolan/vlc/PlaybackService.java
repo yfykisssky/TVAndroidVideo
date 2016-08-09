@@ -53,7 +53,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.android.tvvideo.BuildConfig;
 import com.android.tvvideo.R;
 
 import org.videolan.libvlc.IVLCVout;
@@ -79,7 +78,6 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -135,7 +133,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
     private PowerManager.WakeLock mWakeLock;
     private final AtomicBoolean mExpanding = new AtomicBoolean(false);
 
-    private static boolean mWasPlayingAudio = false; // used only if readPhoneState returns true
+    //private static boolean mWasPlayingAudio = false; // used only if readPhoneState returns true
 
     // Index management
     /**
@@ -170,8 +168,8 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
     /**
      * Last widget position update timestamp
      */
-    private long mWidgetPositionTimestamp = Calendar.getInstance().getTimeInMillis();
-    private ComponentName mRemoteControlClientReceiverComponent;
+    //private long mWidgetPositionTimestamp = Calendar.getInstance().getTimeInMillis();
+    //private ComponentName mRemoteControlClientReceiverComponent;
 
     private static LibVLC LibVLC() {
         return VLCInstance.get();
@@ -214,8 +212,8 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         mPrevIndex = -1;
         mNextIndex = -1;
         mPrevious = new Stack<Integer>();
-        mRemoteControlClientReceiverComponent = new ComponentName(BuildConfig.APPLICATION_ID,
-                RemoteControlClientReceiver.class.getName());
+     /*   mRemoteControlClientReceiverComponent = new ComponentName(BuildConfig.APPLICATION_ID,
+                RemoteControlClientReceiver.class.getName());*/
 
         // Make sure the audio player will acquire a wake-lock while playing. If we don't do
         // that, the CPU might go to sleep while the song is playing, causing playback to stop.
@@ -280,7 +278,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
             else
                 loadLastPlaylist();
         }
-        updateWidget();
+        //updateWidget();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -572,7 +570,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
                     }
 
                     changeAudioFocus(true);
-                    showNotification();
+                    //showNotification();
                     if (!mWakeLock.isHeld())
                         mWakeLock.acquire();
                     break;
@@ -581,7 +579,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
                     executeUpdate();
                     publishState(event.type);
                     executeUpdateProgress();
-                    showNotification();
+                    //showNotification();
                     if (mWakeLock.isHeld())
                         mWakeLock.release();
                     break;
@@ -617,7 +615,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
                 case MediaPlayer.Event.TimeChanged:
                     break;
                 case MediaPlayer.Event.PositionChanged:
-                    updateWidgetPosition(event.getPositionChanged());
+                    //updateWidgetPosition(event.getPositionChanged());
                     break;
                 case MediaPlayer.Event.Vout:
                     break;
@@ -626,7 +624,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
                         if (!handleVout()) {
                             /* Update notification content intent: resume video or resume audio activity */
                             updateMetadata();
-                            showNotification();
+                           // showNotification();
                         }
                     }
                     break;
@@ -724,15 +722,9 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
     }
 
     private void executeUpdate() {
-        executeUpdate(true);
-    }
-
-    private void executeUpdate(Boolean updateWidget) {
         for (Callback callback : mCallbacks) {
             callback.update();
         }
-        if (updateWidget)
-            updateWidget();
         updateMetadata();
 
     }
@@ -792,92 +784,6 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void showNotification() {
-       /* if (mMediaPlayer.getVLCVout().areViewsAttached())
-            return;
-        try {
-            MediaMetadataCompat metaData = mMediaSession.getController().getMetadata();
-            String title = metaData.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
-            String artist = metaData.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST);
-            String album = metaData.getString(MediaMetadataCompat.METADATA_KEY_ALBUM);
-            Bitmap cover = metaData.getBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART);
-            if (cover == null)
-                cover = BitmapFactory.decodeResource(VLCApplication.getAppContext().getResources(), R.drawable.icon);
-            Notification notification;
-
-            //Watch notification dismissed
-            PendingIntent piStop = PendingIntent.getBroadcast(this, 0,
-                    new Intent(ACTION_REMOTE_STOP), PendingIntent.FLAG_UPDATE_CURRENT);
-
-            // add notification to status bar
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-            builder.setSmallIcon(R.drawable.ic_stat_vlc)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setContentTitle(title)
-                .setContentText(artist + " - " + album)
-                .setLargeIcon(cover)
-                .setTicker(title + " - " + artist)
-                .setAutoCancel(!mMediaPlayer.isPlaying())
-                .setOngoing(mMediaPlayer.isPlaying())
-                .setDeleteIntent(piStop);
-
-
-            PendingIntent pendingIntent;
-            if (canSwitchToVideo()) {
-                *//* Resume VideoPlayerActivity from from ACTION_REMOTE_RESUME_VIDEO intent *//*
-                final Intent notificationIntent = new Intent(ACTION_REMOTE_RESUME_VIDEO);
-                pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            } else {
-                *//* Resume AudioPlayerActivity *//*
-
-                final Intent notificationIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
-                notificationIntent.setAction(AudioPlayerContainerActivity.ACTION_SHOW_PLAYER);
-                notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            }
-
-            builder.setContentIntent(pendingIntent);
-
-            PendingIntent piBackward = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_REMOTE_BACKWARD), PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent piPlay = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_REMOTE_PLAYPAUSE), PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent piForward = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_REMOTE_FORWARD), PendingIntent.FLAG_UPDATE_CURRENT);
-
-            builder.addAction(R.drawable.ic_previous_w, getString(R.string.previous), piBackward);
-            if (mMediaPlayer.isPlaying())
-                builder.addAction(R.drawable.ic_pause_w, getString(R.string.pause), piPlay);
-            else
-                builder.addAction(R.drawable.ic_play_w, getString(R.string.play), piPlay);
-            builder.addAction(R.drawable.ic_next_w, getString(R.string.next), piForward);
-
-            builder.setStyle(new NotificationCompat.MediaStyle()
-                            .setMediaSession(mMediaSession.getSessionToken())
-                            .setShowActionsInCompactView(new int[] {0,1,2})
-                            .setShowCancelButton(true)
-                            .setCancelButtonIntent(piStop)
-            );
-
-            notification = builder.build();
-
-            startService(new Intent(this, PlaybackService.class));
-            if (!AndroidUtil.isLolliPopOrLater() || mMediaPlayer.isPlaying())
-                startForeground(3, notification);
-            else {
-                stopForeground(false);
-                NotificationManagerCompat.from(this).notify(3, notification);
-            }
-        }
-        catch (NoSuchMethodError e){
-            // Compat library is wrong on 3.2
-            // http://code.google.com/p/android/issues/detail?id=36359
-            // http://code.google.com/p/android/issues/detail?id=36502
-        }*/
-    }
-
-    private void hideNotification() {
-        hideNotification(true);
-    }
-
     /**
      * Hides the VLC notification and stops the service.
      *
@@ -906,7 +812,6 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
             mMediaPlayer.play();
             mHandler.sendEmptyMessage(SHOW_PROGRESS);
             updateMetadata();
-            updateWidget();
             broadcastMetadata();
         }
     }
@@ -933,7 +838,6 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         mCurrentIndex = -1;
         mPrevious.clear();
         mHandler.removeMessages(SHOW_PROGRESS);
-        hideNotification();
         broadcastMetadata();
         executeUpdate();
         executeUpdateProgress();
@@ -1103,15 +1007,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         mMediaSession.setActive(state != PlaybackStateCompat.STATE_STOPPED);
     }
 
-    private void notifyTrackChanged() {
-        mHandler.sendEmptyMessage(SHOW_PROGRESS);
-        updateMetadata();
-        updateWidget();
-        broadcastMetadata();
-    }
-
     private void onMediaChanged() {
-        notifyTrackChanged();
 
         saveCurrentMedia();
         determinePrevAndNextIndices();
@@ -1175,54 +1071,6 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         mRepeating = repeatType;
         savePosition();
         determinePrevAndNextIndices();
-    }
-
-    private void updateWidget() {
-        updateWidgetState();
-        updateWidgetCover();
-    }
-
-    private void updateWidgetState() {
-    /*    Intent i = new Intent(VLCAppWidgetProvider.ACTION_WIDGET_UPDATE);
-
-        if (hasCurrentMedia()) {
-            final MediaWrapper media = getCurrentMedia();
-            i.putExtra("title", media.getTitle());
-            i.putExtra("artist", media.isArtistUnknown() && media.getNowPlaying() != null ?
-                    media.getNowPlaying()
-                    : MediaUtils.getMediaArtist(this, media));
-        }
-        else {
-            i.putExtra("title", getString(R.string.widget_default_text));
-            i.putExtra("artist", "");
-        }
-        i.putExtra("isplaying", mMediaPlayer.isPlaying());
-
-        sendBroadcast(i);*/
-    }
-
-    private void updateWidgetCover() {
-     /*   Intent i = new Intent(VLCAppWidgetProvider.ACTION_WIDGET_UPDATE_COVER);
-
-        Bitmap cover = hasCurrentMedia() ? AudioUtil.getCover(this, getCurrentMedia(), 64) : null;
-        i.putExtra("cover", cover);
-
-        sendBroadcast(i);*/
-    }
-
-    private void updateWidgetPosition(float pos) {
-    /*    // no more than one widget update for each 1/50 of the song
-        long timestamp = Calendar.getInstance().getTimeInMillis();
-        if (!hasCurrentMedia()
-                || timestamp - mWidgetPositionTimestamp < getCurrentMedia().getLength() / 50)
-            return;
-
-        updateWidgetState();
-
-        mWidgetPositionTimestamp = timestamp;
-        Intent i = new Intent(VLCAppWidgetProvider.ACTION_WIDGET_UPDATE_POSITION);
-        i.putExtra("position", pos);
-        sendBroadcast(i);*/
     }
 
     private void broadcastMetadata() {
@@ -1594,7 +1442,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         mMediaPlayer.setEventListener(mMediaPlayerListener);
         mMediaPlayer.play();
 
-        notifyTrackChanged();
+        //notifyTrackChanged();
         determinePrevAndNextIndices();
     }
 
@@ -1624,8 +1472,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
             return;
         mCurrentIndex = index;
 
-        notifyTrackChanged();
-        showNotification();
+        //notifyTrackChanged();
     }
 
     /**
