@@ -22,13 +22,10 @@ package org.videolan.vlc.gui.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-
-import com.android.tvvideo.R;
 
 import org.videolan.vlc.interfaces.OnEqualizerBarChangeListener;
 
@@ -53,7 +50,7 @@ public class EqualizerBar extends LinearLayout {
     }
 
     private void init(Context context, float band) {
-        LayoutInflater.from(context).inflate(R.layout.equalizer_bar, this, true);
+     /*   LayoutInflater.from(context).inflate(R.layout.equalizer_bar, this, true);
 
         mSeek = (VerticalSeekBar) findViewById(R.id.equalizer_seek);
         mSeek.setMax(2 * RANGE);
@@ -63,7 +60,7 @@ public class EqualizerBar extends LinearLayout {
         mBand.setText(band < 999.5f
                 ? (int) (band + 0.5f) + " Hz"
                 : (int) (band / 1000.0f + 0.5f) + " kHz");
-        mValue = (TextView) findViewById(R.id.equalizer_value);
+        mValue = (TextView) findViewById(R.id.equalizer_value);*/
     }
 
     private final OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {

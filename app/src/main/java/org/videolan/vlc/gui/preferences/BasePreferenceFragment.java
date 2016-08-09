@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
-import com.android.tvvideo.R;
-
 /**
  * Created by yfykisssky on 16/8/7.
  */
@@ -30,9 +28,9 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat {
     }
 
     protected void loadFragment(Fragment fragment) {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_placeholder, fragment)
+       /* getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_placeholder, fragment)
                 .addToBackStack("main")
-                .commit();
+                .commit();*/
     }
 }
 

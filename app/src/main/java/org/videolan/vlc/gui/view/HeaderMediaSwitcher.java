@@ -24,11 +24,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.android.tvvideo.R;
 
 
 public class HeaderMediaSwitcher extends AudioMediaSwitcher {
@@ -38,7 +33,7 @@ public class HeaderMediaSwitcher extends AudioMediaSwitcher {
     }
 
     protected void addMediaView(LayoutInflater inflater, String title, String artist, Bitmap cover) {
-        View v = inflater.inflate(R.layout.audio_media_switcher_item, this, false);
+   /*     View v = inflater.inflate(R.layout.audio_media_switcher_item, this, false);
 
         ImageView coverView = (ImageView) v.findViewById(R.id.cover);
         TextView titleView = (TextView) v.findViewById(R.id.title);
@@ -52,6 +47,6 @@ public class HeaderMediaSwitcher extends AudioMediaSwitcher {
         titleView.setText(title);
         artistView.setText(artist);
 
-        addView(v);
+        addView(v);*/
     }
 }

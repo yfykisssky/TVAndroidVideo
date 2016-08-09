@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
-import com.android.tvvideo.R;
-
 import org.videolan.vlc.PlaybackService;
 
 /**
@@ -40,7 +38,7 @@ public class PreferencesActivity extends Activity implements PlaybackService.Cli
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.preferences_activity);
+        //setContentView(R.layout.preferences_activity);
     /*    setSupportActionBar((Toolbar) findViewById(R.id.main_toolbar));
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()

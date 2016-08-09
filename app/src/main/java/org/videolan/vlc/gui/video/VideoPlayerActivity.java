@@ -173,7 +173,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
 /*    private ActionBar mActionBar;
     private ViewGroup mActionBarView;*/
     private View mOverlayProgress;
-    private View mOverlayBackground;
+    //private View mOverlayBackground;
     private View mOverlayButtons;
     private static final int OVERLAY_TIMEOUT = 4000;
     private static final int OVERLAY_INFINITE = -1;
@@ -356,8 +356,11 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
         loadingDialog=new LoadingDialog(this);
 
        // mTitle = (TextView) mActionBarView.findViewById(R.id.player_overlay_title);
-        mSysTime = (TextView) findViewById(R.id.player_overlay_systime);
-        mBattery = (TextView) findViewById(R.id.player_overlay_battery);
+
+        mSysTime=new TextView(this);
+        mBattery=new TextView(this);
+        //mSysTime = (TextView) findViewById(R.id.player_overlay_systime);
+        //mBattery = (TextView) findViewById(R.id.player_overlay_battery);
         mOverlayProgress = findViewById(R.id.progress_overlay);
         RelativeLayout.LayoutParams layoutParams =
                 (RelativeLayout.LayoutParams)mOverlayProgress.getLayoutParams();
@@ -367,7 +370,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
             layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
         }
         mOverlayProgress.setLayoutParams(layoutParams);
-        mOverlayBackground = findViewById(R.id.player_overlay_background);
+       // mOverlayBackground = findViewById(R.id.player_overlay_background);
         mOverlayButtons =  findViewById(R.id.player_overlay_buttons);
 
         // Position and remaining time
@@ -416,8 +419,8 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
 
         /* Loading view */
         //mLoading = (ImageView) findViewById(R.id.player_overlay_loading);
-        if (mPresentation != null)
-            mTipsBackground = (ImageView) findViewById(R.id.player_remote_tips_background);
+    /*    if (mPresentation != null)
+            mTipsBackground = (ImageView) findViewById(R.id.player_remote_tips_background);*/
         dimStatusBar(false);
         startLoading();
 
@@ -2365,7 +2368,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
             }
             dimStatusBar(false);
             mOverlayProgress.setVisibility(View.VISIBLE);
-            if (mPresentation != null) mOverlayBackground.setVisibility(View.VISIBLE);
+            //if (mPresentation != null) mOverlayBackground.setVisibility(View.VISIBLE);
         }
         mHandler.removeMessages(FADE_OUT);
         if (mOverlayTimeout != OVERLAY_INFINITE)
@@ -2404,10 +2407,10 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
                     mNavMenu.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));*/
             } /*else
                 mSize.setVisibility(View.INVISIBLE);*/
-            if (mPresentation != null) {
+        /*    if (mPresentation != null) {
                 mOverlayBackground.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
                 mOverlayBackground.setVisibility(View.INVISIBLE);
-            }
+            }*/
             setActionBarVisibility(false);
             mOverlayProgress.setVisibility(View.INVISIBLE);
             mPlayPause.setVisibility(View.INVISIBLE);
@@ -3010,11 +3013,11 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.player_remote);
+      /*      setContentView(R.layout.player_remote);
 
             mSurfaceView = (SurfaceView) findViewById(R.id.remote_player_surface);
             mSubtitlesSurfaceView = (SurfaceView) findViewById(R.id.remote_subtitles_surface);
-            mSurfaceFrame = (FrameLayout) findViewById(R.id.remote_player_surface_frame);
+            mSurfaceFrame = (FrameLayout) findViewById(R.id.remote_player_surface_frame);*/
 
             if (HWDecoderUtil.HAS_SUBTITLES_SURFACE) {
                 mSubtitlesSurfaceView.setZOrderMediaOverlay(true);
