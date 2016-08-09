@@ -1,10 +1,13 @@
 package com.android.tvvideo.tools;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 
+import com.android.tvvideo.activity.StartActivity;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
 
@@ -45,8 +48,6 @@ public class CrashHandler implements UncaughtExceptionHandler {
                 jsonObject.put("time",date);
                 jsonObject.put("content",data);
 
-                Log.e("error",jsonObject.toString());
-
                 new NetDataTool(mContext).sendNoShowPost(NetDataConstants.APP_INFO, jsonObject.toString(), new NetDataTool.IResponse() {
                     @Override
                     public void onSuccess(String data) {
@@ -62,8 +63,6 @@ public class CrashHandler implements UncaughtExceptionHandler {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            Log.e("data",jsonObject.toString());
         }
 
     }
@@ -106,9 +105,15 @@ public class CrashHandler implements UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
 
-        handleException(ex);
+        if(handleException(ex)){
 
-        mDefaultHandler.uncaughtException(thread, ex);
+            restartApp(mContext);
+
+        }else{
+
+            mDefaultHandler.uncaughtException(thread, ex);
+
+        }
 
     }
 
@@ -123,6 +128,20 @@ public class CrashHandler implements UncaughtExceptionHandler {
 
         saveLog(dump);
 
-        return false;
+        return true;
+    }
+
+    private void restartApp(Context context){
+        AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(context,StartActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("crash", true);
+        PendingIntent restartIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis(), restartIntent); // 1秒钟后重启应用
+
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
+        System.gc();
     }
 }
