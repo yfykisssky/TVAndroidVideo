@@ -66,14 +66,14 @@ public class MediaUtils {
         });
     }
 
-    public static void openStream(final Context context, final String uri){
+  /*  public static void openStream(final Context context, final String uri){
         new DialogCallback(context, new DialogCallback.Runnable() {
             @Override
             public void run(PlaybackService service) {
                 service.loadLocation(uri);
             }
         });
-    }
+    }*/
 
     public static String getMediaArtist(Context ctx, MediaWrapper media) {
         final String artist = media.getArtist();

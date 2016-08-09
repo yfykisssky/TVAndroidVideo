@@ -87,7 +87,6 @@ import org.videolan.vlc.gui.PlaybackServiceActivity;
 import org.videolan.vlc.gui.helpers.OnRepeatListener;
 import org.videolan.vlc.gui.preferences.PreferencesActivity;
 import org.videolan.vlc.interfaces.IDelayController;
-import org.videolan.vlc.media.MediaDatabase;
 import org.videolan.vlc.media.MediaWrapper;
 import org.videolan.vlc.util.AndroidDevices;
 import org.videolan.vlc.util.Permissions;
@@ -177,7 +176,6 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
     private boolean mIsLoading;
     private LoadingDialog loadingDialog;
     private ImageView mPlayPause;
-    private ImageView mTracks;
     private ImageView mRewind;
     private ImageView mForward;
     private ImageView mDelayPlus;
@@ -321,8 +319,6 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
                 mSettings.getString("screen_orientation_value", "4" /*SCREEN_ORIENTATION_SENSOR*/));
 
         mPlayPause = (ImageView) findViewById(R.id.player_overlay_play);
-
-        mTracks = (ImageView) findViewById(R.id.player_overlay_tracks);
 
         if (mSettings.getBoolean("enable_seek_buttons", false))
             initSeekButton();
@@ -639,6 +635,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
         else
             time -= 2000; // go back 2 seconds, to compensate loading time
         mService.stop();
+/*
 
         SharedPreferences.Editor editor = mSettings.edit();
         // Save position
@@ -656,6 +653,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
         if(isPaused)
             Log.d(TAG, "Video paused - saving flag");
         editor.putBoolean(PreferencesActivity.VIDEO_PAUSED, isPaused);
+*/
 
         // Save selected subtitles
         String subtitleList_serialized = null;
@@ -668,7 +666,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
                 subtitleList_serialized = bos.toString();
             } catch(IOException e) {}
         }*/
-        editor.putString(PreferencesActivity.VIDEO_SUBTITLE_FILES, subtitleList_serialized);
+   /*     editor.putString(PreferencesActivity.VIDEO_SUBTITLE_FILES, subtitleList_serialized);
 
         if (mUri != null)
             editor.putString(PreferencesActivity.VIDEO_LAST, mUri.toString());
@@ -677,7 +675,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
         editor.putFloat(PreferencesActivity.VIDEO_SPEED, mService.getRate());
         mService.setRate(1.0f);
 
-        Util.commitPreferences(editor);
+        Util.commitPreferences(editor);*/
     }
 
     public static void start(Context context, Uri uri) {
@@ -1990,23 +1988,14 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
         if (!mShowing) {
             mShowing = true;
             if (!mIsLocked) {
-                //setActionBarVisibility(true);
                 mPlayPause.setVisibility(View.VISIBLE);
-                if (mTracks != null)
-                    mTracks.setVisibility(View.VISIBLE);
-            /*    if (mAdvOptions !=null)
-                    mAdvOptions.setVisibility(View.VISIBLE);
-                mSize.setVisibility(View.VISIBLE);*/
                 if (mRewind != null)
                     mRewind.setVisibility(View.VISIBLE);
                 if (mForward != null)
                     mForward.setVisibility(View.VISIBLE);
-              /*  if (mMenuIdx >= 0 && mNavMenu != null)
-                    mNavMenu.setVisibility(View.VISIBLE);*/
             }
             dimStatusBar(false);
             mOverlayProgress.setVisibility(View.VISIBLE);
-            //if (mPresentation != null) mOverlayBackground.setVisibility(View.VISIBLE);
         }
         mHandler.removeMessages(FADE_OUT);
         if (mOverlayTimeout != OVERLAY_INFINITE)
@@ -2033,10 +2022,6 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
             if (!fromUser && !mIsLocked) {
                 mOverlayProgress.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
                 mPlayPause.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
-                if (mTracks != null)
-                    mTracks.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
-            /*    if (mAdvOptions !=null)
-                    mAdvOptions.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));*/
                 if (mRewind != null)
                     mRewind.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
                 if (mForward != null)
@@ -2052,8 +2037,6 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
             //setActionBarVisibility(false);
             mOverlayProgress.setVisibility(View.INVISIBLE);
             mPlayPause.setVisibility(View.INVISIBLE);
-            if (mTracks != null)
-                mTracks.setVisibility(View.INVISIBLE);
            /* if (mAdvOptions !=null)
                 mAdvOptions.setVisibility(View.INVISIBLE);*/
             if (mRewind != null)
@@ -2126,11 +2109,11 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
         }
         int time = (int) getTime();
         int length = (int) mService.getLength();
-        if (length == 0) {
+   /*     if (length == 0) {
             MediaWrapper media = MediaDatabase.getInstance().getMedia(mUri);
             if (media != null)
                 length = (int) media.getLength();
-        }
+        }*/
 
         // Update all view elements
         mSeekbar.setMax(length);
@@ -2357,8 +2340,8 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
 
         if (mUri != null) {
             // restore last position
-            MediaWrapper media = MediaDatabase.getInstance().getMedia(mUri);
-            if(media != null) {
+            //MediaWrapper media = MediaDatabase.getInstance().getMedia(mUri);
+          /*  if(media != null) {
                 // in media library
                 if(media.getTime() > 0 && !fromStart && openedPosition == -1) {
                     if (mAskResume) {
@@ -2375,7 +2358,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
 
                 mLastAudioTrack = media.getAudioTrack();
                 mLastSpuTrack = media.getSpuTrack();
-            } else if (openedPosition == -1) {
+            } else */if (openedPosition == -1) {
                 // not in media library
 
                 if (intentPosition > 0 && mAskResume) {

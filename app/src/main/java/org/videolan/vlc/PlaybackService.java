@@ -63,7 +63,6 @@ import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.util.AndroidUtil;
 import org.videolan.vlc.gui.helpers.AudioUtil;
 import org.videolan.vlc.gui.video.VideoPlayerActivity;
-import org.videolan.vlc.media.MediaDatabase;
 import org.videolan.vlc.media.MediaUtils;
 import org.videolan.vlc.media.MediaWrapper;
 import org.videolan.vlc.media.MediaWrapperList;
@@ -74,13 +73,8 @@ import org.videolan.vlc.util.VLCInstance;
 import org.videolan.vlc.util.VLCOptions;
 import org.videolan.vlc.util.WeakHandler;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -270,13 +264,13 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         if(ACTION_REMOTE_PLAYPAUSE.equals(intent.getAction())){
             if (hasCurrentMedia())
                 return START_STICKY;
-            else
-                loadLastPlaylist();
+        /*    else
+                loadLastPlaylist();*/
         } else if (ACTION_REMOTE_PLAY.equals(intent.getAction())) {
             if (hasCurrentMedia())
                 play();
-            else
-                loadLastPlaylist();
+          /*  else
+                loadLastPlaylist();*/
         }
         //updateWidget();
         return super.onStartCommand(intent, flags, startId);
@@ -467,9 +461,9 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
                 stop();
             } else if (action.equalsIgnoreCase(ACTION_REMOTE_FORWARD)) {
                 next();
-            } else if (action.equalsIgnoreCase(ACTION_REMOTE_LAST_PLAYLIST)) {
+            }/* else if (action.equalsIgnoreCase(ACTION_REMOTE_LAST_PLAYLIST)) {
                 loadLastPlaylist();
-            } else if (action.equalsIgnoreCase(ACTION_REMOTE_RESUME_VIDEO)) {
+            } */else if (action.equalsIgnoreCase(ACTION_REMOTE_RESUME_VIDEO)) {
                 switchToVideo();
             }/* else if (action.equalsIgnoreCase(VLCAppWidgetProvider.ACTION_WIDGET_INIT)) {
                 updateWidget();
@@ -552,22 +546,22 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
                     executeUpdateProgress();
 
                     final MediaWrapper mw = mMediaList.getMedia(mCurrentIndex);
-                    if (mw != null) {
+              /*      if (mw != null) {
                         long length = mMediaPlayer.getLength();
                         MediaDatabase dbManager = MediaDatabase.getInstance();
                         MediaWrapper m = dbManager.getMedia(mw.getUri());
-                        /**
+                        *//**
                          * 1) There is a media to update
                          * 2) It has a length of 0
                          * (dynamic track loading - most notably the OGG container)
                          * 3) We were able to get a length even after parsing
                          * (don't want to replace a 0 with a 0)
-                         */
+                         *//*
                         if (m != null && m.getLength() == 0 && length > 0) {
                             dbManager.updateMedia(mw.getUri(),
                                     MediaDatabase.INDEX_MEDIA_LENGTH, length);
                         }
-                    }
+                    }*/
 
                     changeAudioFocus(true);
                     //showNotification();
@@ -1090,7 +1084,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         sendBroadcast(broadcast);
     }
 
-    private synchronized void loadLastPlaylist() {
+/*    private synchronized void loadLastPlaylist() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String currentMedia = prefs.getString("current_media", "");
         if (currentMedia.equals(""))
@@ -1106,14 +1100,14 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         int position = prefs.getInt("position_in_list", Math.max(0, mediaPathList.indexOf(currentMedia)));
         long time = prefs.getLong("position_in_song", -1);
         // load playlist
-        loadLocations(mediaPathList, position);
+        //loadLocations(mediaPathList, position);
         if (time > 0)
             setTime(time);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("position_in_list", 0);
         editor.putLong("position_in_song", 0);
         Util.commitPreferences(editor);
-    }
+    }*/
 
     private synchronized void saveCurrentMedia() {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
@@ -1144,13 +1138,13 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         Util.commitPreferences(editor);
     }
 
-    private boolean validateLocation(String location)
+ /*   private boolean validateLocation(String location)
     {
-        /* Check if the MRL contains a scheme */
+        *//* Check if the MRL contains a scheme *//*
         if (!location.matches("\\w+://.+"))
             location = "file://".concat(location);
         if (location.toLowerCase(Locale.ENGLISH).startsWith("file://")) {
-            /* Ensure the file exists */
+            *//* Ensure the file exists *//*
             File f;
             try {
                 f = new File(new URI(location));
@@ -1163,7 +1157,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
                 return false;
         }
         return true;
-    }
+    }*/
 
     private void showToast(String text, int duration) {
         Message msg = new Message();
@@ -1269,7 +1263,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
             return null;
     }
 
-    @MainThread
+/*    @MainThread
     public Bitmap getCover() {
         if (hasCurrentMedia()) {
             return AudioUtil.getCover(PlaybackService.this, getCurrentMedia(), 512);
@@ -1283,7 +1277,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
             return AudioUtil.getCover(PlaybackService.this, mMediaList.getMedia(mPrevIndex), 64);
         else
             return null;
-    }
+    }*/
 
     @MainThread
     public Bitmap getCoverNext() {
@@ -1317,17 +1311,15 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         return  mMediaPlayer.getLength();
     }
 
-    /**
+/*    *//**
      * Loads a selection of files (a non-user-supplied collection of media)
      * into the primary or "currently playing" playlist.
      *
-     * @param mediaPathList A list of locations to load
-     * @param position The position to start playing at
-     */
+     *//*
     @MainThread
     public void loadLocations(List<String> mediaPathList, int position) {
         ArrayList<MediaWrapper> mediaList = new ArrayList<MediaWrapper>();
-        MediaDatabase db = MediaDatabase.getInstance();
+     /*//*//*   MediaDatabase db = MediaDatabase.getInstance();
 
         for (int i = 0; i < mediaPathList.size(); i++) {
             String location = mediaPathList.get(i);
@@ -1342,9 +1334,9 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
                 mediaWrapper = new MediaWrapper(Uri.parse(location));
             }
             mediaList.add(mediaWrapper);
-        }
+        }*//*
         load(mediaList, position);
-    }
+    }*/
 
     @MainThread
     public void loadUri(Uri uri) {
@@ -1352,13 +1344,13 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         if (TextUtils.equals(uri.getScheme(), "content")) {
             path = "file://"+ FileUtils.getPathFromURI(uri);
         }
-        loadLocation(path);
+        //loadLocation(path);
     }
 
-    @MainThread
+   /* @MainThread
     public void loadLocation(String mediaPath) {
         loadLocations(Collections.singletonList(mediaPath), 0);
-    }
+    }*/
 
     @MainThread
     public void load(List<MediaWrapper> mediaList, int position) {

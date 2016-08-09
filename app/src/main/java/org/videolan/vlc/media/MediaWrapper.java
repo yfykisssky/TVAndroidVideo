@@ -301,7 +301,6 @@ public class MediaWrapper implements Parcelable {
     /**
      * Sets the raw picture object.
      *
-     * In VLC for Android, use {@link MediaDatabase#setPicture(MediaWrapper, Bitmap)} instead.
      *
      * @param p
      */

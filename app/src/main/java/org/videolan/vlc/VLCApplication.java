@@ -28,8 +28,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.videolan.vlc.gui.helpers.AudioUtil;
-
-import org.videolan.vlc.media.MediaDatabase;
 import org.videolan.vlc.util.Strings;
 
 import java.util.Calendar;
@@ -67,7 +65,7 @@ public class VLCApplication extends Application {
         instance = this;
 
         // Initialize the database soon enough to avoid any race condition and crash
-        MediaDatabase.getInstance();
+        //MediaDatabase.getInstance();
         // Prepare cache folder constants
         AudioUtil.prepareCacheFolder(this);
     }

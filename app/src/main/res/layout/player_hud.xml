@@ -108,8 +108,8 @@
 
         <ImageView
             android:id="@+id/player_overlay_play"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="200px"
+            android:layout_height="200px"
             android:layout_weight="1"
             android:clickable="true"
             android:src="@drawable/ic_pause_circle"
