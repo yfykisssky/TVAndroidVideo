@@ -78,26 +78,6 @@ public class BaseActivity extends Activity {
                         AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
 
                 return true;
-            case KeyEvent.KEYCODE_0:
-                break;
-            case KeyEvent.KEYCODE_1:
-                break;
-            case KeyEvent.KEYCODE_2:
-                break;
-            case KeyEvent.KEYCODE_3:
-                break;
-            case KeyEvent.KEYCODE_4:
-                break;
-            case KeyEvent.KEYCODE_5:
-                break;
-            case KeyEvent.KEYCODE_6:
-                break;
-            case KeyEvent.KEYCODE_7:
-                break;
-            case KeyEvent.KEYCODE_8:
-                break;
-            case KeyEvent.KEYCODE_9:
-                break;
             default:
                 break;
         }
