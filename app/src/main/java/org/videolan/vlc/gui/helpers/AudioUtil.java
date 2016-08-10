@@ -19,65 +19,24 @@
  *****************************************************************************/
 package org.videolan.vlc.gui.helpers;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.annotation.RequiresPermission;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.android.tvvideo.BuildConfig;
-import com.android.tvvideo.R;
-
-import org.videolan.libvlc.util.AndroidUtil;
-import org.videolan.vlc.VLCApplication;
-import org.videolan.vlc.media.MediaUtils;
-import org.videolan.vlc.media.MediaWrapper;
-import org.videolan.vlc.util.AndroidDevices;
-import org.videolan.vlc.util.MurmurHash;
-import org.videolan.vlc.util.Permissions;
-import org.videolan.vlc.util.Util;
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-
 public class AudioUtil {
-    public final static String TAG = "VLC/AudioUtil";
+   /* public final static String TAG = "VLC/AudioUtil";
 
-    /**
+    *//**
      * Cache directory (/sdcard/Android/data/...)
-     */
+     *//*
     public static String CACHE_DIR = null;
-    /**
+    *//**
      * VLC embedded art storage location
-     */
+     *//*
     public static String ART_DIR = null;
-    /**
+    *//**
      * Cover caching directory
-     */
+     *//*
     public static String COVER_DIR = null;
-    /**
+    *//**
      * User-defined playlist storage directory
-     */
+     *//*
     public static String PLAYLIST_DIR = null;
 
     //public static final BitmapDrawable DEFAULT_COVER = new BitmapDrawable(VLCApplication.getAppResources(), BitmapCache.getFromResource(VLCApplication.getAppResources(), R.drawable.icon));
@@ -97,7 +56,7 @@ public class AudioUtil {
         ContentValues values = new ContentValues();
         values.put(MediaStore.MediaColumns.DATA, newringtone.getAbsolutePath());
         values.put(MediaStore.MediaColumns.TITLE, song.getTitle());
-        values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/*");
+        values.put(MediaStore.MediaColumns.MIME_TYPE, "audio*//*");
         values.put(MediaStore.Audio.Media.ARTIST, song.getArtist());
         values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
         values.put(MediaStore.Audio.Media.IS_NOTIFICATION, false);
@@ -129,7 +88,7 @@ public class AudioUtil {
                 .show();
 
     }
-
+*//*
     @SuppressLint("NewApi")
     public static void prepareCacheFolder(Context context) {
         try {
@@ -149,7 +108,7 @@ public class AudioUtil {
             if (!file.exists())
                 file.mkdirs();
         }
-    }
+    }*//*
 
     public static void clearCacheFolders() {
         for(String path : Arrays.asList(ART_DIR, COVER_DIR)) {
@@ -197,7 +156,7 @@ public class AudioUtil {
         return null;
     }
 
-    private static String getCoverFromVlc(Context context, MediaWrapper media) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+   *//* private static String getCoverFromVlc(Context context, MediaWrapper media) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         String artworkURL = media.getArtworkURL();
         if (artworkURL != null && artworkURL.startsWith("file://")) {
             return Uri.decode(artworkURL).replace("file://", "");
@@ -206,31 +165,31 @@ public class AudioUtil {
             String mArtist = MediaUtils.getMediaArtist(context, media);
             String mAlbum = MediaUtils.getMediaAlbum(context, media);
 
-            /* Parse decoded attachment */
+            *//**//* Parse decoded attachment *//**//*
             if( mArtist.length() == 0 || mAlbum.length() == 0 ||
                     mArtist.equals(VLCApplication.getAppContext().getString(R.string.unknown_artist)) ||
                     mAlbum.equals(VLCApplication.getAppContext().getString(R.string.unknown_album)) )
             {
-                /* If artist or album are missing, it was cached by title MD5 hash */
+                *//**//* If artist or album are missing, it was cached by title MD5 hash *//**//*
                 MessageDigest md = MessageDigest.getInstance("MD5");
                 byte[] binHash = md.digest((artworkURL + media.getTitle()).getBytes("UTF-8"));
-                /* Convert binary hash to normal hash */
+                *//**//* Convert binary hash to normal hash *//**//*
                 BigInteger hash = new BigInteger(1, binHash);
                 String titleHash = hash.toString(16);
                 while(titleHash.length() < 32) {
                     titleHash = "0" + titleHash;
                 }
-                /* Use generated hash to find art */
+                *//**//* Use generated hash to find art *//**//*
                 artworkURL = ART_DIR + "/arturl/" + titleHash + "/art.png";
             } else {
-                /* Otherwise, it was cached by artist and album */
+                *//**//* Otherwise, it was cached by artist and album *//**//*
                 artworkURL = ART_DIR + "/artistalbum/" + mArtist + "/" + mAlbum + "/art.png";
             }
 
             return artworkURL;
         }
         return null;
-    }
+    }*//*
 
     private static String getCoverFromFolder(MediaWrapper media) {
         File f = AndroidUtil.UriToFile(media.getUri());
@@ -243,16 +202,16 @@ public class AudioUtil {
 
         final String[] imageExt = { ".png", ".jpeg", ".jpg"};
         final String[] coverImages = {
-                "Folder.jpg",           /* Windows */
-                "AlbumArtSmall.jpg",    /* Windows */
-                "AlbumArt.jpg",         /* Windows */
+                "Folder.jpg",           *//* Windows *//*
+                "AlbumArtSmall.jpg",    *//* Windows *//*
+                "AlbumArt.jpg",         *//* Windows *//*
                 "Album.jpg",
-                ".folder.png",          /* KDE?    */
-                "cover.jpg",            /* rockbox */
+                ".folder.png",          *//* KDE?    *//*
+                "cover.jpg",            *//* rockbox *//*
                 "thumb.jpg"
         };
 
-        /* Find the path without the extension  */
+        *//* Find the path without the extension  *//*
         int index = f.getName().lastIndexOf('.');
         if (index > 0) {
             final String name = f.getName().substring(0, index);
@@ -266,7 +225,7 @@ public class AudioUtil {
                 return files[0].getAbsolutePath();
         }
 
-        /* Find the classic cover Images */
+        *//* Find the classic cover Images *//*
         if ( folder.listFiles() != null) {
             for (File file : folder.listFiles()) {
                 for (String str : coverImages) {
@@ -278,22 +237,22 @@ public class AudioUtil {
         return null;
     }
 
-    private static String getCoverCachePath(Context context, MediaWrapper media, int width) {
+  *//*  private static String getCoverCachePath(Context context, MediaWrapper media, int width) {
         final int hash = MurmurHash.hash32(MediaUtils.getMediaArtist(context, media) + MediaUtils.getMediaAlbum(context, media));
         return COVER_DIR + (hash >= 0 ? "" + hash : "m" + (-hash)) + "_" + width;
-    }
+    }*//*
 
-    public static Bitmap getCoverFromMemCache(Context context, MediaWrapper media, int width) {
-      /*  if (media != null && media.getArtist() != null && media.getAlbum() != null) {
+ *//*   public static Bitmap getCoverFromMemCache(Context context, MediaWrapper media, int width) {
+      *//**//*  if (media != null && media.getArtist() != null && media.getAlbum() != null) {
             final BitmapCache cache = BitmapCache.getInstance();
             return cache.getBitmapFromMemCache(getCoverCachePath(context, media, width));
-        } else*/
+        } else*//**//*
             return null;
-    }
+    }*//*
 
     @SuppressLint("NewApi")
     public synchronized static Bitmap getCover(Context context, MediaWrapper media, int width) {
-       /* BitmapCache cache = BitmapCache.getInstance();
+       *//* BitmapCache cache = BitmapCache.getInstance();
         String coverPath = null;
         Bitmap cover = null;
         String cachePath = null;
@@ -351,7 +310,7 @@ public class AudioUtil {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }*//*
         return null;
     }
 
@@ -372,11 +331,11 @@ public class AudioUtil {
     }
 
     private static Bitmap readCoverBitmap(String path, int dipWidth) {
-     /*   Bitmap cover = null;
+     *//*   Bitmap cover = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
         int width = UiTools.convertDpToPx(dipWidth);
 
-        *//* Get the resolution of the bitmap without allocating the memory *//*
+        *//**//* Get the resolution of the bitmap without allocating the memory *//**//*
         options.inJustDecodeBounds = true;
         if (AndroidUtil.isHoneycombOrLater())
             options.inMutable = true;
@@ -394,7 +353,7 @@ public class AudioUtil {
             // Decode the file (with memory allocation this time)
             BitmapUtil.setInBitmap(options);
             cover = BitmapFactory.decodeFile(path, options);
-        }*/
+        }*//*
 
         return null;
     }
@@ -403,13 +362,13 @@ public class AudioUtil {
         Bitmap cover = null;
         LinkedList<String> testedAlbums = new LinkedList<String>();
         for (MediaWrapper media : list) {
-            /* No list cover is artist or album are null */
+            *//* No list cover is artist or album are null *//*
             if (media.getAlbum() == null || media.getArtist() == null)
                 continue;
             if (testedAlbums.contains(media.getAlbum()))
                 continue;
 
-            cover = fromMemCache ? AudioUtil.getCoverFromMemCache(context, media, width) : AudioUtil.getCover(context, media, width);
+            //cover = fromMemCache ? AudioUtil.getCoverFromMemCache(context, media, width) : AudioUtil.getCover(context, media, width);
             if (cover != null)
                 break;
             else if (media.getAlbum() != null)
@@ -418,11 +377,11 @@ public class AudioUtil {
         return cover;
     }
 
-    public static Bitmap getCoverFromMemCache(Context context, ArrayList<MediaWrapper> list, int width) {
+  *//*  public static Bitmap getCoverFromMemCache(Context context, ArrayList<MediaWrapper> list, int width) {
         return getCover(context, list, width, true);
-    }
+    }*//*
 
     public static Bitmap getCover(Context context, ArrayList<MediaWrapper> list, int width) {
         return getCover(context, list, width, false);
-    }
+    }*/
 }

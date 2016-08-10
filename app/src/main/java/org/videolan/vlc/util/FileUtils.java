@@ -25,11 +25,9 @@ package org.videolan.vlc.util;
 
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 
 import org.videolan.libvlc.util.AndroidUtil;
 import org.videolan.vlc.VLCApplication;
@@ -52,7 +50,7 @@ public class FileUtils {
             return path;
     }
 
-    public static String getParent(String path){
+/*    public static String getParent(String path){
         if (TextUtils.equals("/", path))
             return path;
         String parentPath = path;
@@ -77,7 +75,7 @@ public class FileUtils {
         } finally {
             Util.close(cursor);
         }
-    }
+    }*/
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static boolean deleteFile (String path){
@@ -96,14 +94,14 @@ public class FileUtils {
         return deleted;
     }
 
-    public static void asyncRecursiveDelete(String path, Callback callback) {
+/*    public static void asyncRecursiveDelete(String path, Callback callback) {
         asyncRecursiveDelete(new File(path), callback);
     }
 
     public static void asyncRecursiveDelete(String path) {
         asyncRecursiveDelete(path, null);
-    }
-
+    }*/
+/*
     private static void asyncRecursiveDelete(final File fileOrDirectory, final Callback callback) {
         VLCApplication.runBackground(new Runnable() {
             public void run() {
@@ -121,9 +119,9 @@ public class FileUtils {
                     callback.onResult(success);
             }
         });
-    }
+    }*/
 
-    public static boolean canWrite(String path){
+/*    public static boolean canWrite(String path){
         if (path == null)
             return false;
         if (path.startsWith("file://"))
@@ -136,5 +134,5 @@ public class FileUtils {
             return false;
         File file = new File(path);
         return (file.exists() && file.canWrite());
-    }
+    }*/
 }

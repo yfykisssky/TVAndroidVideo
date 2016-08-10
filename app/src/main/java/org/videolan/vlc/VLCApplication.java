@@ -25,27 +25,16 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
-import org.videolan.vlc.gui.helpers.AudioUtil;
 import org.videolan.vlc.util.Strings;
 
-import java.util.Calendar;
 import java.util.Locale;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class VLCApplication extends Application {
     public final static String TAG = "VLC/VLCApplication";
     private static VLCApplication instance;
 
     public final static String SLEEP_INTENT = Strings.buildPkgString("SleepIntent");
-
-    public static Calendar sPlayerSleepTime = null;
-    /* Up to 2 threads maximum, inactive threads are killed after 2 seconds */
-    private ThreadPoolExecutor mThreadPool = new ThreadPoolExecutor(0, 2, 2, TimeUnit.SECONDS,
-                                                                    new LinkedBlockingQueue<Runnable>());
     @Override
     public void onCreate() {
         super.onCreate();
@@ -67,37 +56,17 @@ public class VLCApplication extends Application {
         // Initialize the database soon enough to avoid any race condition and crash
         //MediaDatabase.getInstance();
         // Prepare cache folder constants
-        AudioUtil.prepareCacheFolder(this);
+        //AudioUtil.prepareCacheFolder(this);
     }
 
-    /**
-     * Called when the overall system is running low on memory
-     */
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        Log.w(TAG, "System is running low on memory");
-
-       // BitmapCache.getInstance().clear();
-    }
-
-    /**
-     * @return the main context of the Application
-     */
     public static Context getAppContext()
     {
         return instance;
     }
 
-    /**
-     * @return the main resources from the Application
-     */
     public static Resources getAppResources()
     {
         return instance.getResources();
     }
 
-    public static void runBackground(Runnable runnable) {
-        instance.mThreadPool.execute(runnable);
-    }
 }

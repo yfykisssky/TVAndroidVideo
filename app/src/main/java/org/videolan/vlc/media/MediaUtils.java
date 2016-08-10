@@ -3,25 +3,18 @@ package org.videolan.vlc.media;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.android.tvvideo.R;
 
 import org.videolan.vlc.PlaybackService;
-import org.videolan.vlc.VLCApplication;
-import org.videolan.vlc.gui.video.VideoPlayerActivity;
-import org.videolan.vlc.util.FileUtils;
-import org.videolan.vlc.util.Strings;
 
 import java.util.List;
 
 public class MediaUtils {
-    public static final String ACTION_SCAN_START = Strings.buildPkgString("gui.ScanStart");
-    public static final String ACTION_SCAN_STOP = Strings.buildPkgString("gui.ScanStop");
+ /*   public static final String ACTION_SCAN_START = Strings.buildPkgString("gui.ScanStart");
+    public static final String ACTION_SCAN_STOP = Strings.buildPkgString("gui.ScanStop");*/
 
-    public static void actionScanStart() {
+/*    public static void actionScanStart() {
         Intent intent = new Intent();
         intent.setAction(ACTION_SCAN_START);
         LocalBroadcastManager.getInstance(VLCApplication.getAppContext()).sendBroadcast(intent);
@@ -31,9 +24,9 @@ public class MediaUtils {
         Intent intent = new Intent();
         intent.setAction(ACTION_SCAN_STOP);
         LocalBroadcastManager.getInstance(VLCApplication.getAppContext()).sendBroadcast(intent);
-    }
+    }*/
 
-    public static void openMedia(final Context context, final MediaWrapper media){
+ /*   public static void openMedia(final Context context, final MediaWrapper media){
         if (media == null)
             return;
         if (media.getType() == MediaWrapper.TYPE_VIDEO)
@@ -46,7 +39,7 @@ public class MediaUtils {
                 }
             });
         }
-    }
+    }*/
 
     public static void openList(final Context context, final List<MediaWrapper> list, final int position){
         new DialogCallback(context, new DialogCallback.Runnable() {
@@ -57,14 +50,14 @@ public class MediaUtils {
         });
     }
 
-    public static void openUri(final Context context, final Uri uri){
+  /*  public static void openUri(final Context context, final Uri uri){
         new DialogCallback(context, new DialogCallback.Runnable() {
             @Override
             public void run(PlaybackService service) {
                 service.loadUri(uri);
             }
         });
-    }
+    }*/
 
   /*  public static void openStream(final Context context, final String uri){
         new DialogCallback(context, new DialogCallback.Runnable() {
@@ -75,7 +68,7 @@ public class MediaUtils {
         });
     }*/
 
-    public static String getMediaArtist(Context ctx, MediaWrapper media) {
+/*    public static String getMediaArtist(Context ctx, MediaWrapper media) {
         final String artist = media.getArtist();
         return artist != null ? artist : getMediaString(ctx, R.string.unknown_artist);
     }
@@ -83,14 +76,14 @@ public class MediaUtils {
     public static String getMediaReferenceArtist(Context ctx, MediaWrapper media) {
         final String artist = media.getReferenceArtist();
         return artist != null ? artist : getMediaString(ctx, R.string.unknown_artist);
-    }
+    }*/
 
-    public static String getMediaAlbumArtist(Context ctx, MediaWrapper media) {
+/*    public static String getMediaAlbumArtist(Context ctx, MediaWrapper media) {
         final String albumArtist = media.getAlbumArtist();
         return albumArtist != null ? albumArtist : getMediaString(ctx, R.string.unknown_artist);
-    }
+    }*/
 
-    public static String getMediaAlbum(Context ctx, MediaWrapper media) {
+  /*  public static String getMediaAlbum(Context ctx, MediaWrapper media) {
         final String album = media.getAlbum();
         return album != null ? album : getMediaString(ctx, R.string.unknown_album);
 
@@ -99,9 +92,9 @@ public class MediaUtils {
     public static String getMediaGenre(Context ctx, MediaWrapper media) {
         final String genre = media.getGenre();
         return genre != null ? genre : getMediaString(ctx, R.string.unknown_genre);
-    }
+    }*/
 
-    public static String getMediaSubtitle(Context ctx, MediaWrapper media) {
+/*    public static String getMediaSubtitle(Context ctx, MediaWrapper media) {
         if (media.getType() == MediaWrapper.TYPE_AUDIO)
             return media.getNowPlaying() != null
                     ? media.getNowPlaying()
@@ -115,9 +108,9 @@ public class MediaUtils {
         if (title == null)
             title = FileUtils.getFileNameFromPath(mediaWrapper.getLocation());
         return title;
-    }
+    }*/
 
-    private static String getMediaString(Context ctx, int id) {
+/*    private static String getMediaString(Context ctx, int id) {
         if (ctx != null)
             return ctx.getResources().getString(id);
         else {
@@ -132,7 +125,7 @@ public class MediaUtils {
                     return "";
             }
         }
-    }
+    }*/
 
     private static class DialogCallback implements PlaybackService.Client.Callback {
         private final ProgressDialog dialog;

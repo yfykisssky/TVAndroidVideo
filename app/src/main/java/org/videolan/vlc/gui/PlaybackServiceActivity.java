@@ -22,16 +22,8 @@
 
 package org.videolan.vlc.gui;
 
-import android.app.Activity;
-import android.content.Context;
-import android.support.annotation.MainThread;
-
-import org.videolan.vlc.PlaybackService;
-
-import java.util.ArrayList;
-
-public class PlaybackServiceActivity extends Activity implements PlaybackService.Client.Callback {
-    final private Helper mHelper = new Helper(this, this);
+public class PlaybackServiceActivity{
+   /* final private Helper mHelper = new Helper(this, this);
     protected PlaybackService mService;
 
     @Override
@@ -72,23 +64,6 @@ public class PlaybackServiceActivity extends Activity implements PlaybackService
         }
 
         @MainThread
-        public void registerFragment(PlaybackService.Client.Callback connectCb) {
-            if (connectCb == null)
-                throw new IllegalArgumentException("connectCb can't be null");
-            mFragmentCallbacks.add(connectCb);
-            if (mService != null)
-                connectCb.onConnected(mService);
-
-        }
-
-        @MainThread
-        public void unregisterFragment(PlaybackService.Client.Callback connectCb) {
-            if (mService != null)
-                connectCb.onDisconnected();
-            mFragmentCallbacks.remove(connectCb);
-        }
-
-        @MainThread
         public void onStart() {
             mClient.connect();
         }
@@ -116,5 +91,5 @@ public class PlaybackServiceActivity extends Activity implements PlaybackService
                     connectCb.onDisconnected();
             }
         };
-    }
+    }*/
 }
