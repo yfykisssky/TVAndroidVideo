@@ -84,7 +84,6 @@ import org.videolan.vlc.util.VLCInstance;
 
 import java.lang.reflect.Method;
 
-@SuppressWarnings("WrongConstant")
 public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
         GestureDetector.OnDoubleTapListener, LibVLC.HardwareAccelerationError,
         PlaybackService.Client.Callback, PlaybackService.Callback {
@@ -275,6 +274,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
         this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
         // Orientation
         // 100 is the value for screen_orientation_start_lock
+        //noinspection WrongConstant
         setRequestedOrientation(mScreenOrientation != 100? mScreenOrientation : getScreenOrientation());
 
 
@@ -548,7 +548,6 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
             case KeyEvent.KEYCODE_MEDIA_NEXT:
                 seekDelta(10000);
                 return true;
-            //case KeyEvent.KEYCODE_R:
             case KeyEvent.KEYCODE_MEDIA_REWIND:
             case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
                 seekDelta(-10000);
@@ -556,14 +555,14 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
             case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
             case KeyEvent.KEYCODE_MEDIA_PLAY:
             case KeyEvent.KEYCODE_MEDIA_PAUSE:
-            case KeyEvent.KEYCODE_SPACE:
+       /*     case KeyEvent.KEYCODE_SPACE:
                 if (mIsNavMenu)
                     return navigateDvdMenu(keyCode);
                 else if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) //prevent conflict with remote control
                     return super.onKeyDown(keyCode, event);
                 else
                     doPlayPause();
-                return true;
+                return true;*/
             case KeyEvent.KEYCODE_VOLUME_MUTE:
                 updateMute();
                 return true;

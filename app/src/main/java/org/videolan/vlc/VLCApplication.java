@@ -21,17 +21,12 @@ package org.videolan.vlc;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.preference.PreferenceManager;
 
 import org.videolan.vlc.util.Strings;
 
-import java.util.Locale;
-
 public class VLCApplication extends Application {
-    public final static String TAG = "VLC/VLCApplication";
+
     private static VLCApplication instance;
 
     public final static String SLEEP_INTENT = Strings.buildPkgString("SleepIntent");
@@ -39,7 +34,7 @@ public class VLCApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // Are we using advanced debugging - locale?
+      /*  // Are we using advanced debugging - locale?
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String p = pref.getString("set_locale", "");
         if (!p.equals("")) {
@@ -50,13 +45,9 @@ public class VLCApplication extends Application {
             getResources().updateConfiguration(config,
                     getResources().getDisplayMetrics());
         }
-
+*/
         instance = this;
 
-        // Initialize the database soon enough to avoid any race condition and crash
-        //MediaDatabase.getInstance();
-        // Prepare cache folder constants
-        //AudioUtil.prepareCacheFolder(this);
     }
 
     public static Context getAppContext()
