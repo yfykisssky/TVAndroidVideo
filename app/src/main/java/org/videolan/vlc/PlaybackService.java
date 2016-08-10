@@ -112,7 +112,6 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
 
     final private ArrayList<Callback> mCallbacks = new ArrayList<Callback>();
     private boolean mDetectHeadset = true;
-    //private boolean mPebbleEnabled;
     private PowerManager.WakeLock mWakeLock;
     private final AtomicBoolean mExpanding = new AtomicBoolean(false);
 
