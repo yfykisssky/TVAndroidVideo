@@ -57,6 +57,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                 if(b){
                     settingPswdDialog.dismiss();
                 }else{
+                    settingPswdDialog.dismiss();
                     SettingsActivity.this.finish();
                 }
 
