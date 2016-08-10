@@ -5,6 +5,6 @@ package com.android.tvvideo.constants;
  */
 public class SystemContants {
 
-    public static final String SETTINGS_PSWD="";
+    public static final String SETTINGS_PSWD="684509";
 
 }
