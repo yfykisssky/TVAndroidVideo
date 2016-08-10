@@ -27,21 +27,21 @@
         android:largeHeap="true"
         android:name="org.videolan.vlc.VLCApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:screenOrientation="landscape"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
         android:supportsRtl="true">
         <activity android:name=".activity.StartActivity">
             <!-- 实现开机启动，替换系统的Launcher -->
-     <!--       <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.MONKEY" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
         <activity android:name=".activity.HomeActivity"/>
         <activity android:name=".activity.ExamIntroActivity"/>
@@ -58,11 +58,11 @@
         <activity android:name=".activity.RightIntroActivity"/>
         <activity android:name=".activity.InHospitalIntroActivity"/>
         <activity android:name=".activity.TestActivity">
-             <intent-filter>
+           <!--  <intent-filter>
                  <action android:name="android.intent.action.MAIN" />
                  <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
                  <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+             </intent-filter>-->
         </activity>
 
         <!--suppress AndroidDomInspection -->
