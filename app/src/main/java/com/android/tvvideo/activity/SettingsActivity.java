@@ -13,7 +13,7 @@ import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.tools.CheckTool;
 import com.android.tvvideo.tools.ShaPreHelper;
 import com.android.tvvideo.tools.SystemUtil;
-
+import com.android.tvvideo.view.SettingPswdDialog;
 
 
 /**
@@ -47,6 +47,23 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initData() {
+
+        final SettingPswdDialog settingPswdDialog=new SettingPswdDialog(this);
+
+        settingPswdDialog.setConfirmOrCancelListener(new SettingPswdDialog.ConfirmOrCancelListener() {
+            @Override
+            public void confirmOrCancel(boolean b) {
+
+                if(b){
+                    settingPswdDialog.dismiss();
+                }else{
+                    SettingsActivity.this.finish();
+                }
+
+            }
+        });
+
+        settingPswdDialog.show();
 
         readSettings();
 
