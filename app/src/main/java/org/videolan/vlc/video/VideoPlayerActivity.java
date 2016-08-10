@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
  *****************************************************************************/
 
-package org.videolan.vlc.gui.video;
+package org.videolan.vlc.video;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -74,10 +74,10 @@ import org.videolan.libvlc.util.AndroidUtil;
 import org.videolan.vlc.PlaybackHelper;
 import org.videolan.vlc.PlaybackService;
 import org.videolan.vlc.VLCApplication;
-import org.videolan.vlc.gui.preferences.Preferences;
 import org.videolan.vlc.media.MediaWrapper;
 import org.videolan.vlc.util.AndroidDevices;
 import org.videolan.vlc.util.Permissions;
+import org.videolan.vlc.util.Preferences;
 import org.videolan.vlc.util.Strings;
 import org.videolan.vlc.util.Util;
 import org.videolan.vlc.util.VLCInstance;
@@ -410,7 +410,7 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
 
         if (AndroidUtil.isHoneycombOrLater()) {
             if (mOnLayoutChangeListener == null) {
-                mOnLayoutChangeListener = new View.OnLayoutChangeListener() {
+                mOnLayoutChangeListener = new OnLayoutChangeListener() {
                     private final Runnable mRunnable = new Runnable() {
                         @Override
                         public void run() {
@@ -496,9 +496,6 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
     public static void start(Context context, Uri uri) {
         Intent intent = new Intent(context, VideoPlayerActivity.class);
         intent.putExtra(PLAY_URL, uri);
-/*
-        if (openedPosition != -1)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);*/
 
         context.startActivity(intent);
     }
@@ -807,12 +804,6 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
                     break;
                 case RESET_BACK_LOCK:
                     mLockBackButton = true;
-                    break;
-                case CHECK_VIDEO_TRACKS:
-                    if (mService.getVideoTracksCount() < 1 && mService.getAudioTracksCount() > 0) {
-                        Log.i(TAG, "No video track, open in audio mode");
-                        //switchToAudioMode(true);
-                    }
                     break;
                 case HW_ERROR:
                     handleHardwareAccelerationError();
@@ -1441,26 +1432,14 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
             mRootView.setKeepScreenOn(false);
     }
 
-    /**
-     * External extras:
-     * - position (long) - position of the video to start with (in ms)
-     */
-    @TargetApi(12)
     @SuppressWarnings({ "unchecked" })
     private void loadMedia() {
         if (mService == null)
             return;
-        mUri = null;
-        // String title = getResources().getString(R.string.title);
-        boolean fromStart = false;
-        //int openedPosition = -1;
-        Uri data;
-        //String itemTitle = null;
-        //long intentPosition = -1; // position passed in by intent (ms)
-        //long mediaLength = 0l;
+
         Intent intent = getIntent();
-        String action = intent.getAction();
         Bundle extras = getIntent().getExtras();
+        mUri = extras.getParcelable(PLAY_URL);
 
         boolean wasPaused;
         /*
@@ -1477,124 +1456,6 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
             wasPaused = mSettings.getBoolean(Preferences.VIDEO_PAUSED, false);
         if (wasPaused)
             Log.d(TAG, "Video was previously paused, resuming in paused mode");
-
-       /* if (TextUtils.equals(action, Intent.ACTION_VIEW)) {
-            *//* Started from external application 'content' *//*
-            data = intent.getData();
-            if (data != null && TextUtils.equals(data.getScheme(), "content")) {
-
-
-      *//*          // Mail-based apps - download the stream to a temporary file and play it
-                if(data.getHost().equals("com.fsck.k9.attachmentprovider")
-                        || data.getHost().equals("gmail-ls")) {
-                    InputStream is = null;
-                    OutputStream os = null;
-                    try {
-                        Cursor cursor = getContentResolver().query(data,
-                                new String[]{MediaStore.MediaColumns.DISPLAY_NAME}, null, null, null);
-                        if (cursor != null) {
-                            cursor.moveToFirst();
-                            String filename = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
-                            cursor.close();
-                            Log.i(TAG, "Getting file " + filename + " from content:// URI");
-
-                            is = getContentResolver().openInputStream(data);
-                            os = new FileOutputStream(AndroidDevices.EXTERNAL_PUBLIC_DIRECTORY + "/Download/" + filename);
-                            byte[] buffer = new byte[1024];
-                            int bytesRead = 0;
-                            while((bytesRead = is.read(buffer)) >= 0) {
-                                os.write(buffer, 0, bytesRead);
-                            }
-                            mUri = AndroidUtil.PathToUri(AndroidDevices.EXTERNAL_PUBLIC_DIRECTORY + "/Download/" + filename);
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, "Couldn't download file from mail URI");
-                        encounteredError();
-                        return;
-                    } finally {
-                        Util.close(is);
-                        Util.close(os);
-                    }
-                }
-                // Media or MMS URI
-                else *//**//*if (TextUtils.equals(data.getAuthority(), "media")){
-                    try {
-                        Cursor cursor = getContentResolver().query(data,
-                                new String[]{ MediaStore.Video.Media.DATA }, null, null, null);
-                        if (cursor != null) {
-                            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
-                            if (cursor.moveToFirst())
-                                mUri = AndroidUtil.PathToUri(cursor.getString(column_index));
-                            cursor.close();
-                        }
-                        // other content-based URI (probably file pickers)
-                        else {
-                            mUri = data;
-                        }
-                    } catch (Exception e) {
-                        mUri = data;
-                        if (mUri.getScheme() == null)
-                            mUri = AndroidUtil.PathToUri(mUri.getPath());
-                        Log.e(TAG, "Couldn't read the file from media or MMS");
-                    }
-                } else {
-                    ParcelFileDescriptor inputPFD = null;
-                    try {
-                        inputPFD = getContentResolver().openFileDescriptor(data, "r");
-                        if (AndroidUtil.isHoneycombMr1OrLater())
-                            mUri = AndroidUtil.LocationToUri("fd://" + inputPFD.getFd());
-                        else {
-                            String fdString = inputPFD.getFileDescriptor().toString();
-                            mUri = AndroidUtil.LocationToUri("fd://" + fdString.substring(15, fdString.length() - 1));
-                        }
-
-                        Cursor returnCursor =
-                                getContentResolver().query(data, null, null, null, null);
-                        if (returnCursor != null) {
-                            if (returnCursor.getCount() > 0) {
-                                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                                if (nameIndex > -1) {
-                                    returnCursor.moveToFirst();
-                                    //title = returnCursor.getString(nameIndex);
-                                }
-                            }
-                            returnCursor.close();
-                        }
-                    } catch (FileNotFoundException e) {
-                        Log.e(TAG, "Couldn't understand the intent");
-                        encounteredError();
-                        return;
-                    }
-                }*//*
-            } *//* External application *//*
-            else if (intent.getData() != null) {
-                mUri = intent.getData();
-
-                // Remove VLC prefix if needed
-                if (TextUtils.equals(mUri.getScheme(), "vlc") && mUri.toString().length() > 6) {
-                    mUri = Uri.parse(mUri.toString().substring(6));
-                }
-                if (mUri.getScheme() == null)
-                    mUri = AndroidUtil.PathToUri(mUri.getPath());
-            } else {
-                Log.e(TAG, "Couldn't understand the intent");
-                encounteredError();
-                return;
-            }
-
-          *//*  // Try to get the position
-            if(extras != null)
-                intentPosition = extras.getLong("position", -1);*//*
-        } *//* ACTION_VIEW *//*
-        *//* Started from VideoListActivity *//*
-     /*   else *//*if(TextUtils.equals(action, PLAY_FROM_VIDEOGRID) && extras != null) {
-            mUri = extras.getParcelable(PLAY_EXTRA_ITEM_LOCATION);
-            fromStart = extras.getBoolean(PLAY_EXTRA_FROM_START);
-            //mAskResume &= !fromStart;
-            //openedPosition = extras.getInt(PLAY_EXTRA_OPENED_POSITION, -1);
-        }*/
-
-        mUri = extras.getParcelable(PLAY_URL);
 
         if (mUri != null) {
                 /* prepare playback */
@@ -1760,10 +1621,6 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
             return false;
         }
     };
-
-  /*  public PlaybackServiceActivity.Helper getHelper() {
-        return mHelper;
-    }*/
 
     @Override
     public void onConnected(PlaybackService service) {

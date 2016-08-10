@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 import com.android.tvvideo.R;
 
-import org.videolan.vlc.gui.video.VideoPlayerActivity;
+import org.videolan.vlc.video.VideoPlayerActivity;
 
 
 /**

@@ -67,7 +67,7 @@
 
         <!--suppress AndroidDomInspection -->
         <activity
-            android:name="org.videolan.vlc.gui.video.VideoPlayerActivity"
+            android:name="org.videolan.vlc.video.VideoPlayerActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true"
             android:launchMode="singleTop">

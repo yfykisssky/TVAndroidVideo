@@ -26,7 +26,7 @@ import com.android.tvvideo.view.ReFousListView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.videolan.vlc.gui.video.VideoPlayerActivity;
+import org.videolan.vlc.video.VideoPlayerActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;

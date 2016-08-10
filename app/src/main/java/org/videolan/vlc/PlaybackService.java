@@ -1147,7 +1147,6 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
         mMediaPlayer.setEventListener(mMediaPlayerListener);
         mMediaPlayer.play();
 
-        //notifyTrackChanged();
         determinePrevAndNextIndices();
     }
 
