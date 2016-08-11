@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
-import com.android.tvvideo.activity.SettingsActivity;
 import com.android.tvvideo.tools.PushService;
 import com.android.tvvideo.view.RemindDialog;
 
@@ -35,14 +34,10 @@ public class BaseActivity extends Activity {
 
     String activityName;
 
-    final String toSettingCode="1234567890";
-
-    String toSettingCodeTmp="";
-
     PushMsgListener pushMsgListener;
 
     public interface PushMsgListener{
-       void onMsgReceive(Intent data);
+        void onMsgReceive(Intent data);
     }
 
     protected void setOnPushMsgListener(PushMsgListener pushMsgListener){
@@ -53,19 +48,6 @@ public class BaseActivity extends Activity {
         this.activityName=activityName;
     }
 
-    private void validateSettingCode(char code){
-        toSettingCodeTmp+=code;
-
-        if(toSettingCodeTmp.indexOf(toSettingCode)!=-1){
-
-            Intent intent=new Intent(this, SettingsActivity.class);
-
-            startActivity(intent);
-
-            toSettingCodeTmp="";
-
-        }
-    }
 
     Handler baseHandler=new Handler(){
         @Override
@@ -99,10 +81,13 @@ public class BaseActivity extends Activity {
                     playVideo("");
                     break;
                 case "volume":
+                    //maxVolumePercent;
                     break;
                 case "onoff":
                     break;
-                case "":
+                case "showmsg":
+                case "showad":
+                    pushMsgListener.onMsgReceive(intent);
                     break;
             }
 
@@ -154,6 +139,8 @@ public class BaseActivity extends Activity {
 
         maxVolume=getMaxVolume();
 
+       // maxVolumePercent;
+
     }
 
     @Override
@@ -168,15 +155,15 @@ public class BaseActivity extends Activity {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
 
-                if(maxVolume>0) {
+                if(maxVolumePercent<0){
+                    return false;
+                }
 
-                    if (getCurrentVolume() < (maxVolume*maxVolumePercent)) {
-                        audio.adjustStreamVolume(
-                                AudioManager.STREAM_MUSIC,
-                                AudioManager.ADJUST_RAISE,
-                                AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
-
-                    }
+                if (getCurrentVolume() < (maxVolume*maxVolumePercent)) {
+                    audio.adjustStreamVolume(
+                            AudioManager.STREAM_MUSIC,
+                            AudioManager.ADJUST_RAISE,
+                            AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
 
                 }
 
@@ -188,40 +175,14 @@ public class BaseActivity extends Activity {
                         AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
 
                 return true;
-            case KeyEvent.KEYCODE_0:
-                validateSettingCode('0');
-                break;
-            case KeyEvent.KEYCODE_1:
-                validateSettingCode('1');
-                break;
-            case KeyEvent.KEYCODE_2:
-                validateSettingCode('2');
-                break;
-            case KeyEvent.KEYCODE_3:
-                validateSettingCode('3');
-                break;
-            case KeyEvent.KEYCODE_4:
-                validateSettingCode('4');
-                break;
-            case KeyEvent.KEYCODE_5:
-                validateSettingCode('5');
-                break;
-            case KeyEvent.KEYCODE_6:
-                validateSettingCode('6');
-                break;
-            case KeyEvent.KEYCODE_7:
-                validateSettingCode('7');
-                break;
-            case KeyEvent.KEYCODE_8:
-                validateSettingCode('8');
-                break;
-            case KeyEvent.KEYCODE_9:
-                validateSettingCode('9');
-                break;
             default:
                 break;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void setCurrentStream(int tempVolume){
+        audio.setStreamVolume(AudioManager.STREAM_MUSIC, tempVolume, 0);
     }
 
     protected int getMaxVolume(){
