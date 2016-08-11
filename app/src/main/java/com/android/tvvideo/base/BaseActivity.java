@@ -31,6 +31,8 @@ public class BaseActivity extends Activity {
 
     int maxVolume;
 
+    double maxVolumePercent;
+
     String activityName;
 
     final String toSettingCode="1234567890";
@@ -150,7 +152,7 @@ public class BaseActivity extends Activity {
 
         audio = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
 
-        //maxVolume=getMaxVolume();
+        maxVolume=getMaxVolume();
 
     }
 
@@ -168,7 +170,7 @@ public class BaseActivity extends Activity {
 
                 if(maxVolume>0) {
 
-                    if (getCurrentVolume() < maxVolume) {
+                    if (getCurrentVolume() < (maxVolume*maxVolumePercent)) {
                         audio.adjustStreamVolume(
                                 AudioManager.STREAM_MUSIC,
                                 AudioManager.ADJUST_RAISE,
@@ -227,7 +229,7 @@ public class BaseActivity extends Activity {
     }
 
     protected int getCurrentVolume(){
-        return audio.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+        return audio.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
 
     private static boolean isTopActivity(Context context, String className)
