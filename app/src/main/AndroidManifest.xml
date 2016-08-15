@@ -70,6 +70,9 @@
         <activity android:name=".activity.ServerActivity"/>
         <activity android:name=".activity.WeatherActivity"/>
 
+        <service android:name=".tools.PushService"/>
+        <service android:name=".tools.TimeTaskService"/>
+
         <activity android:name=".activity.TestActivity">
             <!--  <intent-filter>
                   <action android:name="android.intent.action.MAIN" />
