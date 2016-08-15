@@ -1,4 +1,4 @@
-package com.android.tvvideo.activity;
+package org.videolan.vlc.video;
 
 import android.annotation.TargetApi;
 import android.app.KeyguardManager;
@@ -71,7 +71,6 @@ import org.videolan.vlc.util.Preferences;
 import org.videolan.vlc.util.Strings;
 import org.videolan.vlc.util.Util;
 import org.videolan.vlc.util.VLCInstance;
-import org.videolan.vlc.video.VideoPlayerActivity;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
