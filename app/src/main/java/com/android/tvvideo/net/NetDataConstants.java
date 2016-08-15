@@ -31,4 +31,44 @@ public class NetDataConstants {
     public static final String GET_EXAMROOM_INFO="/app/getExamroomInfo";
 
 
+    public static final String VALIDATE_ACCOUNT="/app/validateAccount";
+
+    public static final String GET_MEAL_List="/app/getMailList";
+
+    public static final String GET_RENT_List="/app/getRentList";
+
+    public static final String MEAL_ORDER="/app/mailOrder";
+
+    public static final String RENT_ORDER="/app/rentOrder";
+
+    public static final String GET_WEATHER="/app/getWeather";
+
+    public static final String GET_TV_LIST="/app/getTvList";
+
+    public static final String GET_FEED_LIST="/app/feedBackList";
+
+    public static final String FEED_BACK="/app/feedBack";
+
+    public static final String GET_ADVICE="/app/getAdvice";
+
+    public static final String GET_COMPLAIN="/app/getComplainList";
+
+    public static final String SEND_COMPLAIN="/app/sendComplain";
+
+    public static final String GET_FEE="/app/getFee";
+
+    public static final String SEARCH_PRICE="/app/searchPrice";
+
+    public static final String GET_PERSIONAL="/app/getPersional";
+
+    public static final String GET_AD_DATA="/app/getAdData";
+
+    public static final String GET_MSG_DATA="/app/getMsgData";
+
+
+
+    public static final String GET_MAX_VOLUME="/app/getAdData";
+
+    public static final String GET_ONOFF_TIME="/app/getMsgData";
+
 }

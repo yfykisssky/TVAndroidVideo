@@ -1,13 +1,31 @@
 package com.android.tvvideo.base;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.Toast;
+
+import com.android.tvvideo.net.NetDataConstants;
+import com.android.tvvideo.net.NetDataTool;
+import com.android.tvvideo.tools.PushService;
+import com.android.tvvideo.tools.SystemUtil;
+import com.android.tvvideo.view.RemindDialog;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by yangfengyuan on 16/7/22.
@@ -17,6 +35,27 @@ public class BaseActivity extends Activity {
     AudioManager audio;
 
     int maxVolume;
+
+    double maxVolumePercent;
+
+    String activityName;
+
+    PushMsgListener pushMsgListener;
+
+    RemindDialog remindDialog;
+
+    public interface PushMsgListener{
+        void onMsgReceive(Intent data);
+    }
+
+    protected void setOnPushMsgListener(PushMsgListener pushMsgListener){
+        this.pushMsgListener=pushMsgListener;
+    }
+
+    protected void setActivityName(String activityName){
+        this.activityName=activityName;
+    }
+
 
     Handler baseHandler=new Handler(){
         @Override
@@ -31,6 +70,151 @@ public class BaseActivity extends Activity {
 
         }
     };
+
+    BroadcastReceiver pushReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+           //{"kind":"remind","data":"3458"}
+            String data=intent.getStringExtra("data");
+
+            try {
+                JSONObject jsonObject=new JSONObject(data);
+
+                String kind=jsonObject.getString("kind");
+
+                switch(kind){
+                    case "remind":
+                        if(isTopActivity(context,activityName)){
+                            showRemindDialog(jsonObject.getString("data"));
+                        }
+                        break;
+                    case "playvideo":
+                        playVideo(jsonObject.getString("data"));
+                        break;
+                    case "volume":
+                        resetVolumePercent();
+                        break;
+                    case "onoff":
+                        resetOnOffTime();
+                        break;
+                    case "shutdown":
+                        SystemUtil.shutDown();
+                        break;
+                    case "showmsg":
+                    case "showad":
+                        if(pushMsgListener!=null){
+                            pushMsgListener.onMsgReceive(intent);
+                        }
+                        break;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    };
+
+    private void resetVolumePercent() {
+
+        new NetDataTool(this).sendNoShowGet(NetDataConstants.GET_MAX_VOLUME, new NetDataTool.IResponse() {
+            @Override
+            public void onSuccess(String data) {
+
+                try {
+
+                    JSONObject jsonObject=new JSONObject(data);
+
+                    final String remark=jsonObject.getString("remark");
+                    String path=jsonObject.getString("path");
+                    String bottomremark=jsonObject.getString("bottomRemark");
+
+/*
+                    detial.setText(remark);
+
+                    if(bottomremark!=null){
+                        bottom.setText(bottomremark);
+                    }
+
+                    ImageLoad.loadDefultImage(path,img);*/
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailed(String error) {
+                showToast(error);
+            }
+        });
+
+    }
+
+    private void resetOnOffTime() {
+
+        new NetDataTool(this).sendNoShowGet(NetDataConstants.GET_MAX_VOLUME, new NetDataTool.IResponse() {
+            @Override
+            public void onSuccess(String data) {
+
+                try {
+
+                    JSONObject jsonObject=new JSONObject(data);
+
+                    final String remark=jsonObject.getString("remark");
+                    String path=jsonObject.getString("path");
+                    String bottomremark=jsonObject.getString("bottomRemark");
+
+/*
+                    detial.setText(remark);
+
+                    if(bottomremark!=null){
+                        bottom.setText(bottomremark);
+                    }
+
+                    ImageLoad.loadDefultImage(path,img);*/
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailed(String error) {
+                showToast(error);
+            }
+        });
+
+    }
+
+    private void registerPushReceiver(){
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(PushService.BROAD_CAST_ACTION);
+        registerReceiver(pushReceiver, filter);
+    }
+
+    private void unregisterPushReceiver(){
+        unregisterReceiver(pushReceiver);
+    }
+
+    private void playVideo(String url){
+
+    }
+
+    private void showRemindDialog(String remind){
+
+        if(remindDialog.isShowing()){
+            remindDialog.dismiss();
+        }
+
+        remindDialog.setData(remind);
+
+        remindDialog.show();
+
+    }
 
     protected void showToast(String msg){
 
@@ -47,10 +231,33 @@ public class BaseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initData();
+
+    }
+
+    private void initData() {
+
+        remindDialog=new RemindDialog(this);
+
+        registerPushReceiver();
+
         audio = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
 
-        //maxVolume=getMaxVolume();
+        maxVolume=getMaxVolume();
 
+        resetVolumePercent();
+
+        resetOnOffTime();
+
+        // maxVolumePercent;
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        unregisterPushReceiver();
     }
 
     @Override
@@ -58,15 +265,15 @@ public class BaseActivity extends Activity {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
 
-                if(maxVolume>0) {
+                if(maxVolumePercent<0){
+                    return false;
+                }
 
-                    if (getCurrentVolume() < maxVolume) {
-                        audio.adjustStreamVolume(
-                                AudioManager.STREAM_MUSIC,
-                                AudioManager.ADJUST_RAISE,
-                                AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
-
-                    }
+                if (getCurrentVolume() < (maxVolume*maxVolumePercent)) {
+                    audio.adjustStreamVolume(
+                            AudioManager.STREAM_MUSIC,
+                            AudioManager.ADJUST_RAISE,
+                            AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
 
                 }
 
@@ -84,12 +291,34 @@ public class BaseActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
+    private void setCurrentVolume(int tempVolume){
+        audio.setStreamVolume(AudioManager.STREAM_MUSIC, tempVolume, 0);
+    }
+
     protected int getMaxVolume(){
         return audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
     }
 
     protected int getCurrentVolume(){
-        return audio.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+        return audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+    }
+
+    private static boolean isTopActivity(Context context, String className)
+    {
+        if (context == null || TextUtils.isEmpty(className)) {
+            return false;
+        }
+
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
+        if (list != null && list.size() > 0) {
+            ComponentName cpn = list.get(0).topActivity;
+            if (className.equals(cpn.getClassName())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

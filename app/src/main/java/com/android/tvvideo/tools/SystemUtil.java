@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.DataOutputStream;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -205,7 +206,7 @@ public class SystemUtil {
 
     public interface GetLocalTime{
 
-        void time(int year,int month,int day,int hour,int minute,int second);
+        void time(int year, int month, int day, int hour, int minute, int second);
 
     }
 
@@ -218,6 +219,39 @@ public class SystemUtil {
         int minute = c.get(Calendar.MINUTE);
         int second=c.get(Calendar.SECOND);
         getLocalTime.time(year,month,day,hour,minute,second);
+    }
+
+    //关机 reboot -p
+    //重启 reboot
+    public static void shutDown(){
+        execCmd("reboot -p");
+    }
+
+    public static boolean execCmd(String command) {
+        Process process = null;
+        DataOutputStream os = null;
+        try {
+            process = Runtime.getRuntime().exec("su");
+            os = new DataOutputStream(process.getOutputStream());
+            os.writeBytes(command+"\n");
+            os.writeBytes("exit\n");
+            os.flush();
+            process.waitFor();
+        } catch (Exception e) {
+            return false;
+        } finally {
+            try {
+                if (os != null) {
+                    os.close();
+                }
+                if(process != null) {
+                    process.destroy();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
     }
 
 }
