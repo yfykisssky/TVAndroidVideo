@@ -21,7 +21,6 @@
 package org.videolan.vlc.video;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -64,6 +63,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.tvvideo.R;
+import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.view.LoadingDialog;
 
 import org.videolan.libvlc.IVLCVout;
@@ -84,7 +84,7 @@ import org.videolan.vlc.util.VLCInstance;
 
 import java.lang.reflect.Method;
 
-public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
+public class VideoPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         GestureDetector.OnDoubleTapListener, LibVLC.HardwareAccelerationError,
         PlaybackService.Client.Callback, PlaybackService.Callback {
 
@@ -202,6 +202,8 @@ public class VideoPlayerActivity extends Activity implements IVLCVout.Callback,
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        super.setActivityName(this.getClass().getName());
 
         if (!VLCInstance.testCompatibleCPU(this)) {
             exit();

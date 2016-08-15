@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:id="@+id/player_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:keepScreenOn="true">
     <com.android.tvvideo.view.MarqueeText
         android:id="@+id/showmsg"
         android:layout_width="match_parent"
@@ -21,4 +23,78 @@
         android:id="@+id/adwebview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"></WebView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="false" >
+
+        <FrameLayout
+            android:id="@+id/player_surface_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:foregroundGravity="clip_horizontal|clip_vertical"
+            tools:ignore="true">
+
+            <SurfaceView
+                android:id="@+id/player_surface"
+                android:layout_width="1dp"
+                android:layout_height="1dp" />
+
+            <SurfaceView
+                android:layout_width="1dp"
+                android:layout_height="1dp" />
+        </FrameLayout>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_above="@+id/progress_overlay"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/video_list_length_bg"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:visibility="invisible">
+            <FrameLayout
+                android:id="@+id/verticalbar"
+                android:layout_width="20dp"
+                android:layout_height="100dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="4dp"
+                    android:orientation="vertical"
+                    android:weightSum="100"
+                    android:gravity="bottom">
+
+                    <View android:id="@+id/verticalbar_progress"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:background="@color/orange500transparent" />
+                </LinearLayout>
+            </FrameLayout>
+            <TextView
+                android:id="@+id/player_overlay_textinfo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="36sp" />
+        </LinearLayout>
+
+        <include layout="@layout/player_hud"/>
+
+    </RelativeLayout>
+
 </RelativeLayout>
+
