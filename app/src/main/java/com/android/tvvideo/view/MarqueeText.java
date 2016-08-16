@@ -54,7 +54,7 @@ public class MarqueeText extends TextView implements Runnable {
             currentScrollX = textWidth;
         // return;
         }
-        postDelayed(this, 5);
+        postDelayed(this, 15);
     }
     // 开始滚动
     public void startScroll() {

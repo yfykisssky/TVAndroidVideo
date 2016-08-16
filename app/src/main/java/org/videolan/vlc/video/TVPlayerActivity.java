@@ -53,6 +53,7 @@ import com.android.tvvideo.view.ScrollRelativeLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.videolan.libvlc.IVLCVout;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
@@ -70,6 +71,7 @@ import org.videolan.vlc.util.VLCInstance;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -162,45 +164,56 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
             @Override
             public void onSuccess(String data) {
 
-                msgData="";
+                try {
+                    JSONObject jsonObject=new JSONObject(data);
 
-                final int startHour=0;
-                final int startMinute=0;
-                final int startSecond=0;
+                    Date startTime=SystemUtil.String2Date(jsonObject.getString("startTime"));
 
-                final int endHour=0;
-                final int endMinute=0;
-                final int endSecond=0;
+                    Date endTime=SystemUtil.String2Date(jsonObject.getString("endTime"));
 
-                SystemUtil.getLocalTime(new SystemUtil.GetLocalTime() {
-                    @Override
-                    public void time(int year, int month, int day, int hour, int minute, int second) {
+                    msgData=jsonObject.getString("msg");
 
-                        long startTime=(((startHour-hour)*60+(startMinute-minute))*60+startSecond)*1000;
+                    final int startHour=startTime.getHours();
+                    final int startMinute=startTime.getMinutes();
+                    final int startSecond=startTime.getSeconds();
 
-                        long endTime=(((endHour-hour)*60+(endMinute-minute))*60+endSecond)*1000;
+                    final int endHour=endTime.getHours();
+                    final int endMinute=endTime.getMinutes();
+                    final int endSecond=endTime.getSeconds();
 
-                        msgShowHandler.removeCallbacks(msgShowRunnable);
+                    SystemUtil.getLocalTime(new SystemUtil.GetLocalTime() {
+                        @Override
+                        public void time(int year, int month, int day, int hour, int minute, int second) {
 
-                        msgShowHandler.removeCallbacks(msgHideRunnable);
+                            long startTime=(((startHour-hour)*60+(startMinute-minute))*60+startSecond)*1000;
 
-                        if(endTime<=0){
+                            long endTime=(((endHour-hour)*60+(endMinute-minute))*60+endSecond)*1000;
 
-                            msgShowHandler.post(msgHideRunnable);
+                            msgShowHandler.removeCallbacks(msgShowRunnable);
 
-                            return;
+                            msgShowHandler.removeCallbacks(msgHideRunnable);
+
+                            if(endTime<=0){
+
+                                msgShowHandler.post(msgHideRunnable);
+
+                                return;
+                            }
+
+                            if(startTime<=0){
+                                msgShowHandler.post(msgShowRunnable);
+                            }else{
+                                msgShowHandler.postDelayed(msgShowRunnable,startTime);
+                            }
+
+                            msgShowHandler.postDelayed(msgHideRunnable,endTime);
+
                         }
+                    });
 
-                        if(startTime<=0){
-                            msgShowHandler.post(msgShowRunnable);
-                        }else{
-                            msgShowHandler.postDelayed(msgShowRunnable,startTime);
-                        }
-
-                        msgShowHandler.postDelayed(msgHideRunnable,endTime);
-
-                    }
-                });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -218,45 +231,56 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
             @Override
             public void onSuccess(String data) {
 
-                adUrl="";
+                try {
+                    JSONObject jsonObject=new JSONObject(data);
 
-                final int startHour=0;
-                final int startMinute=0;
-                final int startSecond=0;
+                    Date startTime=SystemUtil.String2Date(jsonObject.getString("startTime"));
 
-                final int endHour=0;
-                final int endMinute=0;
-                final int endSecond=0;
+                    Date endTime=SystemUtil.String2Date(jsonObject.getString("endTime"));
 
-                SystemUtil.getLocalTime(new SystemUtil.GetLocalTime() {
-                    @Override
-                    public void time(int year, int month, int day, int hour, int minute, int second) {
+                    adUrl=jsonObject.getString("url");
 
-                        long startTime=(((startHour-hour)*60+(startMinute-minute))*60+startSecond)*1000;
+                    final int startHour=startTime.getHours();
+                    final int startMinute=startTime.getMinutes();
+                    final int startSecond=startTime.getSeconds();
 
-                        long endTime=(((endHour-hour)*60+(endMinute-minute))*60+endSecond)*1000;
+                    final int endHour=endTime.getHours();
+                    final int endMinute=endTime.getMinutes();
+                    final int endSecond=endTime.getSeconds();
 
-                        adShowHandler.removeCallbacks(adShowRunnable);
+                    SystemUtil.getLocalTime(new SystemUtil.GetLocalTime() {
+                        @Override
+                        public void time(int year, int month, int day, int hour, int minute, int second) {
 
-                        adShowHandler.removeCallbacks(adHideRunnable);
+                            long startTime=(((startHour-hour)*60+(startMinute-minute))*60+startSecond)*1000;
 
-                        if(endTime<=0){
+                            long endTime=(((endHour-hour)*60+(endMinute-minute))*60+endSecond)*1000;
 
-                            adShowHandler.post(adHideRunnable);
+                            adShowHandler.removeCallbacks(adShowRunnable);
 
-                            return;
+                            adShowHandler.removeCallbacks(adHideRunnable);
+
+                            if(endTime<=0){
+
+                                adShowHandler.post(adHideRunnable);
+
+                                return;
+                            }
+
+                            if(startTime<=0){
+                                adShowHandler.post(adShowRunnable);
+                            }else{
+                                adShowHandler.postDelayed(adShowRunnable,startTime);
+                            }
+
+                            adShowHandler.postDelayed(adHideRunnable,endTime);
+
                         }
+                    });
 
-                        if(startTime<=0){
-                            adShowHandler.post(adShowRunnable);
-                        }else{
-                            adShowHandler.postDelayed(adShowRunnable,startTime);
-                        }
-
-                        adShowHandler.postDelayed(adHideRunnable,endTime);
-
-                    }
-                });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -270,7 +294,7 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
     private void getTVListData() {
 
-       new NetDataTool(this).sendGet(NetDataConstants.GET_TV_LIST, new NetDataTool.IResponse() {
+        new NetDataTool(this).sendGet(NetDataConstants.GET_TV_LIST, new NetDataTool.IResponse() {
             @Override
             public void onSuccess(String data) {
 

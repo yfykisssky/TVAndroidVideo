@@ -61,6 +61,7 @@ public class NetDataConstants {
 
     public static final String GET_PERSIONAL="/app/getPersional";
 
+
     public static final String GET_AD_DATA="/app/getAdData";
 
     public static final String GET_MSG_DATA="/app/getMsgData";
