@@ -34,14 +34,14 @@
         android:supportsRtl="true">
         <activity android:name=".activity.StartActivity">
             <!-- 实现开机启动，替换系统的Launcher -->
-            <intent-filter>
+        <!--    <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.MONKEY" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity android:name=".activity.HomeActivity"/>
         <activity android:name=".activity.ExamIntroActivity"/>
@@ -74,11 +74,11 @@
         <service android:name=".tools.TimeTaskService"/>
 
         <activity android:name=".activity.TestActivity">
-            <!--  <intent-filter>
+              <intent-filter>
                   <action android:name="android.intent.action.MAIN" />
                   <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
                   <category android:name="android.intent.category.LAUNCHER" />
-              </intent-filter>-->
+              </intent-filter>
         </activity>
 
         <!--suppress AndroidDomInspection -->
