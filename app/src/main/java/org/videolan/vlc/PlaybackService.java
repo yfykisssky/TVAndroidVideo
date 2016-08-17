@@ -508,7 +508,7 @@ public class PlaybackService extends Service implements IVLCVout.Callback {
                     publishState(event.type);
                     executeUpdateProgress();
 
-                    final MediaWrapper mw = mMediaList.getMedia(mCurrentIndex);
+                    //final MediaWrapper mw = mMediaList.getMedia(mCurrentIndex);
               /*      if (mw != null) {
                         long length = mMediaPlayer.getLength();
                         MediaDatabase dbManager = MediaDatabase.getInstance();
