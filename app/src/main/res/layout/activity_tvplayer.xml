@@ -21,10 +21,11 @@
             android:layout_height="match_parent"></ListView>
     </com.android.tvvideo.view.ScrollRelativeLayout>
     <WebView
+        android:layout_alignParentRight="true"
         android:id="@+id/adwebview"
         android:visibility="gone"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></WebView>
+        android:layout_height="match_parent"></WebView>
 
     <FrameLayout
         android:layout_width="match_parent"
