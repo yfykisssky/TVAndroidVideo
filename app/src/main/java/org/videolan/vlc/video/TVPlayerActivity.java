@@ -47,6 +47,7 @@ import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
 import com.android.tvvideo.tools.SystemUtil;
+import com.android.tvvideo.tools.TimerTaskHelper;
 import com.android.tvvideo.view.LoadingDialog;
 import com.android.tvvideo.view.MarqueeText;
 import com.android.tvvideo.view.ScrollRelativeLayout;
@@ -71,7 +72,6 @@ import org.videolan.vlc.util.VLCInstance;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,11 +107,15 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
     WebView adWebView;
 
-    String adUrl;
+    List<String> adData=new ArrayList<>();
 
     MarqueeText showMsgTex;
 
-    String msgData;
+    List<String> msgTex=new ArrayList<>();
+
+    TimerTaskHelper msgTimerTaskHelper;
+
+    TimerTaskHelper adTimerTaskHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,169 +131,135 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
         initView();
 
-        getTVListData();
-
-        // getAdData();
-
-        // getShowMsg();
-
-        super.setOnPushMsgListener(new PushMsgListener() {
-            @Override
-            public void onMsgReceive(Intent data) {
-
-                String kind=data.getStringExtra("kind");
-
-                if(kind.equals("adshow")){
-
-                    getAdData();
-
-                }
-
-                if(kind.equals("showmsg")){
-
-                    getShowMsg();
-
-                }
-
-            }
-        });
-
-        startCountTimeThread();
+        initData();
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        destoryTimer();
+
+        mAudioManager = null;
+    }
+
+
     private void getShowMsg() {
 
-        new NetDataTool(this).sendGet(NetDataConstants.GET_MSG_DATA, new NetDataTool.IResponse() {
-            @Override
-            public void onSuccess(String data) {
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("ipaddress", SystemUtil.getLocalHostIp());
 
-                try {
-                    JSONObject jsonObject=new JSONObject(data);
+            new NetDataTool(this).sendPost(NetDataConstants.GET_MSG_DATA, postData.toString(), new NetDataTool.IResponse() {
+                @Override
+                public void onSuccess(String data) {
 
-                    Date startTime=SystemUtil.String2Date(jsonObject.getString("startTime"));
+                    msgTex.clear();
 
-                    Date endTime=SystemUtil.String2Date(jsonObject.getString("endTime"));
+                    hideMsg();
 
-                    msgData=jsonObject.getString("msg");
+                    msgTimerTaskHelper.stopAndRemove();
 
-                    final int startHour=startTime.getHours();
-                    final int startMinute=startTime.getMinutes();
-                    final int startSecond=startTime.getSeconds();
+                    List<TimerTaskHelper.TimeModel> timeModels=new ArrayList<TimerTaskHelper.TimeModel>();
 
-                    final int endHour=endTime.getHours();
-                    final int endMinute=endTime.getMinutes();
-                    final int endSecond=endTime.getSeconds();
+                    try {
+                        JSONArray jsonArray=new JSONArray(data);
 
-                    SystemUtil.getLocalTime(new SystemUtil.GetLocalTime() {
-                        @Override
-                        public void time(int year, int month, int day, int hour, int minute, int second) {
+                        for(int c=0;c<jsonArray.length();c++){
 
-                            long startTime=(((startHour-hour)*60+(startMinute-minute))*60+startSecond)*1000;
+                            JSONObject jsonObject=jsonArray.getJSONObject(c);
 
-                            long endTime=(((endHour-hour)*60+(endMinute-minute))*60+endSecond)*1000;
+                            TimerTaskHelper.TimeModel timeModel=new TimerTaskHelper.TimeModel();
 
-                            msgShowHandler.removeCallbacks(msgShowRunnable);
+                            msgTex.add(jsonObject.getString(""));
 
-                            msgShowHandler.removeCallbacks(msgHideRunnable);
+                            timeModel.startTime=jsonObject.getString("startTime");
 
-                            if(endTime<=0){
+                            timeModel.endTime=jsonObject.getString("endTime");
 
-                                msgShowHandler.post(msgHideRunnable);
-
-                                return;
-                            }
-
-                            if(startTime<=0){
-                                msgShowHandler.post(msgShowRunnable);
-                            }else{
-                                msgShowHandler.postDelayed(msgShowRunnable,startTime);
-                            }
-
-                            msgShowHandler.postDelayed(msgHideRunnable,endTime);
+                            timeModels.add(timeModel);
 
                         }
-                    });
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                        msgTimerTaskHelper.setData(timeModels);
+
+                        startMsgListening();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 }
 
-            }
+                @Override
+                public void onFailed(String error) {
+                    showToast(error);
+                }
+            });
 
-            @Override
-            public void onFailed(String error) {
-                showToast(error);
-            }
-        });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
     private void getAdData() {
 
-        new NetDataTool(this).sendGet(NetDataConstants.GET_AD_DATA, new NetDataTool.IResponse() {
-            @Override
-            public void onSuccess(String data) {
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("ipaddress", SystemUtil.getLocalHostIp());
 
-                try {
-                    JSONObject jsonObject=new JSONObject(data);
+            new NetDataTool(this).sendPost(NetDataConstants.GET_AD_DATA, postData.toString(), new NetDataTool.IResponse() {
+                @Override
+                public void onSuccess(String data) {
 
-                    Date startTime=SystemUtil.String2Date(jsonObject.getString("startTime"));
+                    adData.clear();
 
-                    Date endTime=SystemUtil.String2Date(jsonObject.getString("endTime"));
+                    hideAd();
 
-                    adUrl=jsonObject.getString("url");
+                    adTimerTaskHelper.stopAndRemove();
 
-                    final int startHour=startTime.getHours();
-                    final int startMinute=startTime.getMinutes();
-                    final int startSecond=startTime.getSeconds();
+                    List<TimerTaskHelper.TimeModel> timeModels = new ArrayList<TimerTaskHelper.TimeModel>();
 
-                    final int endHour=endTime.getHours();
-                    final int endMinute=endTime.getMinutes();
-                    final int endSecond=endTime.getSeconds();
+                    try {
+                        JSONArray jsonArray = new JSONArray(data);
 
-                    SystemUtil.getLocalTime(new SystemUtil.GetLocalTime() {
-                        @Override
-                        public void time(int year, int month, int day, int hour, int minute, int second) {
+                        for (int c = 0; c < jsonArray.length(); c++) {
 
-                            long startTime=(((startHour-hour)*60+(startMinute-minute))*60+startSecond)*1000;
+                            JSONObject jsonObject = jsonArray.getJSONObject(c);
 
-                            long endTime=(((endHour-hour)*60+(endMinute-minute))*60+endSecond)*1000;
+                            TimerTaskHelper.TimeModel timeModel = new TimerTaskHelper.TimeModel();
 
-                            adShowHandler.removeCallbacks(adShowRunnable);
+                            adData.add(jsonObject.getString(""));
 
-                            adShowHandler.removeCallbacks(adHideRunnable);
+                            timeModel.startTime = jsonObject.getString("startTime");
 
-                            if(endTime<=0){
+                            timeModel.endTime = jsonObject.getString("endTime");
 
-                                adShowHandler.post(adHideRunnable);
-
-                                return;
-                            }
-
-                            if(startTime<=0){
-                                adShowHandler.post(adShowRunnable);
-                            }else{
-                                adShowHandler.postDelayed(adShowRunnable,startTime);
-                            }
-
-                            adShowHandler.postDelayed(adHideRunnable,endTime);
+                            timeModels.add(timeModel);
 
                         }
-                    });
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                        adTimerTaskHelper.setData(timeModels);
+
+                        startAdListening();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 }
 
-            }
+                @Override
+                public void onFailed(String error) {
+                    showToast(error);
+                }
+            });
 
-            @Override
-            public void onFailed(String error) {
-                showToast(error);
-            }
-        });
-
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getTVListData() {
@@ -331,24 +301,22 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
     }
 
-    Handler adShowHandler=new Handler();
+    private void startAdListening(){
 
-    Runnable adShowRunnable=new Runnable() {
+        adTimerTaskHelper.startAndListener("ad", new TimerTaskHelper.OnStartOrEndListener() {
+            @Override
+            public void onStartOrEnd(boolean startOrEnd,int index) {
+                if(startOrEnd){
+                    showAd(adData.get(index));
+                }else{
+                    hideAd();
+                }
+            }
+        });
 
-        @Override
-        public void run() {
-            showAd();
-        }
-    };
+    }
 
-    Runnable adHideRunnable=new Runnable() {
-        @Override
-        public void run() {
-            hideAd();
-        }
-    };
-
-    private void showAd(){
+    private void showAd(String adUrl){
         adWebView.loadUrl(adUrl);
         adWebView.setVisibility(View.VISIBLE);
     }
@@ -357,24 +325,22 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         adWebView.setVisibility(View.GONE);
     }
 
-    Handler msgShowHandler=new Handler();
+    private void startMsgListening(){
 
-    Runnable msgShowRunnable=new Runnable() {
+        msgTimerTaskHelper.startAndListener("msg", new TimerTaskHelper.OnStartOrEndListener() {
+            @Override
+            public void onStartOrEnd(boolean startOrEnd,int index) {
+                if(startOrEnd){
+                    showMsg(msgTex.get(index));
+                }else{
+                    hideMsg();
+                }
+            }
+        });
 
-        @Override
-        public void run() {
-            showMsg();
-        }
-    };
+    }
 
-    Runnable msgHideRunnable=new Runnable() {
-        @Override
-        public void run() {
-            hideMsg();
-        }
-    };
-
-    private void showMsg(){
+    private void showMsg(String msgData){
 
         showMsgTex.setText(msgData);
 
@@ -428,7 +394,52 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
             }
         });
 
+
+        startCountTimeThread();
+
     }
+
+    private void initData() {
+
+        super.setOnPushMsgListener(new PushMsgListener() {
+            @Override
+            public void onMsgReceive(Intent data) {
+
+                String kind=data.getStringExtra("kind");
+
+                if(kind.equals("adchange")){
+
+                    getAdData();
+
+                }
+
+                if(kind.equals("showchange")){
+
+                    getShowMsg();
+
+                }
+
+            }
+        });
+
+        msgTimerTaskHelper=new TimerTaskHelper(this);
+
+        adTimerTaskHelper=new TimerTaskHelper(this);
+
+        getTVListData();
+
+        getAdData();
+
+        getShowMsg();
+
+    }
+
+    private void destoryTimer(){
+        msgTimerTaskHelper.stopAndRemove();
+        adTimerTaskHelper.stopAndRemove();
+    }
+
+
 
     private void resetTvPlay(String playUrl) {
 
@@ -792,13 +803,6 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         if (mService != null)
             mService.removeCallback(this);
         mHelper.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        mAudioManager = null;
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

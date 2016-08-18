@@ -20,10 +20,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Enumeration;
 
 /**
@@ -255,23 +252,6 @@ public class SystemUtil {
             }
         }
         return true;
-    }
-
-    public static Date String2Date(String dateString){
-
-        try
-        {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
-            Date date = sdf.parse(dateString);
-
-            return date;
-        }
-        catch (ParseException e)
-        {
-           e.getMessage();
-        }
-
-        return null;
     }
 
 }

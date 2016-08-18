@@ -91,7 +91,7 @@ public class BaseActivity extends Activity {
                     case "playvideo":
                         playVideo(jsonObject.getString("data"));
                         break;
-                    case "volume":
+                    case "volumechange":
                         resetVolumePercent();
                         break;
                     case "onoff":
@@ -100,8 +100,8 @@ public class BaseActivity extends Activity {
                     case "shutdown":
                         SystemUtil.shutDown();
                         break;
-                    case "showmsg":
-                    case "showad":
+                    case "msgchange":
+                    case "adchange":
                         if(pushMsgListener!=null){
                             pushMsgListener.onMsgReceive(intent);
                         }
