@@ -15,6 +15,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.tvvideo.view.ShutDownDialog;
+
 import java.io.DataOutputStream;
 import java.util.Calendar;
 
@@ -222,8 +224,12 @@ public class SystemUtil {
 
     //关机 reboot -p
     //重启 reboot
-    public static void shutDown(){
-        execCmd("reboot -p");
+    public static void shutDown(Context context){
+
+        ShutDownDialog shutDownDialog=new ShutDownDialog(context);
+
+        shutDownDialog.show();
+
     }
 
     public static boolean execCmd(String command) {

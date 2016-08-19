@@ -358,8 +358,10 @@ public class OrderMealActivity extends BaseActivity {
             MyGridHolder holder = new MyGridHolder();
             if (view == null) {
                 view = LayoutInflater.from(context).inflate(R.layout.item_meal_grid,null);
-                holder.tex = (TextView)view.findViewById(R.id.tex);
                 holder.img=(ImageView)view.findViewById(R.id.img);
+                holder.tex = (TextView)view.findViewById(R.id.tex);
+                holder.price = (TextView)view.findViewById(R.id.price);
+                holder.remark=(TextView)view.findViewById(R.id.remark);
                 view.setTag(holder);
             } else {
                 holder = (MyGridHolder)view.getTag();
@@ -368,6 +370,8 @@ public class OrderMealActivity extends BaseActivity {
             ImageLoad.loadDefultImage(gridData.get(i).getImgUrl(),holder.img);
 
             holder.tex.setText(gridData.get(i).getName());
+            holder.price.setText("￥"+gridData.get(i).getPrice());
+            holder.remark.setText(gridData.get(i).getRemark());
 
             return view;
         }
@@ -376,6 +380,8 @@ public class OrderMealActivity extends BaseActivity {
     class MyGridHolder{
         ImageView img;
         TextView tex;
+        TextView price;
+        TextView remark;
     }
 
 }

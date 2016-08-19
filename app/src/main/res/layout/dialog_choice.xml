@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="700px"
     android:background="@drawable/bg_radius_transwhite"
-    android:layout_height="550px">
+    android:layout_height="500px">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -21,34 +21,31 @@
             android:layout_height="wrap_content">
             <TextView
                 android:textColor="#000000"
-                android:text="1"
+                android:text="名称:"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:textColor="#000000"
-                android:text="1"
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:textColor="#000000"
-                android:text="1"
+                android:text="价格:"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:textColor="#000000"
-                android:text="1"
                 android:id="@+id/price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:textColor="#000000"
-                android:text="1"
+                android:text="介绍:"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:textColor="#000000"
-                android:text="1"
                 android:id="@+id/introduce"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -57,7 +54,7 @@
 
     <LinearLayout
         android:layout_centerHorizontal="true"
-        android:layout_margin="10px"
+        android:layout_marginBottom="30px"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
@@ -68,7 +65,7 @@
             android:background="@drawable/button_selector_gray"
             android:id="@+id/ok"
             android:layout_width="200px"
-            android:layout_height="100px" />
+            android:layout_height="80px" />
         <Button
             android:nextFocusLeft="@+id/ok"
             android:layout_marginLeft="50px"
@@ -76,7 +73,7 @@
             android:text="取消"
             android:id="@+id/cancel"
             android:layout_width="200px"
-            android:layout_height="100px"  />
+            android:layout_height="80px"  />
     </LinearLayout>
 
 </RelativeLayout>

@@ -7,6 +7,7 @@ import android.os.Message;
 import android.widget.TextView;
 
 import com.android.tvvideo.R;
+import com.android.tvvideo.tools.SystemUtil;
 
 /**
  * Created by yangfengyuan on 16/8/9.
@@ -15,8 +16,12 @@ public class ShutDownDialog extends Dialog {
 
     TextView remindTex;
 
+    final int second=5;
+
     public ShutDownDialog(Context context) {
         super(context, R.style.Base_Dialog);
+
+        this.setCancelable(false);
 
         initView();
     }
@@ -37,7 +42,7 @@ public class ShutDownDialog extends Dialog {
             remindTex.setText("还有"+String.valueOf(msg.what)+"秒后关机");
 
             if(msg.what==0){
-
+                SystemUtil.execCmd("reboot -p");
             }else{
 
                 Message message=new Message();
@@ -50,7 +55,7 @@ public class ShutDownDialog extends Dialog {
         }
     };
 
-    public void setData(int second) {
+    public void setData() {
 
         Message message=new Message();
 
