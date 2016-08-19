@@ -24,6 +24,7 @@ import com.android.tvvideo.view.RemindDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.videolan.vlc.VLCApplication;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class BaseActivity extends Activity {
 
     int maxVolume;
 
-    double maxVolumePercent;
+    double maxVolumePercent=-1;
 
     String activityName;
 
@@ -124,7 +125,7 @@ public class BaseActivity extends Activity {
 
                     JSONObject jsonObject=new JSONObject(data);
 
-                    final String remark=jsonObject.getString("remark");
+                    double percent=jsonObject.getDouble("maxvolume");
                     String path=jsonObject.getString("path");
                     String bottomremark=jsonObject.getString("bottomRemark");
 
@@ -136,6 +137,12 @@ public class BaseActivity extends Activity {
                     }
 
                     ImageLoad.loadDefultImage(path,img);*/
+
+                    VLCApplication.getInstance().setMaxVolume(percent);
+
+                    resetCurrentVolume(percent);
+
+                    maxVolumePercent=VLCApplication.getInstance().getMaxVolume();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -154,39 +161,7 @@ public class BaseActivity extends Activity {
 
     private void resetOnOffTime() {
 
-        new NetDataTool(this).sendNoShowGet(NetDataConstants.GET_MAX_VOLUME, new NetDataTool.IResponse() {
-            @Override
-            public void onSuccess(String data) {
-
-                try {
-
-                    JSONObject jsonObject=new JSONObject(data);
-
-                    final String remark=jsonObject.getString("remark");
-                    String path=jsonObject.getString("path");
-                    String bottomremark=jsonObject.getString("bottomRemark");
-
-/*
-                    detial.setText(remark);
-
-                    if(bottomremark!=null){
-                        bottom.setText(bottomremark);
-                    }
-
-                    ImageLoad.loadDefultImage(path,img);*/
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-
-            @Override
-            public void onFailed(String error) {
-                showToast(error);
-            }
-        });
+        VLCApplication.getInstance().getOnOffTime();
 
     }
 
@@ -249,7 +224,9 @@ public class BaseActivity extends Activity {
 
         resetOnOffTime();
 
-        // maxVolumePercent;
+        maxVolumePercent=VLCApplication.getInstance().getMaxVolume();
+
+        resetCurrentVolume(maxVolumePercent);
 
     }
 
@@ -289,6 +266,18 @@ public class BaseActivity extends Activity {
                 break;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void resetCurrentVolume(double percent){
+
+        int volume= (int)(maxVolume*percent);
+
+        if(getCurrentVolume()>volume){
+
+            setCurrentVolume(volume);
+
+        }
+
     }
 
     private void setCurrentVolume(int tempVolume){

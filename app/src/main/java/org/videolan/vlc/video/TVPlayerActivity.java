@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -45,7 +46,6 @@ import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
-import com.android.tvvideo.tools.ImageLoad;
 import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.tools.TimerTaskHelper;
 import com.android.tvvideo.view.LoadingDialog;
@@ -172,7 +172,7 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
                             TimerTaskHelper.TimeModel timeModel=new TimerTaskHelper.TimeModel();
 
-                            msgTex.add(jsonObject.getString(""));
+                            msgTex.add(jsonObject.getString("msgTex"));
 
                             timeModel.startTime=jsonObject.getString("startTime");
 
@@ -231,7 +231,7 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
                             TimerTaskHelper.TimeModel timeModel = new TimerTaskHelper.TimeModel();
 
-                            adData.add(jsonObject.getString(""));
+                            adData.add(jsonObject.getString("adTex"));
 
                             timeModel.startTime = jsonObject.getString("startTime");
 
@@ -286,6 +286,8 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
                     myAdapter.notifyDataSetChanged();
 
                     resetTvPlay(listData.get(0).get("playurl"));
+
+                    startCountTimeThread();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -369,6 +371,11 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
         adWebView=(WebView)findViewById(R.id.adwebview);
 
+        adWebView.getSettings().setJavaScriptEnabled(true);
+        adWebView.getSettings().setAllowFileAccess(true);
+        adWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
+        adWebView.setBackgroundColor(0);
+
         relativeLayout = (ScrollRelativeLayout) findViewById(R.id.relative);
 
         listView = (ListView) findViewById(R.id.list);
@@ -401,9 +408,6 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
             }
         });
-
-
-        startCountTimeThread();
 
     }
 
@@ -446,8 +450,6 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         msgTimerTaskHelper.stopAndRemove();
         adTimerTaskHelper.stopAndRemove();
     }
-
-
 
     private void resetTvPlay(String playUrl) {
 
@@ -496,7 +498,7 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
             myHolder.indexTex.setText(String.valueOf(i));
 
-            ImageLoad.loadDefultImage(imgUrl,myHolder.img);
+//            ImageLoad.loadDefultImage(imgUrl,myHolder.img);
 
             if(indexList==i){
                 view.setBackgroundColor(Color.parseColor("#ccFF0000"));

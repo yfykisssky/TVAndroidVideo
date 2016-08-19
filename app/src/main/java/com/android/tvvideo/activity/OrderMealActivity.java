@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
@@ -72,22 +71,19 @@ public class OrderMealActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        super.setActivityName(this.getClass().getName());
-
         setContentView(R.layout.activity_order_meal);
 
         context=this;
 
         initView();
 
-        getVideoMenus();
+        getOrderKinds();
 
     }
 
-    private void getVideoMenus(){
+    private void getOrderKinds(){
 
-        new NetDataTool(this).sendGet(NetDataConstants.GET_MEAL_List, new NetDataTool.IResponse() {
+        new NetDataTool(this).sendGet(NetDataConstants.GET_MEAL_KINDS, new NetDataTool.IResponse() {
             @Override
             public void onSuccess(String data) {
 
@@ -126,11 +122,13 @@ public class OrderMealActivity extends BaseActivity {
 
     }
 
-    private void getVideoList(String menuId){
+    private void getOrderList(String menuId){
 
-        new NetDataTool(this).sendGet(NetDataConstants.GET_VIDEO_LIST_FROM_KIND+"/"+menuId, new NetDataTool.IResponse() {
+        new NetDataTool(this).sendGet(NetDataConstants.GET_MEAL_LIST+"/"+menuId, new NetDataTool.IResponse() {
             @Override
             public void onSuccess(String data) {
+
+                gridAllData.clear();
 
                 try {
 
@@ -140,6 +138,12 @@ public class OrderMealActivity extends BaseActivity {
                         JSONObject jsonObject=array.getJSONObject(i);
 
                         OrderModel model=new OrderModel();
+
+                        model.setImgUrl(jsonObject.getString("imgPath"));
+                        model.setName(jsonObject.getString("name"));
+                        model.setRemark(jsonObject.getString("remark"));
+                        model.setPrice(jsonObject.getString("price"));
+                        model.setOrder_id(jsonObject.getString("orderId"));
 
                         gridAllData.add(model);
 
@@ -211,8 +215,6 @@ public class OrderMealActivity extends BaseActivity {
 
                 if(pageIndex==0){
                     return;
-                }else{
-                    Toast.makeText(context,"没有更多了", Toast.LENGTH_SHORT).show();
                 }
 
                 pageIndex--;
@@ -230,8 +232,6 @@ public class OrderMealActivity extends BaseActivity {
                     pageIndex++;
                     gridData=getIndexPageData(pageIndex,pageSize);
                     gridAdapter.notifyDataSetChanged();
-                }else{
-                    Toast.makeText(context,"没有更多了", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -252,7 +252,7 @@ public class OrderMealActivity extends BaseActivity {
                 indexList=i;
                 gridData.clear();
                 gridAdapter.notifyDataSetChanged();
-                getVideoList(listData.get(indexList).get("id"));
+                getOrderList(listData.get(indexList).get("id"));
             }
 
             @Override
@@ -273,15 +273,22 @@ public class OrderMealActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                ChoiceMealDialog choiceDialog=new ChoiceMealDialog(context);
-
-                choiceDialog.setData(gridData.get(i).getName(),gridData.get(i).getPrice(),gridData.get(i).getRemark(),gridData.get(i).getImgUrl());
-
-                choiceDialog.show();
+                OrderConfirm("",gridData.get(i));
 
             }
         });
 
+    }
+
+    private void OrderConfirm(String inHospitalNum,OrderModel model) {
+
+        ChoiceMealDialog dialog=new ChoiceMealDialog(this);
+
+        dialog.setData(model.getName(),model.getPrice(),model.getRemark(),model.getImgUrl());
+
+        dialog.setUserData(model.getOrder_id(),inHospitalNum);
+
+        dialog.show();
 
     }
 
@@ -350,9 +357,9 @@ public class OrderMealActivity extends BaseActivity {
         public View getView(int i, View view, ViewGroup viewGroup) {
             MyGridHolder holder = new MyGridHolder();
             if (view == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.item_video_grid,null);
-                holder.tex = (TextView)view.findViewById(R.id.video_tex);
-                holder.img=(ImageView)view.findViewById(R.id.video_img);
+                view = LayoutInflater.from(context).inflate(R.layout.item_meal_grid,null);
+                holder.tex = (TextView)view.findViewById(R.id.tex);
+                holder.img=(ImageView)view.findViewById(R.id.img);
                 view.setTag(holder);
             } else {
                 holder = (MyGridHolder)view.getTag();

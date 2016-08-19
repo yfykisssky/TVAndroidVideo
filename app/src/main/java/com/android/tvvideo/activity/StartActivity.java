@@ -19,6 +19,7 @@ import com.android.tvvideo.tools.UpdateHelpter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.videolan.vlc.VLCApplication;
 
 /**
  * Created by yangfengyuan on 16/7/18.
@@ -129,6 +130,8 @@ public class StartActivity extends BaseActivity {
                     String url=jsonObject.getString("address");
 
                     if(!new UpdateHelpter().checkUpdate(StartActivity.this,version,url,"TeachVideo.apk")){
+
+                        VLCApplication.getInstance().getOnOffTime();
 
                         new Thread(new Runnable() {
                             @Override

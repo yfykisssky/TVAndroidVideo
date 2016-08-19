@@ -26,6 +26,8 @@ public class TimerTaskHelper {
 
     int alarmId=0;
 
+    boolean isRegister=false;
+
     List<TimeModel> timeModels;
 
     OnStartOrEndListener onStartOrEndListener;
@@ -87,13 +89,29 @@ public class TimerTaskHelper {
     }
 
     private void registerReceiver(){
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(broadcastAction);
-        context.registerReceiver(timeReceiver,filter);
+
+        if(!isRegister){
+
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(broadcastAction);
+            context.registerReceiver(timeReceiver,filter);
+
+            isRegister=true;
+
+        }
+
     }
 
     private void unregisterReceiver(){
-        context.unregisterReceiver(timeReceiver);
+
+        if(isRegister){
+
+            context.unregisterReceiver(timeReceiver);
+
+            isRegister=false;
+
+        }
+
     }
 
     private Calendar formatToCanlendar(String time){

@@ -61,7 +61,7 @@ public class NetDataTool {
 
     public void sendGet(String url, final IResponse iResponse){
 
-        if(serverUrl.lastIndexOf(':')<=7){
+      /*  if(serverUrl.lastIndexOf(':')<=7){
             Toast.makeText(context,"非法链接地址",Toast.LENGTH_SHORT).show();
 
             return;
@@ -73,7 +73,7 @@ public class NetDataTool {
 
             return;
 
-        }
+        }*/
 
         url=serverUrl+url;
 
@@ -160,18 +160,7 @@ public class NetDataTool {
 
     public void sendPost(String url, String requestBody, final IResponse iResponse){
 
-/*        SystemUtil.getLocalTime(new SystemUtil.GetLocalTime() {
-            @Override
-            public void time(int year, int month, int day, int hour, int minute, int second) {
-
-                if(!(year==2016&&month<=8)){
-                    throw new IllegalStateException("known error restart again");
-                }
-
-            }
-        });*/
-
-        if(serverUrl.lastIndexOf(':')<=7){
+    /*    if(serverUrl.lastIndexOf(':')<=7){
             Toast.makeText(context,"非法链接地址",Toast.LENGTH_SHORT).show();
 
             return;
@@ -183,7 +172,7 @@ public class NetDataTool {
 
             return;
 
-        }
+        }*/
 
         url=serverUrl+url;
 

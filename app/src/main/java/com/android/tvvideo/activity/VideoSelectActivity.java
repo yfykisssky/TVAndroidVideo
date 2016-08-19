@@ -76,25 +76,7 @@ public class VideoSelectActivity extends BaseActivity {
         context=this;
 
         initView();
-/*
 
-        for(int c=0;c<4;c++){
-            VideoModel videoModel=new VideoModel();
-
-            videoModel.setVideoUrl("");
-
-            videoModel.setTitle(String.valueOf(c));
-
-            gridAllData.add(videoModel);
-        }
-
-        allTex.setText(String.valueOf(gridData.size()));
-
-        gridData=getIndexPageData(pageIndex,pageSize);
-
-        gridAdapter.notifyDataSetChanged();
-
-*/
         getVideoMenus();
 
     }
@@ -104,7 +86,6 @@ public class VideoSelectActivity extends BaseActivity {
         JSONObject postData=new JSONObject();
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
-            //postData.put("ipaddress","192.168.1.1");
 
             new NetDataTool(this).sendPost(NetDataConstants.GET_VIDEO_KIND_LIST,postData.toString(), new NetDataTool.IResponse() {
                 @Override

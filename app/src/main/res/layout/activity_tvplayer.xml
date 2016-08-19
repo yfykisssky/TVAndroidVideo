@@ -22,6 +22,8 @@
     </com.android.tvvideo.view.ScrollRelativeLayout>
     <WebView
         android:layout_alignParentRight="true"
+        android:layerType="software"
+        android:hardwareAccelerated="true"
         android:id="@+id/adwebview"
         android:visibility="gone"
         android:layout_width="wrap_content"
