@@ -38,10 +38,12 @@ public class TimerTaskHelper {
 
             String kind=intent.getStringExtra("kind");
 
+            int index= intent.getIntExtra("index",0);
+
             if(kind.equals("start")){
-                onStartOrEndListener.onStartOrEnd(true,(alarmId/2));
+                onStartOrEndListener.onStartOrEnd(true,index);
             }else if(kind.equals("end")){
-                onStartOrEndListener.onStartOrEnd(false,(alarmId/2));
+                onStartOrEndListener.onStartOrEnd(false,index);
             }
 
         }
@@ -137,20 +139,26 @@ public class TimerTaskHelper {
             Calendar calendar=formatToCanlendar(timeModels.get(y).startTime);
 
             Intent intent = new Intent();
+            intent.putExtra("index",alarmId);
             intent.putExtra("kind", "start");
             intent.setAction(broadcastAction);
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId++,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
             am.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), pendingIntent);
+
+            alarmId++;
 
             calendar=formatToCanlendar(timeModels.get(y).endTime);
 
             intent = new Intent();
+            intent.putExtra("index",alarmId);
             intent.putExtra("kind", "end");
             intent.setAction(broadcastAction);
 
-            pendingIntent = PendingIntent.getBroadcast(context,alarmId++,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+            pendingIntent = PendingIntent.getBroadcast(context,alarmId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
             am.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), pendingIntent);
+
+            alarmId++;
 
         }
 

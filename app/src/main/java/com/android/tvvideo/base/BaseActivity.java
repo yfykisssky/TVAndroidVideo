@@ -222,9 +222,9 @@ public class BaseActivity extends Activity {
 
         maxVolume=getMaxVolume();
 
-        resetVolumePercent();
+        //resetVolumePercent();
 
-        resetOnOffTime();
+        //resetOnOffTime();
 
         maxVolumePercent=VLCApplication.getInstance().getMaxVolume();
 

@@ -151,7 +151,7 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
 
-            new NetDataTool(this).sendPost(NetDataConstants.GET_MSG_DATA, postData.toString(), new NetDataTool.IResponse() {
+            new NetDataTool(this).sendNoShowPost(NetDataConstants.GET_MSG_DATA, postData.toString(), new NetDataTool.IResponse() {
                 @Override
                 public void onSuccess(String data) {
 
@@ -210,7 +210,7 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
 
-            new NetDataTool(this).sendPost(NetDataConstants.GET_AD_DATA, postData.toString(), new NetDataTool.IResponse() {
+            new NetDataTool(this).sendNoShowPost(NetDataConstants.GET_AD_DATA, postData.toString(), new NetDataTool.IResponse() {
                 @Override
                 public void onSuccess(String data) {
 
