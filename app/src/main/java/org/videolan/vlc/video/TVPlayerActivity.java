@@ -323,7 +323,9 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         //changeSurfaceLayout();
         //changeFrameLocation();
 
-        adWebView.loadUrl(adUrl);
+        String url=SystemUtil.getServerAdPath(this)+adUrl;
+
+        adWebView.loadUrl(url);
         adWebView.setVisibility(View.VISIBLE);
     }
 
