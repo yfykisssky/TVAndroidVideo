@@ -21,15 +21,15 @@ public class PushService extends Service {
 
     public static final String BROAD_CAST_ACTION="com.teachvideo.msg.push";
 
-    String serviceUrl="ws://www.lionl73.com/ws/";
+    String serviceUrl;
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        //ws://www.lionl73.com/videoedu/ws/192.168.1.1
-        serviceUrl="ws://"+"www.lionl73.com"+"/videoedu/ws/";
-//ws://nonobank.iask.in/ws/192.168.1.2
-        serviceUrl+="192.168.1.1";
+
+        serviceUrl=SystemUtil.getServerWs(this);
+
+        serviceUrl+=SystemUtil.getLocalHostIp();
 
         startReceiverPush();
 

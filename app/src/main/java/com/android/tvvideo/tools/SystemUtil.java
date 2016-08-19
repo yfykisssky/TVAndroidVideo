@@ -205,6 +205,28 @@ public class SystemUtil {
 
     }
 
+    public static String getServerWs(Context context){
+
+        String serverIp= ShaPreHelper.readShaPre("settings","server_ws",context);
+
+        String serverPort= ShaPreHelper.readShaPre("settings","server_port",context);
+
+        return "ws://www.best673.top/videoedu/ws/";
+
+        //return serverIp+":"+serverPort+"/videoedu/ws/";
+
+    }
+
+    public static String getServerAdPath(Context context){
+
+        String serverIp= ShaPreHelper.readShaPre("settings","server_ip",context);
+
+        String serverPort= ShaPreHelper.readShaPre("settings","server_port",context);
+
+        return serverIp+":"+serverPort+"/ad/";
+
+    }
+
     public interface GetLocalTime{
 
         void time(int year, int month, int day, int hour, int minute, int second);

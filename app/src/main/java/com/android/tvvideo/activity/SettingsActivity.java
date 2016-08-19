@@ -33,6 +33,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
     private String serverPort;
 
+    private String serverWs;
+
     private Button confirmBnt;
 
     @Override
@@ -136,6 +138,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
                 serverIp="http://"+serverIp;
 
+                serverWs="ws://"+serverIp;
+
                 writeSettings();
 
                 Intent intent=new Intent();
@@ -168,6 +172,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         ShaPreHelper.writeShaPre("settings","server_ip",serverIp,this);
 
         ShaPreHelper.writeShaPre("settings","server_port",serverPort,this);
+
+        ShaPreHelper.writeShaPre("settings","server_ws",serverWs,this);
 
     }
 
