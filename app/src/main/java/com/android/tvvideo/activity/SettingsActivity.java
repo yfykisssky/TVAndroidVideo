@@ -136,9 +136,9 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
                 }
 
-                serverIp="http://"+serverIp;
-
                 serverWs="ws://"+serverIp;
+
+                serverIp="http://"+serverIp;
 
                 writeSettings();
 

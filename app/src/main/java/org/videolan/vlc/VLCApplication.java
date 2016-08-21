@@ -20,14 +20,20 @@
 package org.videolan.vlc;
 
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Resources;
+import android.os.IBinder;
 
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
+import com.android.tvvideo.tools.PushService;
 import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.tools.TimerTaskHelper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.videolan.vlc.util.Strings;
@@ -42,6 +48,20 @@ public class VLCApplication extends Application {
     public final static String SLEEP_INTENT = Strings.buildPkgString("SleepIntent");
 
     TimerTaskHelper onOffTaskHelper;
+
+    TimerTaskHelper maxVolumeTaskHelper;
+
+    MaxVolumeChangeListener maxVolumeListener;
+
+    List<String> maxVolumePercents=new ArrayList<>();
+
+    public static interface MaxVolumeChangeListener{
+        public void onMaxVolumeChange();
+    }
+
+    public void setMaxVolumeListener(MaxVolumeChangeListener maxVolumeListener){
+        this.maxVolumeListener=maxVolumeListener;
+    }
 
     private static double MAX_VOLUME=-1;
 
@@ -59,6 +79,8 @@ public class VLCApplication extends Application {
 
         onOffTaskHelper=new TimerTaskHelper(this);
 
+        maxVolumeTaskHelper=new TimerTaskHelper(this);
+
         instance = this;
 
     }
@@ -69,7 +91,7 @@ public class VLCApplication extends Application {
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
 
-            new NetDataTool(this).sendPost(NetDataConstants.GET_ONOFF_TIME, postData.toString(), new NetDataTool.IResponse() {
+            new NetDataTool(this).sendNoShowPost(NetDataConstants.GET_ONOFF_TIME, postData.toString(), new NetDataTool.IResponse() {
                 @Override
                 public void onSuccess(String data) {
 
@@ -122,6 +144,112 @@ public class VLCApplication extends Application {
 
             }
         });
+
+    }
+
+    public void setMaxVolumeTimer(){
+
+        JSONObject postData = new JSONObject();
+
+        try {
+            postData.put("ipaddress", SystemUtil.getLocalHostIp());
+
+            new NetDataTool(this).sendNoShowPost(NetDataConstants.GET_MAX_VOLUME,postData.toString(), new NetDataTool.IResponse() {
+                @Override
+                public void onSuccess(String data) {
+
+                    maxVolumePercents.clear();
+
+                    List<TimerTaskHelper.TimeModel> timeModels=new ArrayList<TimerTaskHelper.TimeModel>();
+
+                    try {
+
+                        JSONArray jsonArray=new JSONArray(data);
+
+                        for(int c=0;c<jsonArray.length();c++){
+
+                            JSONObject jsonObject=jsonArray.getJSONObject(c);
+
+                            TimerTaskHelper.TimeModel timeModel=new TimerTaskHelper.TimeModel();
+
+                            String percent=jsonObject.getString("percent");
+
+                            maxVolumePercents.add(percent);
+
+                            timeModel.startTime=jsonObject.getString("startTime");
+
+                            timeModel.endTime=jsonObject.getString("endTime");
+
+                            timeModels.add(timeModel);
+
+                        }
+
+
+                        maxVolumeTaskHelper.stopAndRemove();
+
+                        maxVolumeTaskHelper.setData(timeModels);
+
+                        maxVolumeTaskHelper.startAndListener("maxvolume", new TimerTaskHelper.OnStartOrEndListener() {
+                            @Override
+                            public void onStartOrEnd(boolean startOrEnd, int index) {
+
+                                if(startOrEnd){
+
+                                    setMaxVolume(Double.parseDouble(maxVolumePercents.get(index)));
+
+                                    if(maxVolumeListener!=null){
+                                        maxVolumeListener.onMaxVolumeChange();
+                                    }
+
+                                }else{
+
+                                    setMaxVolume(-1);
+
+                                    if(maxVolumeListener!=null){
+                                        maxVolumeListener.onMaxVolumeChange();
+                                    }
+
+                                }
+
+                            }
+                        });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+                @Override
+                public void onFailed(String error) {
+
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void initPushService(){
+
+        Intent intent=new Intent(this,PushService.class);
+
+        ServiceConnection conn=new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+
+            }
+        };
+
+        this.bindService(intent,conn,Context.BIND_AUTO_CREATE);
 
     }
 

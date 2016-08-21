@@ -131,7 +131,11 @@ public class StartActivity extends BaseActivity {
 
                     if(!new UpdateHelpter().checkUpdate(StartActivity.this,version,url,"TeachVideo.apk")){
 
-                        VLCApplication.getInstance().getOnOffTime();
+                        //VLCApplication.getInstance().getOnOffTime();
+
+                        VLCApplication vlcApplication= (VLCApplication) getApplication();
+
+                        vlcApplication.setMaxVolumeTimer();
 
                         new Thread(new Runnable() {
                             @Override

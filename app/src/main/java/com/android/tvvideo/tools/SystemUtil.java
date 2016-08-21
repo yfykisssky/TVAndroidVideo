@@ -18,7 +18,12 @@ import android.widget.TextView;
 import com.android.tvvideo.view.ShutDownDialog;
 
 import java.io.DataOutputStream;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.Calendar;
+import java.util.Enumeration;
 
 /**
  * Created by yangfengyuan on 16/7/18.
@@ -137,9 +142,7 @@ public class SystemUtil {
     // 得到本机ip地址
     public static String getLocalHostIp()
     {
-
-        return "192.168.1.1";
-       /* String ipaddress = "";
+        String ipaddress = "";
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
                 NetworkInterface intf = en.nextElement();
@@ -157,7 +160,7 @@ public class SystemUtil {
             ipaddress="获取本地ip地址失败";
             ex.printStackTrace();
         }
-        return ipaddress;*/
+        return ipaddress;
 
     }
 
@@ -199,9 +202,7 @@ public class SystemUtil {
 
         String serverPort= ShaPreHelper.readShaPre("settings","server_port",context);
 
-        return "http://www.best673.top/videoedu";
-
-        //return serverIp+":"+serverPort;
+        return serverIp+":"+serverPort;
 
     }
 
@@ -211,9 +212,7 @@ public class SystemUtil {
 
         String serverPort= ShaPreHelper.readShaPre("settings","server_port",context);
 
-        return "ws://www.best673.top/videoedu/ws/";
-
-        //return serverIp+":"+serverPort+"/videoedu/ws/";
+        return serverIp+":"+serverPort+"/ws/";
 
     }
 

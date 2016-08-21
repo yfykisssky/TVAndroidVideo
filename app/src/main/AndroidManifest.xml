@@ -21,6 +21,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
         android:configChanges="keyboard|keyboardHidden|navigation"
@@ -34,14 +35,14 @@
         android:supportsRtl="true">
         <activity android:name=".activity.StartActivity">
             <!-- 实现开机启动，替换系统的Launcher -->
-        <!--    <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.MONKEY" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
         <activity android:name=".activity.HomeActivity"/>
         <activity android:name=".activity.ExamIntroActivity"/>
@@ -61,7 +62,6 @@
         <activity android:name=".activity.OrderMealActivity"/>
         <activity android:name=".activity.RentActivity"/>
         <activity android:name=".activity.HospitalServerActivity"/>
-        <activity android:name=".activity.InHospitalActivity"/>
         <activity android:name=".activity.AdviceActivity"/>
         <activity android:name=".activity.FeedBackActivity"/>
         <activity android:name=".activity.FeeActivity"/>
@@ -71,14 +71,13 @@
         <activity android:name=".activity.WeatherActivity"/>
 
         <service android:name=".tools.PushService"/>
-        <service android:name=".tools.TimeTaskService"/>
 
         <activity android:name=".activity.TestActivity">
-              <intent-filter>
+           <!--   <intent-filter>
                   <action android:name="android.intent.action.MAIN" />
                   <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
                   <category android:name="android.intent.category.LAUNCHER" />
-              </intent-filter>
+              </intent-filter>-->
         </activity>
 
         <!--suppress AndroidDomInspection -->

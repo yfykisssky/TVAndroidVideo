@@ -39,6 +39,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
+import com.android.tvvideo.tools.ImageLoad;
 import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.tools.TimerTaskHelper;
 import com.android.tvvideo.view.LoadingDialog;
@@ -116,6 +118,8 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
     TimerTaskHelper msgTimerTaskHelper;
 
     TimerTaskHelper adTimerTaskHelper;
+
+    RelativeLayout playRelative;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -278,7 +282,6 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
                         map.put("imgurl",array.getJSONObject(x).getString("path"));
                         map.put("playurl",array.getJSONObject(x).getString("iptv"));
                         map.put("name",array.getJSONObject(x).getString("name"));
-                        map.put("id",array.getJSONObject(x).getString("id"));
 
                         listData.add(map);
                     }
@@ -368,6 +371,8 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
     }
 
     private void initView() {
+
+        playRelative=(RelativeLayout)findViewById(R.id.play_relative);
 
         showMsgTex=(MarqueeText)findViewById(R.id.showmsg);
 
@@ -498,9 +503,9 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
             String imgUrl=listData.get(i).get("imgurl");
 
-            myHolder.indexTex.setText(String.valueOf(i));
+            myHolder.indexTex.setText(String.valueOf(i+1));
 
-//            ImageLoad.loadDefultImage(imgUrl,myHolder.img);
+           ImageLoad.loadDefultImage(imgUrl,myHolder.img);
 
             if(indexList==i){
                 view.setBackgroundColor(Color.parseColor("#ccFF0000"));
@@ -518,7 +523,7 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
     }
 
     private void startCountTimeThread() {
-        countTimeThread = new CountTimeThread(2);
+        countTimeThread = new CountTimeThread(3);
         countTimeThread.start();
     }
 

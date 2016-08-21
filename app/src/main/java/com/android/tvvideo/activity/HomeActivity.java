@@ -13,6 +13,8 @@ import com.android.tvvideo.view.page.Image3DModel;
 import com.android.tvvideo.view.page.PagerViewAdapter;
 import com.android.tvvideo.view.page.ZoomCardPageTransformer;
 
+import org.videolan.vlc.VLCApplication;
+import org.videolan.vlc.video.TVPlayerActivity;
 
 
 public class HomeActivity extends BaseActivity {
@@ -20,9 +22,9 @@ public class HomeActivity extends BaseActivity {
     int index=0;
     TextView titleTex;
 
-    final String[] titles={"医院介绍","科室介绍","住院告知","健康宣教","系统设置"};
+    final String[] titles={"医院介绍","科室介绍","住院告知","健康宣教","电视直播","系统设置"};
 
-    final int[] pageViewIds={R.drawable.hosipital,R.drawable.exams,R.drawable.inhospital,R.drawable.teach,R.drawable.settings};
+    final int[] pageViewIds={R.drawable.hosipital,R.drawable.exams,R.drawable.inhospital,R.drawable.teach,R.drawable.tv,R.drawable.settings};
 
     CustomViewPager customViewPager;
 
@@ -32,6 +34,8 @@ public class HomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        VLCApplication.getInstance().initPushService();
 
         titleTex=(TextView)findViewById(R.id.title);
 
@@ -91,6 +95,9 @@ public class HomeActivity extends BaseActivity {
                             toTeach();
                             break;
                         case 4:
+                            toTV();
+                            break;
+                        case 5:
                             toSettings();
                             break;
                     }
@@ -120,6 +127,11 @@ public class HomeActivity extends BaseActivity {
 
     private void toTeach(){
         Intent intent=new Intent(this,VideoSelectActivity.class);
+        startActivity(intent);
+    }
+
+    private void toTV(){
+        Intent intent=new Intent(this, TVPlayerActivity.class);
         startActivity(intent);
     }
 

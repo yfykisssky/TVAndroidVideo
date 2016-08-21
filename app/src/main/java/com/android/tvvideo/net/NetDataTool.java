@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.android.tvvideo.tools.CheckTool;
 import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.view.LoadingDialog;
 
@@ -59,7 +61,7 @@ public class NetDataTool {
 
     public void sendGet(String url, final IResponse iResponse){
 
-      /*  if(serverUrl.lastIndexOf(':')<=7){
+       if(serverUrl.lastIndexOf(':')<=7){
             Toast.makeText(context,"非法链接地址",Toast.LENGTH_SHORT).show();
 
             return;
@@ -71,7 +73,7 @@ public class NetDataTool {
 
             return;
 
-        }*/
+        }
 
         url=serverUrl+url;
 
@@ -158,7 +160,7 @@ public class NetDataTool {
 
     public void sendPost(String url, String requestBody, final IResponse iResponse){
 
-    /*    if(serverUrl.lastIndexOf(':')<=7){
+      if(serverUrl.lastIndexOf(':')<=7){
             Toast.makeText(context,"非法链接地址",Toast.LENGTH_SHORT).show();
 
             return;
@@ -170,7 +172,7 @@ public class NetDataTool {
 
             return;
 
-        }*/
+        }
 
         url=serverUrl+url;
 
@@ -256,7 +258,7 @@ public class NetDataTool {
 
     public void sendNoShowGet(String url, final IResponse iResponse){
 
-   /*     if(serverUrl.lastIndexOf(':')<=7){
+        if(serverUrl.lastIndexOf(':')<=7){
             Toast.makeText(context,"非法链接地址",Toast.LENGTH_SHORT).show();
 
             return;
@@ -268,7 +270,7 @@ public class NetDataTool {
 
             return;
 
-        }*/
+        }
 
         url=serverUrl+url;
 
@@ -321,7 +323,7 @@ public class NetDataTool {
 
     public void sendNoShowPost(String url, String requestBody, final IResponse iResponse){
 
-   /*     if(serverUrl.lastIndexOf(':')<=7){
+        if(serverUrl.lastIndexOf(':')<=7){
             Toast.makeText(context,"非法链接地址",Toast.LENGTH_SHORT).show();
 
             return;
@@ -333,7 +335,7 @@ public class NetDataTool {
 
             return;
 
-        }*/
+        }
 
         url=serverUrl+url;
 

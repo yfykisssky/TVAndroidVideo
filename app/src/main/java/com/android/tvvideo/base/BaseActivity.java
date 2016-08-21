@@ -17,8 +17,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
-import com.android.tvvideo.net.NetDataConstants;
-import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.PushService;
 import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.view.RemindDialog;
@@ -77,7 +75,7 @@ public class BaseActivity extends Activity {
     BroadcastReceiver pushReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-           //{"kind":"remind","data":"3458"}
+            //{"kind":"remind","data":"3458"}
             String data=intent.getStringExtra("data");
 
             try {
@@ -87,9 +85,9 @@ public class BaseActivity extends Activity {
 
                 switch(kind){
                     case "remind":
-                        if(isTopActivity(context,activityName)){
+                       // if(isTopActivity(context,activityName)){
                             showRemindDialog(jsonObject.getString("data"));
-                        }
+                        //}
                         break;
                     case "playvideo":
                         playVideo(jsonObject.getString("data"));
@@ -119,45 +117,9 @@ public class BaseActivity extends Activity {
 
     private void resetVolumePercent() {
 
-        new NetDataTool(this).sendNoShowGet(NetDataConstants.GET_MAX_VOLUME, new NetDataTool.IResponse() {
-            @Override
-            public void onSuccess(String data) {
+        VLCApplication vlcApplication= (VLCApplication) getApplication();
 
-                try {
-
-                    JSONObject jsonObject=new JSONObject(data);
-
-                    double percent=jsonObject.getDouble("maxvolume");
-                    String path=jsonObject.getString("path");
-                    String bottomremark=jsonObject.getString("bottomRemark");
-
-/*
-                    detial.setText(remark);
-
-                    if(bottomremark!=null){
-                        bottom.setText(bottomremark);
-                    }
-
-                    ImageLoad.loadDefultImage(path,img);*/
-
-                    VLCApplication.getInstance().setMaxVolume(percent);
-
-                    resetCurrentVolume(percent);
-
-                    maxVolumePercent=VLCApplication.getInstance().getMaxVolume();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-
-            @Override
-            public void onFailed(String error) {
-                showToast(error);
-            }
-        });
+        vlcApplication.setMaxVolumeTimer();
 
     }
 
@@ -229,6 +191,20 @@ public class BaseActivity extends Activity {
         maxVolumePercent=VLCApplication.getInstance().getMaxVolume();
 
         resetCurrentVolume(maxVolumePercent);
+
+        VLCApplication vlcApplication= (VLCApplication) getApplication();
+
+        vlcApplication.setMaxVolumeListener(new VLCApplication.MaxVolumeChangeListener() {
+
+            @Override
+            public void onMaxVolumeChange() {
+
+                maxVolumePercent=VLCApplication.getInstance().getMaxVolume();
+
+                resetCurrentVolume(maxVolumePercent);
+
+            }
+        });
 
     }
 
