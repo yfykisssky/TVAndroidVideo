@@ -146,7 +146,7 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
         destoryTimer();
 
-        mAudioManager = null;
+        //mAudioManager = null;
     }
 
 
@@ -666,23 +666,17 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
     private static final int CHECK_VIDEO_TRACKS = 7;
     private static final int HW_ERROR = 1000; // TODO REMOVE
 
-    private boolean mDragging;
     private boolean mShowing;
     private int mUiVisibility = -1;
     private TextView mInfo;
-/*    private View mVerticalBar;
-    private View mVerticalBarProgress;*/
     private boolean mIsLoading;
     private LoadingDialog loadingDialog;
-    /*    private View mObjectFocused;
-        private boolean mDisplayRemainingTime = false;*/
     private int mScreenOrientation;
     private int mScreenOrientationLock;
     private boolean mIsLocked = false;
     /* -1 is a valid track (Disable) */
     private int mLastAudioTrack = -2;
     private int mLastSpuTrack = -2;
-    private int mOverlayTimeout = 0;
     private boolean mLockBackButton = false;
 
     /**
@@ -704,22 +698,12 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
     private int mSarNum;
     private int mSarDen;
 
-    //Volume
-    private AudioManager mAudioManager;
-    private int mAudioMax;
-    private boolean mMute = false;
-    private int mVolSave;
-
     /**
      * Flag to indicate whether the media should be paused once loaded
      * (e.g. lock screen, or to restore the pause state)
      */
     private boolean mPlaybackStarted = false;
     private boolean mSurfacesAttached = false;
-
-    // Navigation handling (DVD, Blu-Ray...)
-    private int mMenuIdx = -1;
-    private boolean mIsNavMenu = false;
 
     private View.OnLayoutChangeListener mOnLayoutChangeListener;
     private AlertDialog mAlertDialog;
@@ -737,26 +721,18 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
         mSettings = PreferenceManager.getDefaultSharedPreferences(this);
 
-        /* Services and miscellaneous */
-        mAudioManager = (AudioManager) VLCApplication.getAppContext().getSystemService(AUDIO_SERVICE);
-        mAudioMax = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-
         mRootView = findViewById(R.id.player_root);
 
         loadingDialog=new LoadingDialog(this);
 
         // the info textView is not on the overlay
         mInfo = (TextView) findViewById(R.id.player_overlay_textinfo);
-      /*  mVerticalBar = findViewById(R.id.verticalbar);
-        mVerticalBarProgress = findViewById(R.id.verticalbar_progress);*/
 
         mScreenOrientation = Integer.valueOf(mSettings.getString("screen_orientation_value", "4" /*SCREEN_ORIENTATION_SENSOR*/));
 
         mSurfaceView = (SurfaceView) findViewById(R.id.player_surface);
 
         mSurfaceFrame = (FrameLayout) findViewById(R.id.player_surface_frame);
-
-        //startLoading();
 
         mSwitchingView = false;
         mHardwareAccelerationError = false;
@@ -906,9 +882,6 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         if (!mPlaybackStarted)
             return;
 
-        if (mMute)
-            mute(false);
-
         LibVLC().setOnHardwareAccelerationError(null);
 
         mPlaybackStarted = false;
@@ -979,101 +952,6 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         } else
             exitOK();
     }
-
-   /* @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_BUTTON_B)
-            return super.onKeyDown(keyCode, event);
-        if (mIsLoading) {
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_MEDIA_STOP:
-                    exitOK();
-                    return true;
-            }
-            return false;
-        }
-        showOverlayTimeout(OVERLAY_TIMEOUT);
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
-            case KeyEvent.KEYCODE_MEDIA_NEXT:
-                seekDelta(10000);
-                return true;
-            case KeyEvent.KEYCODE_MEDIA_REWIND:
-            case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                seekDelta(-10000);
-                return true;
-            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-            case KeyEvent.KEYCODE_MEDIA_PLAY:
-            case KeyEvent.KEYCODE_MEDIA_PAUSE:
-       *//*     case KeyEvent.KEYCODE_SPACE:
-                if (mIsNavMenu)
-                    return navigateDvdMenu(keyCode);
-                else if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) //prevent conflict with remote control
-                    return super.onKeyDown(keyCode, event);
-                else
-                    doPlayPause();
-                return true;*//*
-            case KeyEvent.KEYCODE_VOLUME_MUTE:
-                updateMute();
-                return true;
-            case KeyEvent.KEYCODE_MEDIA_STOP:
-                exitOK();
-                return true;
-            case KeyEvent.KEYCODE_DPAD_UP:
-            case KeyEvent.KEYCODE_DPAD_DOWN:
-            case KeyEvent.KEYCODE_DPAD_LEFT:
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
-            case KeyEvent.KEYCODE_DPAD_CENTER:
-            case KeyEvent.KEYCODE_ENTER:
-                if (mIsNavMenu)
-                    return navigateDvdMenu(keyCode);
-                else
-                    return super.onKeyDown(keyCode, event);
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-            case KeyEvent.KEYCODE_VOLUME_UP:
-                if (mMute) {
-                    updateMute();
-                    return true;
-                } else
-                    return false;
-        }
-        return super.onKeyDown(keyCode, event);
-    }*/
-
-   /* private boolean navigateDvdMenu(int keyCode) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_UP:
-                mService.navigate(MediaPlayer.Navigate.Up);
-                return true;
-            case KeyEvent.KEYCODE_DPAD_DOWN:
-                mService.navigate(MediaPlayer.Navigate.Down);
-                return true;
-            case KeyEvent.KEYCODE_DPAD_LEFT:
-                mService.navigate(MediaPlayer.Navigate.Left);
-                return true;
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
-                mService.navigate(MediaPlayer.Navigate.Right);
-                return true;
-            case KeyEvent.KEYCODE_DPAD_CENTER:
-            case KeyEvent.KEYCODE_ENTER:
-            case KeyEvent.KEYCODE_BUTTON_X:
-            case KeyEvent.KEYCODE_BUTTON_A:
-                mService.navigate(MediaPlayer.Navigate.Activate);
-                return true;
-            default:
-                return false;
-        }
-    }*/
-
-  /*  *//**
-     * Show text in the info view and vertical progress bar for "duration" milliseconds
-     * @param text
-     * @param duration
-     * @param barNewValue new volume/brightness value (range: 0 - 15)
-     *//*
-    private void showInfoWithVerticalBar(String text, int duration, int barNewValue) {
-
-    }*/
 
     /**
      * Show text in the info view for "duration" milliseconds
@@ -1187,12 +1065,12 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
                 break;
             case MediaPlayer.Event.Vout:
                 //updateNavStatus();
-                if (mMenuIdx == -1)
+                //if (mMenuIdx == -1)
                     handleVout(event.getVoutCount());
                 break;
             case MediaPlayer.Event.ESAdded:
-            case MediaPlayer.Event.ESDeleted:
-                if (mMenuIdx == -1 && event.getEsChangedType() == Media.Track.Type.Video) {
+           case MediaPlayer.Event.ESDeleted:
+                if (event.getEsChangedType() == Media.Track.Type.Video) {
                     mHandler.removeMessages(CHECK_VIDEO_TRACKS);
                     mHandler.sendEmptyMessageDelayed(CHECK_VIDEO_TRACKS, 1000);
                 }
@@ -1246,15 +1124,9 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         }
     });
 
-    private boolean canShowProgress() {
-        return !mDragging && mShowing && mService != null &&  mService.isPlaying();
-    }
-
     private void onPlaying() {
         stopLoading();
-        //showOverlay(true);
         setESTracks();
-        // updateNavStatus();
     }
 
     private void endReached() {
@@ -1446,51 +1318,6 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         surface.invalidate();
     }
 
-    private void mute(boolean mute) {
-        mMute = mute;
-        if (mMute)
-            mVolSave = mService.getVolume();
-        mService.setVolume(mMute ? 0 : mVolSave);
-    }
-
-    private void updateMute () {
-        mute(!mMute);
-        showInfo(mMute ? R.string.sound_off : R.string.sound_on,1000);
-    }
-
-    private void resizeVideo() {
-        if (mCurrentSize < SURFACE_ORIGINAL) {
-            mCurrentSize++;
-        } else {
-            mCurrentSize = 0;
-        }
-        changeSurfaceLayout();
-        switch (mCurrentSize) {
-            case SURFACE_BEST_FIT:
-                showInfo(R.string.surface_best_fit, 1000);
-                break;
-            case SURFACE_FIT_HORIZONTAL:
-                showInfo(R.string.surface_fit_horizontal, 1000);
-                break;
-            case SURFACE_FIT_VERTICAL:
-                showInfo(R.string.surface_fit_vertical, 1000);
-                break;
-            case SURFACE_FILL:
-                showInfo(R.string.surface_fill, 1000);
-                break;
-            case SURFACE_16_9:
-                showInfo("16:9", 1000);
-                break;
-            case SURFACE_4_3:
-                showInfo("4:3", 1000);
-                break;
-            case SURFACE_ORIGINAL:
-                showInfo(R.string.surface_original, 1000);
-                break;
-        }
-
-    }
-
     private void setESTracks() {
         if (mLastAudioTrack >= -1) {
             mService.setAudioTrack(mLastAudioTrack);
@@ -1526,8 +1353,6 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
             return;
 
         Intent intent = getIntent();
-        Bundle extras = getIntent().getExtras();
-//        mUri = extras.getParcelable(PLAY_URL);
 
         boolean wasPaused;
         /*
@@ -1542,7 +1367,6 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
             wasPaused = true;
         else
             wasPaused = mSettings.getBoolean(Preferences.VIDEO_PAUSED, false);
-        //if (wasPaused)
 
         if (mUri != null) {
                 /* prepare playback */
