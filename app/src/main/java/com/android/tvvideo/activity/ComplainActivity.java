@@ -183,7 +183,7 @@ public class ComplainActivity extends BaseActivity {
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
 
-            new NetDataTool(this).sendPost(NetDataConstants.GET_COMPLAIN,postData.toString(), new NetDataTool.IResponse() {
+            new NetDataTool(this).sendPost(NetDataConstants.GET_COMPLAIN_LIST,postData.toString(), new NetDataTool.IResponse() {
                 @Override
                 public void onSuccess(String data) {
 
