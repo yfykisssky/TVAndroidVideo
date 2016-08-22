@@ -100,8 +100,7 @@ public class HomeActivity extends BaseActivity {
                         case 4:
                             toTV();
                             break;
-
-            /*            case 5:
+                        case 6:
 
                             validateDialog.setValidateListener(new ValidateDialog.ValidateListener() {
                                 @Override
@@ -115,8 +114,10 @@ public class HomeActivity extends BaseActivity {
                                 }
                             });
 
+                            validateDialog.show();
+
                             break;
-                        case 6:
+                        case 7:
 
                             validateDialog.setValidateListener(new ValidateDialog.ValidateListener() {
                                 @Override
@@ -130,8 +131,10 @@ public class HomeActivity extends BaseActivity {
                                 }
                             });
 
+                            validateDialog.show();
+
                             break;
-                        case 7:
+                        case 8:
 
                             validateDialog.setValidateListener(new ValidateDialog.ValidateListener() {
                                 @Override
@@ -145,8 +148,9 @@ public class HomeActivity extends BaseActivity {
                                 }
                             });
 
+                            validateDialog.show();
 
-                            break;*/
+                            break;
 
                         case 5:
                             toSettings();

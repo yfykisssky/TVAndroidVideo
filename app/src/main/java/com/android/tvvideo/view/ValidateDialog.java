@@ -15,6 +15,7 @@ import com.android.tvvideo.tools.SystemUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.videolan.vlc.VLCApplication;
 
 /**
  * Created by yangfengyuan on 16/7/29.
@@ -86,7 +87,7 @@ public class ValidateDialog extends Dialog {
     }
 
 
-    private void validate(String phonenum,String inhospinum){
+    private void validate(final String phonenum, final String inhospinum){
 
         JSONObject postData=new JSONObject();
         try {
@@ -99,6 +100,11 @@ public class ValidateDialog extends Dialog {
                 public void onSuccess(String data) {
 
                     if(Boolean.parseBoolean(data)){
+
+                        VLCApplication.getInstance().setPatientNum(inhospinum);
+
+                        VLCApplication.getInstance().setPatientPhoneNum(phonenum);
+
                         validateListener.validate(true);
                     }else{
                         validateListener.validate(false);

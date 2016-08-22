@@ -18,6 +18,8 @@ import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.tools.ViewTool;
 
+import org.videolan.vlc.VLCApplication;
+
 /**
  * Created by yangfengyuan on 16/8/22.
  */
@@ -115,6 +117,15 @@ public class ComplainAndAdviceActivity extends BaseActivity {
         TextView tex;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        VLCApplication.getInstance().setPatientPhoneNum(null);
+
+        VLCApplication.getInstance().setPatientNum(null);
+
+    }
 
 }
 

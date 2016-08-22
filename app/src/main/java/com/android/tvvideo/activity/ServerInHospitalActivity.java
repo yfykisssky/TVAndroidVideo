@@ -18,6 +18,8 @@ import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.tools.ViewTool;
 
+import org.videolan.vlc.VLCApplication;
+
 /**
  * Created by yfykisssky on 16/8/4.
  */
@@ -123,6 +125,15 @@ public class ServerInHospitalActivity extends BaseActivity {
         TextView tex;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        VLCApplication.getInstance().setPatientPhoneNum(null);
+
+        VLCApplication.getInstance().setPatientNum(null);
+
+    }
 
 }
 
