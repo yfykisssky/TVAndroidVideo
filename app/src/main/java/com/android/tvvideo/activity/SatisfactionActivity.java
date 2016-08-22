@@ -127,7 +127,7 @@ public class SatisfactionActivity extends BaseActivity {
             new NetDataTool(this).sendPost(NetDataConstants.SATISFACTION_FEED_BACK,postData.toString(), new NetDataTool.IResponse() {
                 @Override
                 public void onSuccess(String data) {
-
+                    showToast("发送成功!");
                 }
 
                 @Override
