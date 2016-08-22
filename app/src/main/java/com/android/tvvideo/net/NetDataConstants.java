@@ -50,9 +50,9 @@ public class NetDataConstants {
 
     public static final String GET_TV_LIST="/app/getTvList";//
 
-    public static final String GET_FEED_LIST="/app/feedBackList";
+    public static final String GET_SATISFACTION_LIST="/app/feedSatisfactionList";
 
-    public static final String FEED_BACK="/app/feedBack";
+    public static final String SATISFACTION_FEED_BACK="/app/satisfactionFeedBack";
 
     public static final String GET_ADVICE="/app/getAdvice";
 

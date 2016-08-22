@@ -58,7 +58,7 @@ public class SatisfactionActivity extends BaseActivity {
 
     private void getFeedBackList() {
 
-        new NetDataTool(this).sendGet(NetDataConstants.GET_FEED_LIST, new NetDataTool.IResponse() {
+        new NetDataTool(this).sendGet(NetDataConstants.GET_SATISFACTION_LIST, new NetDataTool.IResponse() {
             @Override
             public void onSuccess(String data) {
 
@@ -124,7 +124,7 @@ public class SatisfactionActivity extends BaseActivity {
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
 
-            new NetDataTool(this).sendPost(NetDataConstants.FEED_BACK,postData.toString(), new NetDataTool.IResponse() {
+            new NetDataTool(this).sendPost(NetDataConstants.SATISFACTION_FEED_BACK,postData.toString(), new NetDataTool.IResponse() {
                 @Override
                 public void onSuccess(String data) {
 /*
