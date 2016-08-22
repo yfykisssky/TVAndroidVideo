@@ -85,9 +85,9 @@ public class BaseActivity extends Activity {
 
                 switch(kind){
                     case "remind":
-                       // if(isTopActivity(context,activityName)){
+                        if(isTopActivity(context,activityName)){
                             showRemindDialog(jsonObject.getString("data"));
-                        //}
+                        }
                         break;
                     case "playvideo":
                         playVideo(jsonObject.getString("data"));

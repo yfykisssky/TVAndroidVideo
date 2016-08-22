@@ -2,8 +2,12 @@ package com.android.tvvideo.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 /**
@@ -11,32 +15,76 @@ import android.widget.TextView;
  */
 public class MarqueeText extends TextView implements Runnable {
 
-    private int currentScrollX;// 当前滚动的位置
+    private int currentScrollX;
     private boolean isStop = false;
     private int textWidth;
     private boolean isMeasure = false;
+
+    private Context context;
+
+    private String text;
+
+    int width;
+
     public MarqueeText(Context context) {
         super(context);
+
+        this.context=context;
+
+        this.setVisibility(View.VISIBLE);
 
     }
     public MarqueeText(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        this.context=context;
+
+        this.setVisibility(View.VISIBLE);
+
     }
     public MarqueeText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+
+        this.context=context;
+
+        this.setVisibility(View.VISIBLE);
+
     }
+
+    public void setShowText(String text) {
+        super.setText(text,BufferType.NORMAL);
+
+        this.text=text;
+
+        this.setTextColor(Color.parseColor("#00000000"));
+    }
+
+
     @Override
     protected void onDraw(Canvas canvas) {
 
         super.onDraw(canvas);
-        if (!isMeasure) {// 文字宽度只需获取一次就可以了
+
+        Paint mPaint = new Paint();
+        mPaint.setStrokeWidth(5);
+        mPaint.setTextSize(50);
+        mPaint.setColor(Color.BLACK);
+        mPaint.setTextAlign(Paint.Align.LEFT);
+
+        Rect bounds = new Rect();
+        mPaint.getTextBounds(text, 0,text.length(), bounds);
+
+        Paint.FontMetricsInt fontMetrics = mPaint.getFontMetricsInt();
+        int baseline = (getMeasuredHeight() - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top;
+
+        canvas.drawText(text,0,baseline,mPaint);
+
+        if (!isMeasure) {
             getTextWidth();
             isMeasure = true;
         }
     }
-    /**
-     * 获取文字宽度
-     */
+
     private void getTextWidth() {
         Paint paint = this.getPaint();
         String str = this.getText().toString();
@@ -44,32 +92,49 @@ public class MarqueeText extends TextView implements Runnable {
     }
     @Override
     public void run() {
-        currentScrollX -= 2;// 滚动速度
+        currentScrollX += 2;
         scrollTo(currentScrollX, 0);
+
         if (isStop) {
             return;
         }
-        if (getScrollX() <= -(this.getWidth())) {
-            scrollTo(textWidth, 0);
-            currentScrollX = textWidth;
-        // return;
+
+        if(currentScrollX==textWidth){
+            scrollTo(-width,0);
+            currentScrollX = -width;
         }
+
         postDelayed(this, 15);
     }
-    // 开始滚动
+
     public void startScroll() {
         isStop = false;
         this.removeCallbacks(this);
         post(this);
     }
-    // 停止滚动
+
     public void stopScroll() {
         isStop = true;
     }
-    // 从头开始滚动
+
     public void startFor0() {
-        currentScrollX = 0;
-        startScroll();
+
+        this.measure(0,0);
+
+        width=((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
+
+        this.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                MarqueeText.this.setVisibility(View.VISIBLE);
+
+                scrollTo(-width,0);
+                currentScrollX = -width;
+                startScroll();
+            }
+        },100);
+
     }
 
 }

@@ -37,7 +37,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -120,6 +119,8 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
     TimerTaskHelper adTimerTaskHelper;
 
     RelativeLayout playRelative;
+
+    final int changeWidth=1440;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -323,8 +324,7 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
     private void showAd(String adUrl){
 
-        //changeSurfaceLayout();
-        //changeFrameLocation();
+        showAdFrameLocation();
 
         String url=SystemUtil.getServerAdPath(this)+adUrl;
 
@@ -332,12 +332,26 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         adWebView.setVisibility(View.VISIBLE);
     }
 
-    private void changeFrameLocation(){
-       // mSurfaceFrame.layout();
+    private void showAdFrameLocation(){
+
+        playRelative.setLayoutParams(new RelativeLayout.LayoutParams(changeWidth,RelativeLayout.LayoutParams.MATCH_PARENT));
+
+        mCurrentSize = SURFACE_BEST_FIT;
+        changeSurfaceLayout();
+    }
+
+    private void hideAdFrameLocation(){
+
+        playRelative.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.MATCH_PARENT));
+
+        mCurrentSize = SURFACE_BEST_FIT;
+        changeSurfaceLayout();
     }
 
     private void hideAd(){
         adWebView.setVisibility(View.GONE);
+
+        hideAdFrameLocation();
     }
 
     private void startMsgListening(){
@@ -357,7 +371,7 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
     private void showMsg(String msgData){
 
-        showMsgTex.setText(msgData);
+        showMsgTex.setShowText(msgData);
 
         showMsgTex.startFor0();
 
@@ -656,8 +670,8 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
     private boolean mShowing;
     private int mUiVisibility = -1;
     private TextView mInfo;
-    private View mVerticalBar;
-    private View mVerticalBarProgress;
+/*    private View mVerticalBar;
+    private View mVerticalBarProgress;*/
     private boolean mIsLoading;
     private LoadingDialog loadingDialog;
     /*    private View mObjectFocused;
@@ -733,8 +747,8 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
 
         // the info textView is not on the overlay
         mInfo = (TextView) findViewById(R.id.player_overlay_textinfo);
-        mVerticalBar = findViewById(R.id.verticalbar);
-        mVerticalBarProgress = findViewById(R.id.verticalbar_progress);
+      /*  mVerticalBar = findViewById(R.id.verticalbar);
+        mVerticalBarProgress = findViewById(R.id.verticalbar_progress);*/
 
         mScreenOrientation = Integer.valueOf(mSettings.getString("screen_orientation_value", "4" /*SCREEN_ORIENTATION_SENSOR*/));
 
@@ -1051,19 +1065,15 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         }
     }*/
 
-    /**
+  /*  *//**
      * Show text in the info view and vertical progress bar for "duration" milliseconds
      * @param text
      * @param duration
      * @param barNewValue new volume/brightness value (range: 0 - 15)
-     */
+     *//*
     private void showInfoWithVerticalBar(String text, int duration, int barNewValue) {
-        showInfo(text, duration);
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mVerticalBarProgress.getLayoutParams();
-        layoutParams.weight = barNewValue;
-        mVerticalBarProgress.setLayoutParams(layoutParams);
-        mVerticalBar.setVisibility(View.VISIBLE);
-    }
+
+    }*/
 
     /**
      * Show text in the info view for "duration" milliseconds
@@ -1071,8 +1081,6 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
      * @param duration
      */
     private void showInfo(String text, int duration) {
-        if (mVerticalBar != null)
-            mVerticalBar.setVisibility(View.GONE);
         mInfo.setVisibility(View.VISIBLE);
         mInfo.setText(text);
         mHandler.removeMessages(FADE_OUT_INFO);
@@ -1080,8 +1088,6 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
     }
 
     private void showInfo(int textid, int duration) {
-        if (mVerticalBar != null)
-            mVerticalBar.setVisibility(View.GONE);
         mInfo.setVisibility(View.VISIBLE);
         mInfo.setText(textid);
         mHandler.removeMessages(FADE_OUT_INFO);
@@ -1108,14 +1114,6 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
             mInfo.startAnimation(AnimationUtils.loadAnimation(
                     TVPlayerActivity.this, android.R.anim.fade_out));
         mInfo.setVisibility(View.INVISIBLE);
-
-        if (mVerticalBar != null) {
-            if (mVerticalBar.getVisibility() == View.VISIBLE) {
-                mVerticalBar.startAnimation(AnimationUtils.loadAnimation(
-                        TVPlayerActivity.this, android.R.anim.fade_out));
-                mVerticalBar.setVisibility(View.INVISIBLE);
-            }
-        }
     }
 
     @Override
@@ -1446,33 +1444,6 @@ public class TVPlayerActivity extends BaseActivity implements IVLCVout.Callback,
         surfaceFrame.setLayoutParams(lp);
 
         surface.invalidate();
-    }
-
-/*
-
-    private void doVolumeTouch(float y_changed) {
-        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_VOLUME)
-            return;
-        float delta = - ((y_changed / mSurfaceYDisplayRange) * mAudioMax);
-        mVol += delta;
-        int vol = (int) Math.min(Math.max(mVol, 0), mAudioMax);
-        if (delta != 0f) {
-            setAudioVolume(vol);
-        }
-    }*/
-
-    private void setAudioVolume(int vol) {
-        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, vol, 0);
-
-        /* Since android 4.3, the safe volume warning dialog is displayed only with the FLAG_SHOW_UI flag.
-         * We don't want to always show the default UI volume, so show it only when volume is not set. */
-        int newVol = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        if (vol != newVol)
-            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, vol, AudioManager.FLAG_SHOW_UI);
-
-        //mTouchAction = TOUCH_VOLUME;
-        vol = vol * 100 / mAudioMax;
-        showInfoWithVerticalBar(getString(R.string.volume) + "\n" + Integer.toString(vol) + '%', 1000, vol);
     }
 
     private void mute(boolean mute) {
