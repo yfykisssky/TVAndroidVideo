@@ -55,8 +55,28 @@ public class VLCApplication extends Application {
 
     List<String> maxVolumePercents=new ArrayList<>();
 
-    public static interface MaxVolumeChangeListener{
-        public void onMaxVolumeChange();
+    String patientNum;
+
+    String patientPhoneNum;
+
+    public String getPatientNum() {
+        return patientNum;
+    }
+
+    public void setPatientNum(String patientNum) {
+        this.patientNum = patientNum;
+    }
+
+    public String getPatientPhoneNum() {
+        return patientPhoneNum;
+    }
+
+    public void setPatientPhoneNum(String patientPhoneNum) {
+        this.patientPhoneNum = patientPhoneNum;
+    }
+
+    public interface MaxVolumeChangeListener{
+        void onMaxVolumeChange();
     }
 
     public void setMaxVolumeListener(MaxVolumeChangeListener maxVolumeListener){

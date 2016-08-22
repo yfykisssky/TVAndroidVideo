@@ -25,6 +25,7 @@ import com.android.tvvideo.view.ReFousListView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.videolan.vlc.VLCApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,11 +140,11 @@ public class OrderMealActivity extends BaseActivity {
 
                         OrderModel model=new OrderModel();
 
-                        model.setImgUrl(jsonObject.getString("imgPath"));
+                        model.setImgUrl(jsonObject.getString("path"));
                         model.setName(jsonObject.getString("name"));
                         model.setRemark(jsonObject.getString("remark"));
                         model.setPrice(jsonObject.getString("price"));
-                        model.setOrder_id(jsonObject.getString("orderId"));
+                        model.setId(jsonObject.getString("foodId"));
 
                         gridAllData.add(model);
 
@@ -273,20 +274,20 @@ public class OrderMealActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                OrderConfirm("",gridData.get(i));
+                OrderConfirm(gridData.get(i),VLCApplication.getInstance().getPatientNum(),VLCApplication.getInstance().getPatientPhoneNum());
 
             }
         });
 
     }
 
-    private void OrderConfirm(String inHospitalNum,OrderModel model) {
+    private void OrderConfirm(OrderModel model,String inHospitalNum,String phoneNum) {
 
         ChoiceMealDialog dialog=new ChoiceMealDialog(this);
 
         dialog.setData(model.getName(),model.getPrice(),model.getRemark(),model.getImgUrl());
 
-        dialog.setUserData(model.getOrder_id(),inHospitalNum);
+        dialog.setUserData(model.getId(),inHospitalNum,phoneNum);
 
         dialog.show();
 

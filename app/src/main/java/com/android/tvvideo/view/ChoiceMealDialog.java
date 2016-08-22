@@ -12,6 +12,10 @@ import com.android.tvvideo.R;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
+import com.android.tvvideo.tools.SystemUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by yangfengyuan on 16/7/29.
@@ -30,9 +34,11 @@ public class ChoiceMealDialog extends Dialog {
 
     Button cancelBnt;
 
-    String orderId;
+    String id;
 
     String inHospitalNum;
+
+    String phoneNum;
 
     Context context;
 
@@ -63,7 +69,7 @@ public class ChoiceMealDialog extends Dialog {
         confirmBnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendOrder(orderId,inHospitalNum);
+                sendOrder(id,inHospitalNum,phoneNum);
             }
         });
 
@@ -88,35 +94,46 @@ public class ChoiceMealDialog extends Dialog {
 
     }
 
-    public void setUserData(String orderId,String inHospitalNum){
+    public void setUserData(String id,String inHospitalNum,String phoneNum){
 
-        this.orderId=orderId;
+        this.id=id;
 
         this.inHospitalNum=inHospitalNum;
 
+        this.phoneNum=phoneNum;
+
     }
 
-    private void sendOrder(String orderId,String inHospitalNum){
+    private void sendOrder(String id,String inhospinum,String phonenum){
 
-        new NetDataTool(context).sendGet(NetDataConstants.MEAL_ORDER+"/"+orderId+"/"+inHospitalNum, new NetDataTool.IResponse() {
-            @Override
-            public void onSuccess(String data) {
+        JSONObject postData=new JSONObject();
+        try {
+            postData.put("ipaddress", SystemUtil.getLocalHostIp());
+            postData.put("inHospitalNum",inhospinum);
+            postData.put("phoneNum",phonenum);
+            postData.put("foodId",id);
 
-                Toast.makeText(context,"下单成功",Toast.LENGTH_SHORT).show();
+            new NetDataTool(this.getContext()).sendPost(NetDataConstants.VALIDATE_ACCOUNT,postData.toString(),new NetDataTool.IResponse() {
+                @Override
+                public void onSuccess(String data) {
 
-                ChoiceMealDialog.this.dismiss();
+                    Toast.makeText(context,"下单成功",Toast.LENGTH_SHORT).show();
 
-            }
+                    ChoiceMealDialog.this.dismiss();
 
-            @Override
-            public void onFailed(String error) {
+                }
 
-                Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
+                @Override
+                public void onFailed(String error) {
 
-            }
-        });
+                    Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
 
+                }
+            });
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 

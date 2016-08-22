@@ -13,7 +13,7 @@ public class OrderModel {
 
     String imgUrl;
 
-    String order_id;
+    String id;
 
     public String getImgUrl() {
         return imgUrl;
@@ -31,12 +31,12 @@ public class OrderModel {
         this.name = name;
     }
 
-    public String getOrder_id() {
-        return order_id;
+    public String getId() {
+        return id;
     }
 
-    public void setOrder_id(String order_id) {
-        this.order_id = order_id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getPrice() {

@@ -11,6 +11,10 @@ import android.widget.Toast;
 import com.android.tvvideo.R;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
+import com.android.tvvideo.tools.SystemUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by yangfengyuan on 16/7/29.
@@ -84,28 +88,37 @@ public class ValidateDialog extends Dialog {
 
     private void validate(String phonenum,String inhospinum){
 
-        new NetDataTool(this.getContext()).sendGet(NetDataConstants.VALIDATE_ACCOUNT+"/"+phonenum+"/"+inhospinum,new NetDataTool.IResponse() {
-            @Override
-            public void onSuccess(String data) {
+        JSONObject postData=new JSONObject();
+        try {
+            postData.put("ipaddress", SystemUtil.getLocalHostIp());
+            postData.put("inHospitalNum",inhospinum);
+            postData.put("phoneNum",phonenum);
 
-                validateListener.validate(true);
+            new NetDataTool(this.getContext()).sendPost(NetDataConstants.VALIDATE_ACCOUNT,postData.toString(),new NetDataTool.IResponse() {
+                @Override
+                public void onSuccess(String data) {
 
-                validateListener.validate(false);
+                    if(Boolean.parseBoolean(data)){
+                        validateListener.validate(true);
+                    }else{
+                        validateListener.validate(false);
+                    }
 
-                ValidateDialog.this.dismiss();
+                }
 
-            }
+                @Override
+                public void onFailed(String error) {
 
-            @Override
-            public void onFailed(String error) {
+                    Toast.makeText(ValidateDialog.this.getContext(),error,Toast.LENGTH_SHORT).show();
 
-                Toast.makeText(ValidateDialog.this.getContext(),error,Toast.LENGTH_SHORT).show();
+                }
+            });
 
-            }
-        });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
-
 
 }
 
