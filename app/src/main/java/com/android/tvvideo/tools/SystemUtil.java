@@ -208,11 +208,15 @@ public class SystemUtil {
 
     public static String getServerWs(Context context){
 
-        String serverIp= ShaPreHelper.readShaPre("settings","server_ws",context);
+        String serverIp= ShaPreHelper.readShaPre("settings","server_ip",context);
 
         String serverPort= ShaPreHelper.readShaPre("settings","server_port",context);
 
-        return serverIp+":"+serverPort+"/ws/";
+        String ip=serverIp.substring(serverIp.indexOf(":"),serverIp.length());
+
+        ip="ws"+ip;
+
+        return ip+":"+serverPort+"/ws/";
 
     }
 
