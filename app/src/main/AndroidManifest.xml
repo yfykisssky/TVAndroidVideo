@@ -61,14 +61,16 @@
 
         <activity android:name=".activity.OrderMealActivity"/>
         <activity android:name=".activity.RentActivity"/>
-        <activity android:name=".activity.HospitalServerActivity"/>
         <activity android:name=".activity.AdviceActivity"/>
-        <activity android:name=".activity.FeedBackActivity"/>
         <activity android:name=".activity.FeeActivity"/>
         <activity android:name=".activity.PersionalActivity"/>
         <activity android:name=".activity.PriceActivity"/>
         <activity android:name=".activity.ServerActivity"/>
         <activity android:name=".activity.WeatherActivity"/>
+        <activity android:name=".activity.ComplainActivity"/>
+        <activity android:name=".activity.ComplainAndAdviceActivity"/>
+        <activity android:name=".activity.SatisfactionActivity"/>
+        <activity android:name=".activity.ServerInHospitalActivity"/>
 
         <service android:name=".tools.PushService"/>
 

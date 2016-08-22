@@ -26,9 +26,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by yangfengyuan on 16/7/29.
+ * Created by yangfengyuan on 16/8/22.
  */
-public class FeedBackActivity extends BaseActivity {
+public class SatisfactionActivity extends BaseActivity {
 
     ListView listView;
 
@@ -46,7 +46,7 @@ public class FeedBackActivity extends BaseActivity {
 
         super.setActivityName(this.getClass().getName());
 
-        setContentView(R.layout.activity_feedback);
+        setContentView(R.layout.activity_satisfaction);
 
         context=this;
 
@@ -194,7 +194,7 @@ public class FeedBackActivity extends BaseActivity {
 
             MyHolder myHolder = null;
             if (view == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.item_feedback_list, null);
+                view = LayoutInflater.from(context).inflate(R.layout.item_satisfaction_list, null);
                 myHolder = new MyHolder();
                 myHolder.remarkTex = (TextView) view.findViewById(R.id.remark);
                 myHolder.radioGroup= (RadioGroup) view.findViewById(R.id.group);
@@ -214,7 +214,7 @@ public class FeedBackActivity extends BaseActivity {
                     switch (i){
                         case R.id.radio1:
                             Log.e("checked","1");
-                        break;
+                            break;
                         case R.id.radio2:
                             Log.e("checked","2");
                             break;
@@ -237,3 +237,4 @@ public class FeedBackActivity extends BaseActivity {
 
 
 }
+

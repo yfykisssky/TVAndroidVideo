@@ -75,7 +75,7 @@ public class BaseActivity extends Activity {
     BroadcastReceiver pushReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //{"kind":"remind","data":"3458"}
+
             String data=intent.getStringExtra("data");
 
             try {
@@ -183,10 +183,6 @@ public class BaseActivity extends Activity {
         audio = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
 
         maxVolume=getMaxVolume();
-
-        //resetVolumePercent();
-
-        //resetOnOffTime();
 
         maxVolumePercent=VLCApplication.getInstance().getMaxVolume();
 

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
+import com.android.tvvideo.view.ValidateDialog;
 import com.android.tvvideo.view.page.Image3DModel;
 import com.android.tvvideo.view.page.PagerViewAdapter;
 import com.android.tvvideo.view.page.ZoomCardPageTransformer;
@@ -79,6 +80,8 @@ public class HomeActivity extends BaseActivity {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
 
+                final ValidateDialog validateDialog=new ValidateDialog(HomeActivity.this);
+
                 if(keyEvent.getKeyCode()== KeyEvent.KEYCODE_DPAD_CENTER){
 
                     switch (index){
@@ -97,6 +100,54 @@ public class HomeActivity extends BaseActivity {
                         case 4:
                             toTV();
                             break;
+
+            /*            case 5:
+
+                            validateDialog.setValidateListener(new ValidateDialog.ValidateListener() {
+                                @Override
+                                public void validate(boolean result) {
+                                    if(result){
+                                        validateDialog.dismiss();
+                                        toServer();
+                                    }else{
+                                        showToast("号码错误");
+                                    }
+                                }
+                            });
+
+                            break;
+                        case 6:
+
+                            validateDialog.setValidateListener(new ValidateDialog.ValidateListener() {
+                                @Override
+                                public void validate(boolean result) {
+                                    if(result){
+                                        validateDialog.dismiss();
+                                        toServerInHospital();
+                                    }else{
+                                        showToast("号码错误");
+                                    }
+                                }
+                            });
+
+                            break;
+                        case 7:
+
+                            validateDialog.setValidateListener(new ValidateDialog.ValidateListener() {
+                                @Override
+                                public void validate(boolean result) {
+                                    if(result){
+                                        validateDialog.dismiss();
+                                        toComplainAndAdvice();
+                                    }else{
+                                        showToast("号码错误");
+                                    }
+                                }
+                            });
+
+
+                            break;*/
+
                         case 5:
                             toSettings();
                             break;
@@ -132,6 +183,21 @@ public class HomeActivity extends BaseActivity {
 
     private void toTV(){
         Intent intent=new Intent(this, TVPlayerActivity.class);
+        startActivity(intent);
+    }
+
+    private void toServer(){
+        Intent intent=new Intent(this,ServerActivity.class);
+        startActivity(intent);
+    }
+
+    private void toServerInHospital(){
+        Intent intent=new Intent(this,ServerInHospitalActivity.class);
+        startActivity(intent);
+    }
+
+    private void toComplainAndAdvice(){
+        Intent intent=new Intent(this,ComplainAndAdviceActivity.class);
         startActivity(intent);
     }
 
