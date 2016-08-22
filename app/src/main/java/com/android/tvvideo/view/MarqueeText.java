@@ -18,12 +18,8 @@ public class MarqueeText extends TextView implements Runnable {
     private int currentScrollX;
     private boolean isStop = false;
     private int textWidth;
-    private boolean isMeasure = false;
-
     private Context context;
-
     private String text;
-
     int width;
 
     public MarqueeText(Context context) {
@@ -79,17 +75,9 @@ public class MarqueeText extends TextView implements Runnable {
 
         canvas.drawText(text,0,baseline,mPaint);
 
-        if (!isMeasure) {
-            getTextWidth();
-            isMeasure = true;
-        }
+        textWidth =bounds.width();
     }
 
-    private void getTextWidth() {
-        Paint paint = this.getPaint();
-        String str = this.getText().toString();
-        textWidth = (int) paint.measureText(str);
-    }
     @Override
     public void run() {
         currentScrollX += 2;
@@ -99,7 +87,7 @@ public class MarqueeText extends TextView implements Runnable {
             return;
         }
 
-        if(currentScrollX==textWidth){
+        if(currentScrollX>textWidth){
             scrollTo(-width,0);
             currentScrollX = -width;
         }
