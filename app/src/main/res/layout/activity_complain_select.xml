@@ -16,11 +16,15 @@
             android:layout_height="100px" />
     </LinearLayout>
     <TextView
+        android:textColor="#FFFFFF"
+        android:layout_gravity="center"
+        android:text="请问,您对我们哪位医护人员的服务不满意？"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <com.android.tvvideo.view.SmoothGridView
         android:listSelector="@null"
         android:id="@+id/select"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.android.tvvideo.view.SmoothGridView>
+        android:layout_height="match_parent">
+    </com.android.tvvideo.view.SmoothGridView>
 </LinearLayout>
