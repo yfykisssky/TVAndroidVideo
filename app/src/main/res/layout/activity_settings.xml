@@ -3,17 +3,6 @@
     android:background="@drawable/main_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-   <!-- <com.test.test.MarqueeText
-        android:id="@+id/test"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#339320"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:text="这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的"
-        android:textColor="#000000"
-        android:textSize="20dp"  />-->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

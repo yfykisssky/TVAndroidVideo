@@ -2,10 +2,11 @@ package com.android.tvvideo.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -16,12 +17,13 @@ import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
-import com.android.tvvideo.tools.SystemUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +41,8 @@ public class SatisfactionActivity extends BaseActivity {
     List<Map<String,String>> listData=new ArrayList<>();
 
     Button comfirmBnt;
+
+    int listSelect=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,26 +66,28 @@ public class SatisfactionActivity extends BaseActivity {
             @Override
             public void onSuccess(String data) {
 
-              /*  try {
+                try {
 
-                    JSONObject jsonObject=new JSONObject(data);
+                    JSONArray array=new JSONArray(data);
 
-                    final String remark=jsonObject.getString("remark");
-                    String path=jsonObject.getString("path");
-                    String bottomremark=jsonObject.getString("bottomremark");
+                    for(int x=0;x<array.length();x++){
 
+                        JSONObject jsonObject=array.getJSONObject(x);
 
-                    detial.setText(remark);
+                        Map<String,String> map=new HashMap<String, String>();
 
-                    if(bottomremark!=null){
-                        bottom.setText(bottomremark);
+                        map.put("id",jsonObject.getString("id"));
+
+                        map.put("remark",jsonObject.getString("remark"));
+
+                        listData.add(map);
                     }
 
-                    ImageLoad.loadDefultImage(path,img);
+                    myAdapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }*/
+                }
 
 
             }
@@ -93,67 +99,34 @@ public class SatisfactionActivity extends BaseActivity {
         });
 
 
-
-    }
-
-    private void initView() {
-
-        listView=(ListView)findViewById(R.id.list);
-
-        myAdapter=new MyAdapter();
-
-        listView.setAdapter(myAdapter);
-
-        comfirmBnt=(Button)findViewById(R.id.confirm);
-
-        comfirmBnt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                sendFeedBack();
-
-            }
-        });
-
     }
 
     private void sendFeedBack() {
 
-
         JSONObject postData=new JSONObject();
         try {
-            postData.put("ipaddress", SystemUtil.getLocalHostIp());
+
+            JSONArray array=new JSONArray();
+
+            for(int c=0;c<array.length();c++){
+
+                JSONObject jsonObject=new JSONObject();
+
+                String id=listData.get(c).get("id");
+
+                jsonObject.put("id",id);
+
+                String selectIndex=listData.get(c).get("selectIndex");
+
+                jsonObject.put("selectIndex",selectIndex);
+
+                array.put(jsonObject);
+
+            }
 
             new NetDataTool(this).sendPost(NetDataConstants.SATISFACTION_FEED_BACK,postData.toString(), new NetDataTool.IResponse() {
                 @Override
                 public void onSuccess(String data) {
-/*
-
-                    try {
-*/
-/*
-                        JSONObject jsonObject=new JSONObject(data);
-
-                        examRoomId= String.valueOf(jsonObject.getInt("id"));
-
-                        String remark=jsonObject.getString("remark");
-                        String path = jsonObject.getString("path");
-                        String bottomremark=jsonObject.getString("bottomremark");
-
-                        detial.setText(remark);
-
-                        if(bottomremark!=null){
-                            bottom.setText(bottomremark);
-                        }
-
-                        ImageLoad.loadDefultImage(path,img);*//*
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-*/
-
 
                 }
 
@@ -170,13 +143,71 @@ public class SatisfactionActivity extends BaseActivity {
 
     }
 
+    private void initView() {
+
+        listView=(ListView)findViewById(R.id.list);
+
+        myAdapter=new MyAdapter();
+
+        listView.setAdapter(myAdapter);
+
+        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                listSelect=i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        listView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+
+                int indexRadioSelect=Integer.parseInt(listData.get(listSelect).get("selectIndex"));
+
+                if(keyEvent.getKeyCode()==KeyEvent.KEYCODE_DPAD_LEFT){
+
+                    if(indexRadioSelect>0){
+                        indexRadioSelect--;
+                    }
+
+                }else if(keyEvent.getKeyCode()==KeyEvent.KEYCODE_DPAD_RIGHT){
+
+                    if(indexRadioSelect<3){
+                        indexRadioSelect++;
+                    }
+                }
+
+                listData.get(listSelect).remove("selectIndex");
+                listData.get(listSelect).put("selectIndex",String.valueOf(indexRadioSelect));
+                myAdapter.notifyDataSetChanged();
+
+                return false;
+            }
+        });
+
+        comfirmBnt=(Button)findViewById(R.id.confirm);
+
+        comfirmBnt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                sendFeedBack();
+
+            }
+        });
+
+    }
 
     class MyAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            // return listData.size();
-            return 20;
+            return listData.size();
         }
 
         @Override
@@ -202,29 +233,27 @@ public class SatisfactionActivity extends BaseActivity {
             } else {
                 myHolder = (MyHolder)view.getTag();
             }
-         /*   listData.get(i).get("name");
-            listData.get(i).get("path");*/
 
-//            myHolder.remarkTex.setText(listData.get(i).get("remark"));
+            myHolder.remarkTex.setText(listData.get(i).get("remark"));
 
-            myHolder.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
+            if(i==listSelect){
 
-                    switch (i){
-                        case R.id.radio1:
-                            Log.e("checked","1");
-                            break;
-                        case R.id.radio2:
-                            Log.e("checked","2");
-                            break;
-                        case R.id.radio3:
-                            Log.e("checked","3");
-                            break;
-                    }
+                switch(Integer.parseInt(listData.get(listSelect).get("selectIndex"))){
+
+                    case 0:
+                        myHolder.radioGroup.check(R.id.radio1);
+                        break;
+                    case 1:
+                        myHolder.radioGroup.check(R.id.radio2);
+                        break;
+                    case 2:
+                        myHolder.radioGroup.check(R.id.radio3);
+                        break;
 
                 }
-            });
+
+
+            }
 
             return view;
         }
@@ -234,7 +263,6 @@ public class SatisfactionActivity extends BaseActivity {
         TextView remarkTex;
         RadioGroup radioGroup;
     }
-
 
 }
 
