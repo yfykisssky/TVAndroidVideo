@@ -16,6 +16,7 @@
             android:layout_width="200px"
             android:layout_height="100px" />
         <TextView
+            android:layout_margin="30px"
             android:textSize="40px"
             android:id="@+id/remind"
             android:gravity="center"
