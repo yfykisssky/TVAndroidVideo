@@ -113,7 +113,7 @@ public class ChoiceMealDialog extends Dialog {
             postData.put("phoneNum",phonenum);
             postData.put("foodId",id);
 
-            new NetDataTool(this.getContext()).sendPost(NetDataConstants.VALIDATE_ACCOUNT,postData.toString(),new NetDataTool.IResponse() {
+            new NetDataTool(this.getContext()).sendPost(NetDataConstants.MEAL_ORDER,postData.toString(),new NetDataTool.IResponse() {
                 @Override
                 public void onSuccess(String data) {
 

@@ -2,6 +2,7 @@ package com.android.tvvideo.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,11 @@ public class WeatherActivity extends BaseActivity {
             @Override
             public void onSuccess(String data) {
 
+                if(TextUtils.isEmpty(data)){
+                    showToast("没有数据");
+                    return;
+                }
+
                 try {
 
                     listData.clear();
@@ -117,6 +123,11 @@ public class WeatherActivity extends BaseActivity {
 
             @Override
             public void onSuccess(String data) {
+
+                if(TextUtils.isEmpty(data)){
+                    showToast("没有更多了");
+                    return;
+                }
 
                 if(upDown){
                     pageIndex--;

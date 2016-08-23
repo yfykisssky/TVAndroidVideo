@@ -35,6 +35,7 @@
                 android:layout_width="200px"
                 android:layout_height="match_parent" />
             <EditText
+                android:inputType="number"
                 android:id="@+id/phonenum"
                 android:imeOptions="actionDone"
                 android:layout_width="match_parent"
