@@ -90,27 +90,7 @@ public class ComplainActivity extends BaseActivity {
                 @Override
                 public void onSuccess(String data) {
 
-                    try {
-
-                        JSONArray arrays=new JSONArray(data.toString());
-
-                        for(int v=0;v<arrays.length();v++){
-
-                            Map<String,String> map=new HashMap<String, String>();
-
-                            map.put("name",arrays.getJSONObject(v).getString("name"));
-                            map.put("title",arrays.getJSONObject(v).getString("title"));
-                            map.put("path",arrays.getJSONObject(v).getString("path"));
-
-                            datas.add(map);
-
-                        }
-
-                        myAdapter.notifyDataSetChanged();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    showToast("投诉成功");
 
                 }
 
