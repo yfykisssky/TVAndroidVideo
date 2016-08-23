@@ -19,6 +19,7 @@ import com.android.tvvideo.net.NetDataTool;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,13 @@ public class WeatherActivity extends BaseActivity {
 
                     listData.clear();
 
-                    JSONArray array=new JSONArray(data);
+                    JSONObject jsonObject=new JSONObject(data);
+
+                    String date=jsonObject.getString("date");
+
+                    timeTex.setText(date);
+
+                    JSONArray array=jsonObject.getJSONArray("list");
 
                     for(int c=0;c<array.length();c++){
 

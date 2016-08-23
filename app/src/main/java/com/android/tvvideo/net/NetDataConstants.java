@@ -30,8 +30,6 @@ public class NetDataConstants {
 
     public static final String GET_EXAMROOM_INFO="/app/getExamroomInfo";
 
-
-
     public static final String GET_TV_LIST="/app/getTvList";
 
     public static final String GET_AD_DATA="/app/getAdData";
