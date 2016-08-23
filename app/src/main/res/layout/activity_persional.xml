@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@drawable/main_bg"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="住院基本信息"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:background="@drawable/bg_radius_downright_right"
+            android:layout_width="240px"
+            android:layout_height="100px" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_radius_transwhite"
+        android:layout_width="1600px"
+        android:layout_height="700px">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_margin="100px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="住院号"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:id="@+id/inhospital"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="床号"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:id="@+id/bed"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="姓名"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="性别"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:id="@+id/sex"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="年龄"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:id="@+id/age"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="病区"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:id="@+id/area"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="费别"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:id="@+id/feekind"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="入院日期"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:id="@+id/livedate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="住院天数"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:id="@+id/livetime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="护理等级"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:id="@+id/level"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="住院医师"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:id="@+id/doctor"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="责任护士"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:id="@+id/nurse"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="预交金余额"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:id="@+id/deposit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="700px"
+                    android:layout_height="50px">
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:text="费用总额"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/table_frame_gray"
+                        android:textColor="#000000"
+                        android:id="@+id/allfee"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

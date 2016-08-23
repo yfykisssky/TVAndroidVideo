@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@drawable/main_bg"
+    android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/kind"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/remark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/status"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/use"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/usetime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/usequlaty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/useunit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/starttime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/doctor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/examroom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/doexamroom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/feekind"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/nurse"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/table_frame_gray"
+                android:textColor="#000000"
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+</RelativeLayout>

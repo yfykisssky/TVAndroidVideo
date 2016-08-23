@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@drawable/main_bg"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="费用清单"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:background="@drawable/bg_radius_downright_right"
+            android:layout_width="240px"
+            android:layout_height="100px" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_radius_transwhite"
+        android:layout_width="1600px"
+        android:layout_height="700px">
+
+        <LinearLayout
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_marginTop="50px"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/table_frame_gray"
+            android:textColor="#000000"
+            android:text="日期"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/table_frame_gray"
+            android:textColor="#000000"
+            android:text="住院号"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/table_frame_gray"
+            android:textColor="#000000"
+            android:text="姓名"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/table_frame_gray"
+            android:textColor="#000000"
+            android:text="项目类别"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/table_frame_gray"
+            android:textColor="#000000"
+            android:text="项目名称"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/table_frame_gray"
+            android:textColor="#000000"
+            android:text="规格"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/table_frame_gray"
+            android:textColor="#000000"
+            android:text="单位"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/table_frame_gray"
+            android:textColor="#000000"
+            android:text="单价"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/table_frame_gray"
+            android:textColor="#000000"
+            android:text="执行科室"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/table_frame_gray"
+            android:textColor="#000000"
+            android:text="保险类型"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/table_frame_gray"
+            android:textColor="#000000"
+            android:text="数量"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/table_frame_gray"
+            android:textColor="#000000"
+            android:text="金额"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/feelist"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_marginBottom="50px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
+    </LinearLayout>
+
+</RelativeLayout>
