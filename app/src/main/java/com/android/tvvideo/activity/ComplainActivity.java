@@ -54,7 +54,7 @@ public class ComplainActivity extends BaseActivity {
 
         initView();
 
-        getDataFromNet();
+        getComplainList();
 
     }
 
@@ -177,7 +177,7 @@ public class ComplainActivity extends BaseActivity {
 
     }
 
-    private void getDataFromNet() {
+    private void getComplainList() {
 
         JSONObject postData=new JSONObject();
         try {
