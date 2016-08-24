@@ -113,7 +113,7 @@ public class ChoiceRentDialog extends Dialog {
             postData.put("mobile",phonenum);
             postData.put("rentId",id);
 
-            new NetDataTool(this.getContext()).sendPost(NetDataConstants.MEAL_ORDER,postData.toString(),new NetDataTool.IResponse() {
+            new NetDataTool(this.getContext()).sendPost(NetDataConstants.RENT_ORDER,postData.toString(),new NetDataTool.IResponse() {
                 @Override
                 public void onSuccess(String data) {
 
