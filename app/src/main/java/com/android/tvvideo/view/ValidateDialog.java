@@ -92,8 +92,8 @@ public class ValidateDialog extends Dialog {
         JSONObject postData=new JSONObject();
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
-            postData.put("inHospitalNum",inhospinum);
-            postData.put("phoneNum",phonenum);
+            postData.put("hospitalId",inhospinum);
+            postData.put("mobile",phonenum);
 
             new NetDataTool(this.getContext()).sendPost(NetDataConstants.VALIDATE_ACCOUNT,postData.toString(),new NetDataTool.IResponse() {
                 @Override

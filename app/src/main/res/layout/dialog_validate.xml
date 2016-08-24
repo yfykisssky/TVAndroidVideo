@@ -14,7 +14,7 @@
             <TextView
                 android:gravity="center"
                 android:textColor="#000000"
-                android:text="手机号码:"
+                android:text="住院号:"
                 android:layout_width="200px"
                 android:layout_height="match_parent" />
             <EditText

@@ -109,8 +109,8 @@ public class ChoiceRentDialog extends Dialog {
         JSONObject postData=new JSONObject();
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
-            postData.put("inHospitalNum",inhospinum);
-            postData.put("phoneNum",phonenum);
+            postData.put("hospitalId",inhospinum);
+            postData.put("mobile",phonenum);
             postData.put("rentId",id);
 
             new NetDataTool(this.getContext()).sendPost(NetDataConstants.MEAL_ORDER,postData.toString(),new NetDataTool.IResponse() {
