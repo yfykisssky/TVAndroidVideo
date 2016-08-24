@@ -15,15 +15,7 @@
             android:gravity="center"
             android:background="@drawable/table_frame_gray"
             android:textColor="#000000"
-          android:id="@+id/date"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <TextView
-            android:id="@+id/inhospital"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/table_frame_gray"
-            android:textColor="#000000"
+            android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <TextView
@@ -31,19 +23,11 @@
             android:gravity="center"
             android:background="@drawable/table_frame_gray"
             android:textColor="#000000"
-            android:id="@+id/name"
+            android:id="@+id/projectnum"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <TextView
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/table_frame_gray"
-            android:textColor="#000000"
-            android:id="@+id/kind"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <TextView
-            android:layout_weight="1"
+            android:layout_weight="0.8"
             android:gravity="center"
             android:background="@drawable/table_frame_gray"
             android:textColor="#000000"
@@ -55,7 +39,7 @@
             android:gravity="center"
             android:background="@drawable/table_frame_gray"
             android:textColor="#000000"
-            android:id="@+id/specifications"
+            android:id="@+id/quality"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <TextView
@@ -71,31 +55,7 @@
             android:gravity="center"
             android:background="@drawable/table_frame_gray"
             android:textColor="#000000"
-            android:id="@+id/unitname"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <TextView
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/table_frame_gray"
-            android:textColor="#000000"
-            android:id="@+id/doexamroom"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <TextView
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/table_frame_gray"
-            android:textColor="#000000"
-            android:id="@+id/safest"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <TextView
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/table_frame_gray"
-            android:textColor="#000000"
-            android:id="@+id/quality"
+            android:id="@+id/unitprice"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <TextView

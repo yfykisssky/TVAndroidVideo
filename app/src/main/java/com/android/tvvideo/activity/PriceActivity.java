@@ -19,7 +19,7 @@ public class PriceActivity extends BaseActivity {
 
         super.setActivityName(this.getClass().getName());
 
-        setContentView(R.layout.activity_complain_select);
+        setContentView(R.layout.activity_price);
 
         context=this;
 

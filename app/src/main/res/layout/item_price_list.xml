@@ -13,23 +13,7 @@
             android:gravity="center"
             android:background="@drawable/table_frame_gray"
             android:textColor="#000000"
-            android:id="@+id/clinicalkind"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <TextView
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/table_frame_gray"
-            android:textColor="#000000"
-            android:id="@+id/clinicalname"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <TextView
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/table_frame_gray"
-            android:textColor="#000000"
-            android:id="@+id/kind"
+            android:id="@+id/number"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <TextView
@@ -54,6 +38,14 @@
             android:background="@drawable/table_frame_gray"
             android:textColor="#000000"
             android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="0.9"
+            android:gravity="center"
+            android:background="@drawable/table_frame_gray"
+            android:textColor="#000000"
+            android:id="@+id/kind"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

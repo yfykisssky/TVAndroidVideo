@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="700px"
+    android:background="@drawable/bg_radius_transwhite"
+    android:layout_height="300px">
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+            <EditText
+                android:inputType="number"
+                android:gravity="center"
+                android:id="@+id/year"
+                android:imeOptions="actionDone"
+                android:layout_width="200px"
+                android:layout_height="match_parent" />
+            <TextView
+                android:gravity="center"
+                android:textColor="#000000"
+                android:text="年"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <EditText
+                android:inputType="number"
+                android:gravity="center"
+                android:id="@+id/month"
+                android:imeOptions="actionDone"
+                android:layout_width="100px"
+                android:layout_height="match_parent" />
+            <TextView
+                android:gravity="center"
+                android:textColor="#000000"
+                android:text="月"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <EditText
+                android:inputType="number"
+                android:gravity="center"
+                android:id="@+id/day"
+                android:imeOptions="actionDone"
+                android:layout_width="100px"
+                android:layout_height="match_parent" />
+            <TextView
+                android:gravity="center"
+                android:textColor="#000000"
+                android:text="日"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="20px"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="100px">
+            <Button
+                android:text="确认"
+                android:background="@drawable/button_selector_gray"
+                android:nextFocusRight="@+id/cancel"
+                android:id="@+id/ok"
+                android:layout_width="200px"
+                android:layout_height="match_parent" />
+            <Button
+                android:background="@drawable/button_selector_gray"
+                android:layout_marginLeft="100px"
+                android:text="取消"
+                android:nextFocusLeft="@+id/ok"
+                android:id="@+id/cancel"
+                android:layout_width="200px"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
