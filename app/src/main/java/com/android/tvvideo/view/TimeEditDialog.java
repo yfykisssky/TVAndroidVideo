@@ -47,7 +47,7 @@ public class TimeEditDialog extends Dialog {
 
     private void initView() {
 
-        setContentView(R.layout.dialog_validate);
+        setContentView(R.layout.dialog_time_edit);
 
         yearEdit=(EditText)this.findViewById(R.id.year);
 

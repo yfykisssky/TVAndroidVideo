@@ -50,7 +50,7 @@ public class FeeActivity extends BaseActivity {
 
     private void initView() {
 
-        startTimeBnt=(Button)findViewById(R.id.startTiem);
+        startTimeBnt=(Button)findViewById(R.id.startTime);
 
         startTimeBnt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +62,7 @@ public class FeeActivity extends BaseActivity {
                     @Override
                     public void change(String date) {
                         startTime=date;
+                        startTimeBnt.setText(date);
                     }
                 });
 
@@ -70,7 +71,7 @@ public class FeeActivity extends BaseActivity {
             }
         });
 
-        endTimeBnt=(Button)findViewById(R.id.startTiem);
+        endTimeBnt=(Button)findViewById(R.id.endTime);
 
         endTimeBnt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +83,7 @@ public class FeeActivity extends BaseActivity {
                     @Override
                     public void change(String date) {
                         endTime=date;
+                        endTimeBnt.setText(date);
                     }
                 });
 
