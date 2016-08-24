@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ public class SatisfactionActivity extends BaseActivity {
 
     MyAdapter myAdapter;
 
-    List<Map<String,String>> listData=new ArrayList<>();
+    List<Map<String,Object>> listData=new ArrayList<>();
 
     Button comfirmBnt;
 
@@ -74,11 +75,21 @@ public class SatisfactionActivity extends BaseActivity {
 
                         JSONObject jsonObject=array.getJSONObject(x);
 
-                        Map<String,String> map=new HashMap<String, String>();
+                        Map<String,Object> map=new HashMap<String,Object>();
 
-                        map.put("id",jsonObject.getString("id"));
+                        map.put("question",jsonObject.getString("question"));
 
-                        map.put("remark",jsonObject.getString("remark"));
+                        JSONArray arrayChoices=jsonObject.getJSONArray("choices");
+
+                        List<String> list=new ArrayList<String>();
+
+                        for(int k=0;k<arrayChoices.length();k++){
+                            list.add(arrayChoices.getJSONObject(k).getString("choice"));
+                        }
+
+                        map.put("choices",list);
+
+                        map.put("selectIndex","0");
 
                         listData.add(map);
                     }
@@ -112,13 +123,15 @@ public class SatisfactionActivity extends BaseActivity {
 
                 JSONObject jsonObject=new JSONObject();
 
-                String id=listData.get(c).get("id");
+                String question=(String)listData.get(c).get("question");
 
-                jsonObject.put("id",id);
+                jsonObject.put("question",question);
 
-                String selectIndex=listData.get(c).get("selectIndex");
+                String selectIndex=(String)listData.get(c).get("selectIndex");
 
-                jsonObject.put("selectIndex",selectIndex);
+                String choice=((List<String>)listData.get(c).get("choices")).get(Integer.parseInt(selectIndex));
+
+                jsonObject.put("choice",choice);
 
                 array.put(jsonObject);
 
@@ -167,7 +180,7 @@ public class SatisfactionActivity extends BaseActivity {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
 
-                int indexRadioSelect=Integer.parseInt(listData.get(listSelect).get("selectIndex"));
+                int indexRadioSelect=Integer.parseInt((String)listData.get(listSelect).get("selectIndex"));
 
                 if(keyEvent.getKeyCode()==KeyEvent.KEYCODE_DPAD_LEFT){
 
@@ -177,9 +190,10 @@ public class SatisfactionActivity extends BaseActivity {
 
                 }else if(keyEvent.getKeyCode()==KeyEvent.KEYCODE_DPAD_RIGHT){
 
-                    if(indexRadioSelect<3){
+                    if(indexRadioSelect<((List<String>)listData.get(i).get("choices")).size()){
                         indexRadioSelect++;
                     }
+
                 }
 
                 listData.get(listSelect).remove("selectIndex");
@@ -229,16 +243,86 @@ public class SatisfactionActivity extends BaseActivity {
                 myHolder = new MyHolder();
                 myHolder.remarkTex = (TextView) view.findViewById(R.id.remark);
                 myHolder.radioGroup= (RadioGroup) view.findViewById(R.id.group);
+                myHolder.radioButton1=(RadioButton)view.findViewById(R.id.radio1);
+                myHolder.radioButton2=(RadioButton)view.findViewById(R.id.radio2);
+                myHolder.radioButton3=(RadioButton)view.findViewById(R.id.radio3);
+                myHolder.radioButton4=(RadioButton)view.findViewById(R.id.radio4);
+                myHolder.radioButton5=(RadioButton)view.findViewById(R.id.radio5);
                 view.setTag(myHolder);
             } else {
                 myHolder = (MyHolder)view.getTag();
             }
 
-            myHolder.remarkTex.setText(listData.get(i).get("remark"));
+            myHolder.remarkTex.setText((String)listData.get(i).get("question"));
+
+            switch (((List<String>)listData.get(i).get("choices")).size()){
+                case 1:
+                    myHolder.radioButton1.setVisibility(View.VISIBLE);
+                    myHolder.radioButton2.setVisibility(View.GONE);
+                    myHolder.radioButton3.setVisibility(View.GONE);
+                    myHolder.radioButton4.setVisibility(View.GONE);
+                    myHolder.radioButton5.setVisibility(View.GONE);
+
+                    myHolder.radioButton1.setText(((List<String>)listData.get(i).get("choices")).get(0));
+                    break;
+                case 2:
+                    myHolder.radioButton1.setVisibility(View.VISIBLE);
+                    myHolder.radioButton2.setVisibility(View.VISIBLE);
+                    myHolder.radioButton3.setVisibility(View.GONE);
+                    myHolder.radioButton4.setVisibility(View.GONE);
+                    myHolder.radioButton5.setVisibility(View.GONE);
+
+                    myHolder.radioButton1.setText(((List<String>)listData.get(i).get("choices")).get(0));
+                    myHolder.radioButton2.setText(((List<String>)listData.get(i).get("choices")).get(1));
+                    break;
+                case 3:
+                    myHolder.radioButton1.setVisibility(View.VISIBLE);
+                    myHolder.radioButton2.setVisibility(View.VISIBLE);
+                    myHolder.radioButton3.setVisibility(View.VISIBLE);
+                    myHolder.radioButton4.setVisibility(View.GONE);
+                    myHolder.radioButton5.setVisibility(View.GONE);
+
+                    myHolder.radioButton1.setText(((List<String>)listData.get(i).get("choices")).get(0));
+                    myHolder.radioButton2.setText(((List<String>)listData.get(i).get("choices")).get(1));
+                    myHolder.radioButton3.setText(((List<String>)listData.get(i).get("choices")).get(2));
+                    break;
+                case 4:
+                    myHolder.radioButton1.setVisibility(View.VISIBLE);
+                    myHolder.radioButton2.setVisibility(View.VISIBLE);
+                    myHolder.radioButton3.setVisibility(View.VISIBLE);
+                    myHolder.radioButton4.setVisibility(View.VISIBLE);
+                    myHolder.radioButton5.setVisibility(View.GONE);
+
+                    myHolder.radioButton1.setText(((List<String>)listData.get(i).get("choices")).get(0));
+                    myHolder.radioButton2.setText(((List<String>)listData.get(i).get("choices")).get(1));
+                    myHolder.radioButton3.setText(((List<String>)listData.get(i).get("choices")).get(2));
+                    myHolder.radioButton4.setText(((List<String>)listData.get(i).get("choices")).get(3));
+                    break;
+                case 5:
+                    myHolder.radioButton1.setVisibility(View.VISIBLE);
+                    myHolder.radioButton2.setVisibility(View.VISIBLE);
+                    myHolder.radioButton3.setVisibility(View.VISIBLE);
+                    myHolder.radioButton4.setVisibility(View.VISIBLE);
+                    myHolder.radioButton5.setVisibility(View.VISIBLE);
+
+                    myHolder.radioButton1.setText(((List<String>)listData.get(i).get("choices")).get(0));
+                    myHolder.radioButton2.setText(((List<String>)listData.get(i).get("choices")).get(1));
+                    myHolder.radioButton3.setText(((List<String>)listData.get(i).get("choices")).get(2));
+                    myHolder.radioButton4.setText(((List<String>)listData.get(i).get("choices")).get(3));
+                    myHolder.radioButton5.setText(((List<String>)listData.get(i).get("choices")).get(4));
+                    break;
+                default:
+                    myHolder.radioButton1.setVisibility(View.GONE);
+                    myHolder.radioButton2.setVisibility(View.GONE);
+                    myHolder.radioButton3.setVisibility(View.GONE);
+                    myHolder.radioButton4.setVisibility(View.GONE);
+                    myHolder.radioButton5.setVisibility(View.GONE);
+                    break;
+            }
 
             if(i==listSelect){
 
-                switch(Integer.parseInt(listData.get(listSelect).get("selectIndex"))){
+                switch(Integer.parseInt((String)listData.get(listSelect).get("selectIndex"))){
 
                     case 0:
                         myHolder.radioGroup.check(R.id.radio1);
@@ -248,6 +332,12 @@ public class SatisfactionActivity extends BaseActivity {
                         break;
                     case 2:
                         myHolder.radioGroup.check(R.id.radio3);
+                        break;
+                    case 3:
+                        myHolder.radioGroup.check(R.id.radio4);
+                        break;
+                    case 4:
+                        myHolder.radioGroup.check(R.id.radio5);
                         break;
 
                 }
@@ -262,6 +352,11 @@ public class SatisfactionActivity extends BaseActivity {
     class MyHolder {
         TextView remarkTex;
         RadioGroup radioGroup;
+        RadioButton radioButton1;
+        RadioButton radioButton2;
+        RadioButton radioButton3;
+        RadioButton radioButton4;
+        RadioButton radioButton5;
     }
 
 }

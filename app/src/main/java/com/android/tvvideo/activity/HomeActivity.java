@@ -26,6 +26,10 @@ public class HomeActivity extends BaseActivity {
     final String[] titles={"医院介绍","科室介绍","住院告知","健康宣教","电视直播","系统设置"};
 
     final int[] pageViewIds={R.drawable.hosipital,R.drawable.exams,R.drawable.inhospital,R.drawable.teach,R.drawable.tv,R.drawable.settings};
+/*
+    final String[] titles={"医院介绍","科室介绍","住院告知","健康宣教","电视直播","日常服务","患者服务","投诉建议","系统设置"};
+
+    final int[] pageViewIds={R.drawable.hosipital,R.drawable.exams,R.drawable.inhospital,R.drawable.teach,R.drawable.tv,R.drawable.server,R.drawable.hospitalserve,R.drawable.feedback,R.drawable.settings};*/
 
     CustomViewPager customViewPager;
 
