@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.android.tvvideo.R;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
+import com.android.tvvideo.tools.CheckTool;
 import com.android.tvvideo.tools.SystemUtil;
 
 import org.json.JSONException;
@@ -65,6 +66,11 @@ public class ValidateDialog extends Dialog {
                 String phonenum=phoneEdit.getText().toString();
 
                 String inhospinum=inhospiEdit.getText().toString();
+
+                if(!CheckTool.isMobileNum(phonenum)){
+                    Toast.makeText(ValidateDialog.this.getContext(),"手机号码错误",Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 if(TextUtils.isEmpty(phonenum)||TextUtils.isEmpty(inhospinum)){
                     Toast.makeText(getContext(),"",Toast.LENGTH_SHORT).show();
