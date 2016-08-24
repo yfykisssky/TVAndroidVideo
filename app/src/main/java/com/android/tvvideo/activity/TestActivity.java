@@ -37,6 +37,17 @@ public class TestActivity extends Activity {
 
         setContentView(R.layout.activity_test);
 
+   /*     ValidateDialog validateDialog=new ValidateDialog(this);
+
+        validateDialog.setValidateListener(new ValidateDialog.ValidateListener() {
+            @Override
+            public void validate(boolean result) {
+                Log.e("ok",String.valueOf(result));
+            }
+        });
+
+        validateDialog.show();*/
+
         //startActivity(new Intent(this,OrderMealActivity.class));
         //((EditText)findViewById(R.id.url)).setText("rtsp://218.204.223.237:554/live/1/67A7572844E51A64/f68g2mj7wjua3la7.sdp");
 

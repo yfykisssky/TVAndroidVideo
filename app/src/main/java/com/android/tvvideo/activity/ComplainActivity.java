@@ -104,8 +104,6 @@ public class ComplainActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-
-
     }
 
     class MyAdapter extends BaseAdapter {
