@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:layout_weight="1"
+                android:layout_weight="0.97"
                 android:gravity="center"
                 android:background="@drawable/table_frame_gray"
                 android:textColor="#000000"
@@ -87,6 +87,7 @@
         </LinearLayout>
 
         <ListView
+            android:focusable="false"
             android:id="@+id/feelist"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
