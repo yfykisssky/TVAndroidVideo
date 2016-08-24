@@ -12,6 +12,10 @@ import com.android.tvvideo.R;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
+import com.android.tvvideo.tools.SystemUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by yangfengyuan on 16/7/29.
@@ -30,9 +34,11 @@ public class ChoiceRentDialog extends Dialog {
 
     Button cancelBnt;
 
-    String orderId;
+    String id;
 
     String inHospitalNum;
+
+    String phoneNum;
 
     Context context;
 
@@ -63,7 +69,7 @@ public class ChoiceRentDialog extends Dialog {
         confirmBnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendOrder(orderId,inHospitalNum);
+                sendOrder(id,inHospitalNum,phoneNum);
             }
         });
 
@@ -88,37 +94,47 @@ public class ChoiceRentDialog extends Dialog {
 
     }
 
-    public void setUserData(String orderId,String inHospitalNum){
+    public void setUserData(String id,String inHospitalNum,String phoneNum){
 
-        this.orderId=orderId;
+        this.id=id;
 
         this.inHospitalNum=inHospitalNum;
 
-    }
-
-    private void sendOrder(String orderId,String inHospitalNum){
-
-        new NetDataTool(context).sendGet(NetDataConstants.RENT_ORDER+"/"+orderId+"/"+inHospitalNum, new NetDataTool.IResponse() {
-            @Override
-            public void onSuccess(String data) {
-
-                Toast.makeText(context,"下单成功",Toast.LENGTH_SHORT).show();
-
-                ChoiceRentDialog.this.dismiss();
-
-            }
-
-            @Override
-            public void onFailed(String error) {
-
-                Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-
+        this.phoneNum=phoneNum;
 
     }
 
+    private void sendOrder(String id,String inhospinum,String phonenum){
+
+        JSONObject postData=new JSONObject();
+        try {
+            postData.put("ipaddress", SystemUtil.getLocalHostIp());
+            postData.put("inHospitalNum",inhospinum);
+            postData.put("phoneNum",phonenum);
+            postData.put("rentId",id);
+
+            new NetDataTool(this.getContext()).sendPost(NetDataConstants.MEAL_ORDER,postData.toString(),new NetDataTool.IResponse() {
+                @Override
+                public void onSuccess(String data) {
+
+                    Toast.makeText(context,"下单成功",Toast.LENGTH_SHORT).show();
+
+                    ChoiceRentDialog.this.dismiss();
+
+                }
+
+                @Override
+                public void onFailed(String error) {
+
+                    Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }

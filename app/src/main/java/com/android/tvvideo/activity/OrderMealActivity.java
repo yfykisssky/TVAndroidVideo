@@ -314,7 +314,7 @@ public class OrderMealActivity extends BaseActivity {
         public View getView(int i, View view, ViewGroup viewGroup) {
             MyListHolder holder = new MyListHolder();
             if (view == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.item_video_list,null);
+                view = LayoutInflater.from(context).inflate(R.layout.item_meal_list,null);
                 holder.tex = (TextView)view.findViewById(R.id.text);
                 view.setTag(holder);
             } else {
