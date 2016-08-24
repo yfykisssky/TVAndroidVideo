@@ -117,9 +117,13 @@ public class ChoiceRentDialog extends Dialog {
                 @Override
                 public void onSuccess(String data) {
 
-                    Toast.makeText(context,"下单成功",Toast.LENGTH_SHORT).show();
+                    if(Boolean.parseBoolean(data)){
+                        Toast.makeText(context,"下单成功",Toast.LENGTH_SHORT).show();
 
-                    ChoiceRentDialog.this.dismiss();
+                        ChoiceRentDialog.this.dismiss();
+                    }else{
+                        Toast.makeText(context,"下单失败",Toast.LENGTH_SHORT).show();
+                    }
 
                 }
 
