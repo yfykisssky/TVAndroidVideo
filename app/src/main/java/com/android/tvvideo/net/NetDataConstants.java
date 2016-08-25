@@ -38,8 +38,6 @@ public class NetDataConstants {
 
     public static final String GET_MAX_VOLUME="/app/getMaxVolume";
 
-
-
     public static final String VALIDATE_ACCOUNT="/app/validateAccount";
 
     public static final String GET_MEAL_KINDS="/app/getMailKinds";

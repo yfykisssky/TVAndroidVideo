@@ -30,7 +30,7 @@ public class WeatherActivity extends BaseActivity {
 
     TextView timeTex;
 
-    int pageIndex;
+    int pageIndex=0;
 
     Button upBnt;
     Button downBnt;
@@ -80,7 +80,7 @@ public class WeatherActivity extends BaseActivity {
 
                     timeTex.setText(date);
 
-                    JSONArray array=jsonObject.getJSONArray("list");
+                    JSONArray array=jsonObject.getJSONArray("weatherList");
 
                     for(int c=0;c<array.length();c++){
 
@@ -146,7 +146,13 @@ public class WeatherActivity extends BaseActivity {
 
                     listData.clear();
 
-                    JSONArray array=new JSONArray(data);
+                    JSONObject jsonObject=new JSONObject(data);
+
+                    String date=jsonObject.getString("date");
+
+                    timeTex.setText(date);
+
+                    JSONArray array=jsonObject.getJSONArray("weatherList");
 
                     for(int c=0;c<array.length();c++){
 
