@@ -49,7 +49,7 @@ public class TestActivity extends Activity {
         validateDialog.show();*/
 
         //startActivity(new Intent(this,WeatherActivity.class));
-        ((EditText)findViewById(R.id.url)).setText("http://ivi.bupt.edu.cn/hls/cctv5phd.m3u8");
+        ((EditText)findViewById(R.id.url)).setText("rtmp://live.hkstv.hk.lxdns.com/live/hks");
         //((EditText)findViewById(R.id.url)).setText("http://bbs.tvhuan.com/");
 
         ((Button)findViewById(R.id.ok)).setOnClickListener(new View.OnClickListener() {

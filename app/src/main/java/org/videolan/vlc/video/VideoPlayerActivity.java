@@ -382,6 +382,10 @@ public class VideoPlayerActivity extends BaseActivity implements IVLCVout.Callba
     protected void onDestroy() {
         super.onDestroy();
 
+        if(loadingDialog.isShowing()){
+            loadingDialog.dismiss();
+        }
+
         mAudioManager = null;
     }
 

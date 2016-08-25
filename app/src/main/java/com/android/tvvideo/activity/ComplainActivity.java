@@ -72,37 +72,11 @@ public class ComplainActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                sendComplain();
+                //sendComplain();
 
             }
         });
 
-
-    }
-
-    private void sendComplain() {
-
-        JSONObject postData=new JSONObject();
-        try {
-            postData.put("ipaddress", SystemUtil.getLocalHostIp());
-
-            new NetDataTool(this).sendPost(NetDataConstants.SEND_COMPLAIN,postData.toString(), new NetDataTool.IResponse() {
-                @Override
-                public void onSuccess(String data) {
-
-                    showToast("投诉成功");
-
-                }
-
-                @Override
-                public void onFailed(String error) {
-                    showToast(error);
-                }
-            });
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
     }
 

@@ -54,11 +54,11 @@ public class NetDataConstants {
 
     public static final String GET_WEATHER="/app/getWeather";
 
-
-
     public static final String GET_SATISFACTION_LIST="/app/feedSatisfactionList";
 
     public static final String SATISFACTION_FEED_BACK="/app/satisfactionFeedBack";
+
+
 
     public static final String GET_COMPLAIN_LIST="/app/getComplainList";
 

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="600px"
+    android:background="@drawable/bg_radius_transwhite"
+    android:layout_height="800px">
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioGroup
+                android:id="@+id/radiogroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <RadioButton
+                    android:textColor="#000000"
+                    android:id="@+id/radio1"
+                    android:text="不满意"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <RadioButton
+                    android:textColor="#000000"
+                    android:id="@+id/radio2"
+                    android:text="不满意"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <RadioButton
+                    android:textColor="#000000"
+                    android:id="@+id/radio3"
+                    android:text="不满意"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <RadioButton
+                    android:textColor="#000000"
+                    android:id="@+id/radio4"
+                    android:text="不满意"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <RadioButton
+                    android:textColor="#000000"
+                    android:id="@+id/radio5"
+                    android:text="不满不满不满不满"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Button
+                    android:text="确认"
+                    android:nextFocusRight="@+id/cancel"
+                    android:background="@drawable/button_selector_gray"
+                    android:id="@+id/ok"
+                    android:layout_width="200px"
+                    android:layout_height="80px" />
+                <Button
+                    android:nextFocusLeft="@+id/ok"
+                    android:layout_marginLeft="50px"
+                    android:background="@drawable/button_selector_gray"
+                    android:text="取消"
+                    android:id="@+id/cancel"
+                    android:layout_width="200px"
+                    android:layout_height="80px"  />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
