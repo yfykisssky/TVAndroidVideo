@@ -1,7 +1,9 @@
 package com.android.tvvideo.activity;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,6 +79,8 @@ public class SatisfactionActivity extends BaseActivity {
 
                         Map<String,Object> map=new HashMap<String,Object>();
 
+                        map.put("id",jsonObject.getString("id"));
+
                         map.put("question",jsonObject.getString("question"));
 
                         JSONArray arrayChoices=jsonObject.getJSONArray("choices");
@@ -84,7 +88,7 @@ public class SatisfactionActivity extends BaseActivity {
                         List<String> list=new ArrayList<String>();
 
                         for(int k=0;k<arrayChoices.length();k++){
-                            list.add(arrayChoices.getJSONObject(k).getString("choice"));
+                            list.add(arrayChoices.getString(k));
                         }
 
                         map.put("choices",list);
@@ -117,30 +121,45 @@ public class SatisfactionActivity extends BaseActivity {
         JSONObject postData=new JSONObject();
         try {
 
+            //postData.put("ipaddress", SystemUtil.getLocalHostIp());
+            //postData.put("hospitalId",VLCApplication.getInstance().getPatientNum());
+            //postData.put("mobile",VLCApplication.getInstance().getPatientPhoneNum());
+            postData.put("ipaddress","192.168.2.117");
+            postData.put("hospitalId","123456");
+            postData.put("mobile","15936046693");
+
             JSONArray array=new JSONArray();
 
-            for(int c=0;c<array.length();c++){
+            for(int c=0;c<listData.size();c++){
 
                 JSONObject jsonObject=new JSONObject();
 
-                String question=(String)listData.get(c).get("question");
+                String id=(String)listData.get(c).get("id");
 
-                jsonObject.put("question",question);
+                jsonObject.put("question",id);
 
                 String selectIndex=(String)listData.get(c).get("selectIndex");
 
                 String choice=((List<String>)listData.get(c).get("choices")).get(Integer.parseInt(selectIndex));
 
-                jsonObject.put("choice",choice);
+                jsonObject.put("choiced",choice);
 
                 array.put(jsonObject);
 
             }
 
+            postData.put("list",array);
+
+            Log.e("postJson",postData.toString());
+
             new NetDataTool(this).sendPost(NetDataConstants.SATISFACTION_FEED_BACK,postData.toString(), new NetDataTool.IResponse() {
                 @Override
                 public void onSuccess(String data) {
-                    showToast("发送成功!");
+                    if(Boolean.parseBoolean(data)){
+                        showToast("发送成功!");
+                    }else{
+                        showToast("发送失败!");
+                    }
                 }
 
                 @Override
@@ -253,7 +272,13 @@ public class SatisfactionActivity extends BaseActivity {
                 myHolder = (MyHolder)view.getTag();
             }
 
-            myHolder.remarkTex.setText((String)listData.get(i).get("question"));
+            setRadioButtonDrawable(myHolder.radioButton1);
+            setRadioButtonDrawable(myHolder.radioButton2);
+            setRadioButtonDrawable(myHolder.radioButton3);
+            setRadioButtonDrawable(myHolder.radioButton4);
+            setRadioButtonDrawable(myHolder.radioButton5);
+
+            myHolder.remarkTex.setText(String.valueOf(i+1)+"."+(String)listData.get(i).get("question"));
 
             switch (((List<String>)listData.get(i).get("choices")).size()){
                 case 1:
@@ -347,6 +372,14 @@ public class SatisfactionActivity extends BaseActivity {
 
             return view;
         }
+    }
+
+    private void setRadioButtonDrawable(RadioButton radioButton){
+
+        Drawable drawableAdd = getResources().getDrawable(R.drawable.radiobutton_selector);
+        drawableAdd.setBounds(0, 0,50,50);
+        radioButton.setCompoundDrawables(drawableAdd, null, null, null);
+
     }
 
     class MyHolder {
