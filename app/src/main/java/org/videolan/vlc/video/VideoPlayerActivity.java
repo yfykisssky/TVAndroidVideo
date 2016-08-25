@@ -23,7 +23,6 @@ package org.videolan.vlc.video;
 import android.annotation.TargetApi;
 import android.app.KeyguardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -37,7 +36,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -192,7 +190,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVLCVout.Callba
     private long mLastTime = -1;
 
     private OnLayoutChangeListener mOnLayoutChangeListener;
-    private AlertDialog mAlertDialog;
+    //private AlertDialog mAlertDialog;
 
     private static LibVLC LibVLC() {
         return VLCInstance.get();
@@ -372,8 +370,8 @@ public class VideoPlayerActivity extends BaseActivity implements IVLCVout.Callba
     protected void onStop() {
         super.onStop();
 
-        if (mAlertDialog != null && mAlertDialog.isShowing())
-            mAlertDialog.dismiss();
+      /*  if (mAlertDialog != null && mAlertDialog.isShowing())
+            mAlertDialog.dismiss();*/
         stopPlayback();
         if (mService != null)
             mService.removeCallback(this);
@@ -858,7 +856,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVLCVout.Callba
             Permissions.checkReadStoragePermission(this, true);
             return;
         }
-        /* Encountered Error, exit player with a message */
+      /*  *//* Encountered Error, exit player with a message *//*
         mAlertDialog = new AlertDialog.Builder(VideoPlayerActivity.this)
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
@@ -875,7 +873,9 @@ public class VideoPlayerActivity extends BaseActivity implements IVLCVout.Callba
                 .setTitle(R.string.encountered_error_title)
                 .setMessage(R.string.encountered_error_message)
                 .create();
-        mAlertDialog.show();
+        mAlertDialog.show();*/
+
+        exit();
     }
 
     @Override

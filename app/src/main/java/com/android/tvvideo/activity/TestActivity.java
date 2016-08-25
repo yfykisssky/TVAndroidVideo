@@ -2,7 +2,6 @@ package com.android.tvvideo.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -49,8 +48,9 @@ public class TestActivity extends Activity {
 
         validateDialog.show();*/
 
-        startActivity(new Intent(this,WeatherActivity.class));
-        //((EditText)findViewById(R.id.url)).setText("rtsp://218.204.223.237:554/live/1/67A7572844E51A64/f68g2mj7wjua3la7.sdp");
+        //startActivity(new Intent(this,WeatherActivity.class));
+        ((EditText)findViewById(R.id.url)).setText("http://ivi.bupt.edu.cn/hls/cctv5phd.m3u8");
+        //((EditText)findViewById(R.id.url)).setText("http://bbs.tvhuan.com/");
 
         ((Button)findViewById(R.id.ok)).setOnClickListener(new View.OnClickListener() {
             @Override
