@@ -18,6 +18,9 @@
             android:layout_height="50px"
             android:orientation="horizontal" >
             <RadioButton
+                android:textSize="40px"
+                android:gravity="center_vertical"
+                android:background="@null"
                 android:button="@null"
                 android:textColor="#000000"
                 android:checked="true"
@@ -26,6 +29,9 @@
                 android:layout_height="match_parent"
                 />
             <RadioButton
+                android:textSize="40px"
+                android:gravity="center_vertical"
+                android:background="@null"
                 android:button="@null"
                 android:textColor="#000000"
                 android:id="@+id/radio2"
@@ -33,6 +39,9 @@
                 android:layout_height="match_parent"
                 />
             <RadioButton
+                android:textSize="40px"
+                android:gravity="center_vertical"
+                android:background="@null"
                 android:button="@null"
                 android:textColor="#000000"
                 android:id="@+id/radio3"
@@ -40,6 +49,9 @@
                 android:layout_height="match_parent"
                 />
             <RadioButton
+                android:textSize="40px"
+                android:gravity="center_vertical"
+                android:background="@null"
                 android:button="@null"
                 android:textColor="#000000"
                 android:id="@+id/radio4"
@@ -47,6 +59,9 @@
                 android:layout_height="match_parent"
                 />
             <RadioButton
+                android:textSize="40px"
+                android:gravity="center_vertical"
+                android:background="@null"
                 android:button="@null"
                 android:textColor="#000000"
                 android:id="@+id/radio5"

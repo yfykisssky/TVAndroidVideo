@@ -2,13 +2,12 @@ package com.android.tvvideo.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.tools.ShaPreHelper;
@@ -52,7 +51,7 @@ public class TestActivity extends Activity {
 
         validateDialog.show();*/
 
-        //startActivity(new Intent(this,SatisfactionActivity.class));
+        startActivity(new Intent(this,SatisfactionActivity.class));
         ((EditText)findViewById(R.id.url)).setText("rtmp://live.hkstv.hk.lxdns.com/live/hks");
         //((EditText)findViewById(R.id.url)).setText("http://bbs.tvhuan.com/");
 
