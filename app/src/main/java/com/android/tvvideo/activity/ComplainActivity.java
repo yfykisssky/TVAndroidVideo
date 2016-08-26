@@ -14,12 +14,15 @@ import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
+import com.android.tvvideo.tools.ImageLoad;
+import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.view.ComplainDialog;
 import com.android.tvvideo.view.SmoothGridView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.videolan.vlc.VLCApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,8 +81,6 @@ public class ComplainActivity extends BaseActivity {
 
                 complainDialog.show();
 
-                //sendComplain();
-
             }
         });
 
@@ -119,7 +120,7 @@ public class ComplainActivity extends BaseActivity {
             {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-//            ImageLoad.loadDefultImage(datas.get(i).get("path"),viewHolder.headImg);
+            ImageLoad.loadDefultImage(datas.get(i).get("path"),viewHolder.headImg);
             viewHolder.nameTex.setText(datas.get(i).get("name"));
             viewHolder.postTex.setText(datas.get(i).get("title"));
             return convertView;
@@ -139,12 +140,9 @@ public class ComplainActivity extends BaseActivity {
 
         JSONObject postData=new JSONObject();
         try {
-            //postData.put("ipaddress", SystemUtil.getLocalHostIp());
-            //postData.put("hospitalId", VLCApplication.getInstance().getPatientNum());
-            //postData.put("mobile",VLCApplication.getInstance().getPatientPhoneNum());
-            postData.put("ipaddress","192.168.2.117");
-            postData.put("hospitalId","123456");
-            postData.put("mobile","15936046693");
+            postData.put("ipaddress", SystemUtil.getLocalHostIp());
+            postData.put("hospitalId", VLCApplication.getInstance().getPatientNum());
+            postData.put("mobile", VLCApplication.getInstance().getPatientPhoneNum());
 
             new NetDataTool(this).sendPost(NetDataConstants.GET_COMPLAIN_LIST,postData.toString(), new NetDataTool.IResponse() {
                 @Override

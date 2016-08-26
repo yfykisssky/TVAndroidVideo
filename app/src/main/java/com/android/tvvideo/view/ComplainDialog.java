@@ -17,9 +17,11 @@ import android.widget.Toast;
 import com.android.tvvideo.R;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
+import com.android.tvvideo.tools.SystemUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.videolan.vlc.VLCApplication;
 
 /**
  * Created by yangfengyuan on 16/8/25.
@@ -143,13 +145,9 @@ public class ComplainDialog extends Dialog {
 
         JSONObject postData=new JSONObject();
         try {
-          /*  postData.put("ipaddress", SystemUtil.getLocalHostIp());
+            postData.put("ipaddress", SystemUtil.getLocalHostIp());
             postData.put("hospitalId", VLCApplication.getInstance().getPatientNum());
-            postData.put("mobile",VLCApplication.getInstance().getPatientPhoneNum());*/
-
-            postData.put("ipaddress","192.168.2.117");
-            postData.put("hospitalId","123456");
-            postData.put("mobile","15936046693");
+            postData.put("mobile",VLCApplication.getInstance().getPatientPhoneNum());
             postData.put("remark",remark);
             postData.put("id",id);
             postData.put("kind",kind);
