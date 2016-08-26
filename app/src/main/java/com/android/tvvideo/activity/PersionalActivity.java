@@ -74,7 +74,7 @@ public class PersionalActivity extends BaseActivity {
             postData.put("inHospitalNum",inhospinum);
             postData.put("phoneNum",phonenum);
 
-            new NetDataTool(this).sendPost(NetDataConstants.MEAL_ORDER,postData.toString(),new NetDataTool.IResponse() {
+            new NetDataTool(this).sendPost(NetDataConstants.GET_PERSIONAL,postData.toString(),new NetDataTool.IResponse() {
                 @Override
                 public void onSuccess(String data) {
 

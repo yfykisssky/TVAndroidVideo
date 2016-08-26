@@ -11,9 +11,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
+import com.android.tvvideo.net.NetDataConstants;
+import com.android.tvvideo.net.NetDataTool;
+import com.android.tvvideo.tools.SystemUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.videolan.vlc.VLCApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -153,6 +162,39 @@ public class PriceActivity extends BaseActivity {
 
             listAllData.add(map);
 
+        }
+
+
+        JSONObject postData=new JSONObject();
+        try {
+            postData.put("ipaddress", SystemUtil.getLocalHostIp());
+            postData.put("inHospitalNum", VLCApplication.getInstance().getPatientNum());
+            postData.put("phoneNum",VLCApplication.getInstance().getPatientPhoneNum());
+
+            new NetDataTool(this).sendPost(NetDataConstants.SEARCH_PRICE,postData.toString(),new NetDataTool.IResponse() {
+                @Override
+                public void onSuccess(String data) {
+
+                    try {
+
+                        JSONArray array=new JSONArray(data);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onFailed(String error) {
+
+                    Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
 
