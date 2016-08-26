@@ -17,30 +17,50 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <RadioButton
+                    android:textSize="40px"
+                    android:gravity="center_vertical"
+                    android:background="@null"
+                    android:button="@null"
                     android:textColor="#000000"
                     android:id="@+id/radio1"
                     android:text="不满意"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <RadioButton
+                    android:textSize="40px"
+                    android:gravity="center_vertical"
+                    android:background="@null"
+                    android:button="@null"
                     android:textColor="#000000"
                     android:id="@+id/radio2"
                     android:text="不满意"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <RadioButton
+                    android:textSize="40px"
+                    android:gravity="center_vertical"
+                    android:background="@null"
+                    android:button="@null"
                     android:textColor="#000000"
                     android:id="@+id/radio3"
                     android:text="不满意"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <RadioButton
+                    android:textSize="40px"
+                    android:gravity="center_vertical"
+                    android:background="@null"
+                    android:button="@null"
                     android:textColor="#000000"
                     android:id="@+id/radio4"
                     android:text="不满意"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <RadioButton
+                    android:textSize="40px"
+                    android:gravity="center_vertical"
+                    android:background="@null"
+                    android:button="@null"
                     android:textColor="#000000"
                     android:id="@+id/radio5"
                     android:text="不满不满不满不满"

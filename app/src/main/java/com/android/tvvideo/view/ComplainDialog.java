@@ -2,8 +2,10 @@ package com.android.tvvideo.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -73,6 +75,14 @@ public class ComplainDialog extends Dialog {
         this.inHospitalNum=inHospitalNum;
 
         this.phoneNum=phoneNum;*/
+
+    }
+
+    private void setRadioButtonDrawable(RadioButton radioButton){
+
+        Drawable drawableAdd = context.getResources().getDrawable(R.drawable.radiobutton_selector);
+        drawableAdd.setBounds(0, 0,50,50);
+        radioButton.setCompoundDrawables(drawableAdd, null, null, null);
 
     }
 
