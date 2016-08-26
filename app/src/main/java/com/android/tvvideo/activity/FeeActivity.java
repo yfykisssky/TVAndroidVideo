@@ -288,8 +288,8 @@ public class FeeActivity extends BaseActivity {
         JSONObject postData=new JSONObject();
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
-            postData.put("inHospitalNum", VLCApplication.getInstance().getPatientNum());
-            postData.put("phoneNum",VLCApplication.getInstance().getPatientPhoneNum());
+            postData.put("hospitalId", VLCApplication.getInstance().getPatientNum());
+            postData.put("mobile",VLCApplication.getInstance().getPatientPhoneNum());
 
             new NetDataTool(this).sendPost(NetDataConstants.GET_FEE,postData.toString(),new NetDataTool.IResponse() {
                 @Override

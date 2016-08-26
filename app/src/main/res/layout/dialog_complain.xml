@@ -2,73 +2,71 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="600px"
     android:background="@drawable/bg_radius_transwhite"
-    android:layout_height="800px">
+    android:layout_height="700px">
     <LinearLayout
-        android:layout_centerInParent="true"
+        android:layout_marginTop="50px"
+        android:layout_centerHorizontal="true"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="450px"
             android:layout_height="wrap_content">
-            <RadioGroup
-                android:id="@+id/radiogroup"
+            <View
+                android:background="#898989"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
+            <CheckBox
+                android:textSize="50px"
+                android:gravity="center_vertical"
+                android:background="@null"
+                android:button="@null"
+                android:textColor="#000000"
+                android:id="@+id/radio1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <RadioButton
-                    android:textSize="40px"
-                    android:gravity="center_vertical"
-                    android:background="@null"
-                    android:button="@null"
-                    android:textColor="#000000"
-                    android:id="@+id/radio1"
-                    android:text="不满意"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <RadioButton
-                    android:textSize="40px"
-                    android:gravity="center_vertical"
-                    android:background="@null"
-                    android:button="@null"
-                    android:textColor="#000000"
-                    android:id="@+id/radio2"
-                    android:text="不满意"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <RadioButton
-                    android:textSize="40px"
-                    android:gravity="center_vertical"
-                    android:background="@null"
-                    android:button="@null"
-                    android:textColor="#000000"
-                    android:id="@+id/radio3"
-                    android:text="不满意"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <RadioButton
-                    android:textSize="40px"
-                    android:gravity="center_vertical"
-                    android:background="@null"
-                    android:button="@null"
-                    android:textColor="#000000"
-                    android:id="@+id/radio4"
-                    android:text="不满意"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <RadioButton
-                    android:textSize="40px"
-                    android:gravity="center_vertical"
-                    android:background="@null"
-                    android:button="@null"
-                    android:textColor="#000000"
-                    android:id="@+id/radio5"
-                    android:text="不满不满不满不满"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </RadioGroup>
-
+                android:layout_height="100px" />
+            <View
+                android:background="#898989"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
+            <CheckBox
+                android:textSize="50px"
+                android:gravity="center_vertical"
+                android:background="@null"
+                android:button="@null"
+                android:textColor="#000000"
+                android:id="@+id/radio2"
+                android:layout_width="wrap_content"
+                android:layout_height="100px" />
+            <View
+                android:background="#898989"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
+            <CheckBox
+                android:textSize="50px"
+                android:gravity="center_vertical"
+                android:background="@null"
+                android:button="@null"
+                android:textColor="#000000"
+                android:id="@+id/radio3"
+                android:layout_width="wrap_content"
+                android:layout_height="100px" />
+            <View
+                android:background="#898989"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
+            <EditText
+                android:textSize="50px"
+                android:id="@+id/other"
+                android:layout_width="match_parent"
+                android:layout_height="100px" />
+            <View
+                android:background="#898989"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
             <LinearLayout
+                android:layout_marginTop="20px"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"

@@ -38,20 +38,7 @@ public class TestActivity extends Activity {
 
         setContentView(R.layout.activity_test);
 
-
-
-   /*     ValidateDialog validateDialog=new ValidateDialog(this);
-
-        validateDialog.setValidateListener(new ValidateDialog.ValidateListener() {
-            @Override
-            public void validate(boolean result) {
-                Log.e("ok",String.valueOf(result));
-            }
-        });
-
-        validateDialog.show();*/
-
-        startActivity(new Intent(this,SatisfactionActivity.class));
+        startActivity(new Intent(this,ComplainActivity.class));
         ((EditText)findViewById(R.id.url)).setText("rtmp://live.hkstv.hk.lxdns.com/live/hks");
         //((EditText)findViewById(R.id.url)).setText("http://bbs.tvhuan.com/");
 

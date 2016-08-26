@@ -71,8 +71,8 @@ public class PersionalActivity extends BaseActivity {
         JSONObject postData=new JSONObject();
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
-            postData.put("inHospitalNum",inhospinum);
-            postData.put("phoneNum",phonenum);
+            postData.put("hospitalId", VLCApplication.getInstance().getPatientNum());
+            postData.put("mobile",VLCApplication.getInstance().getPatientPhoneNum());
 
             new NetDataTool(this).sendPost(NetDataConstants.GET_PERSIONAL,postData.toString(),new NetDataTool.IResponse() {
                 @Override

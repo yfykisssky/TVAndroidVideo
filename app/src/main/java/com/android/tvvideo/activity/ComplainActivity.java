@@ -14,8 +14,7 @@ import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
-import com.android.tvvideo.tools.ImageLoad;
-import com.android.tvvideo.tools.SystemUtil;
+import com.android.tvvideo.view.ComplainDialog;
 import com.android.tvvideo.view.SmoothGridView;
 
 import org.json.JSONArray;
@@ -72,6 +71,13 @@ public class ComplainActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+
+                ComplainDialog complainDialog=new ComplainDialog(context);
+
+                complainDialog.setData(datas.get(i).get("id"),datas.get(i).get("kind"));
+
+                complainDialog.show();
+
                 //sendComplain();
 
             }
@@ -113,7 +119,7 @@ public class ComplainActivity extends BaseActivity {
             {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            ImageLoad.loadDefultImage(datas.get(i).get("path"),viewHolder.headImg);
+//            ImageLoad.loadDefultImage(datas.get(i).get("path"),viewHolder.headImg);
             viewHolder.nameTex.setText(datas.get(i).get("name"));
             viewHolder.postTex.setText(datas.get(i).get("title"));
             return convertView;
@@ -133,7 +139,12 @@ public class ComplainActivity extends BaseActivity {
 
         JSONObject postData=new JSONObject();
         try {
-            postData.put("ipaddress", SystemUtil.getLocalHostIp());
+            //postData.put("ipaddress", SystemUtil.getLocalHostIp());
+            //postData.put("hospitalId", VLCApplication.getInstance().getPatientNum());
+            //postData.put("mobile",VLCApplication.getInstance().getPatientPhoneNum());
+            postData.put("ipaddress","192.168.2.117");
+            postData.put("hospitalId","123456");
+            postData.put("mobile","15936046693");
 
             new NetDataTool(this).sendPost(NetDataConstants.GET_COMPLAIN_LIST,postData.toString(), new NetDataTool.IResponse() {
                 @Override
@@ -141,15 +152,35 @@ public class ComplainActivity extends BaseActivity {
 
                     try {
 
-                        JSONArray arrays=new JSONArray(data.toString());
+                        JSONObject jsonObject=new JSONObject(data);
 
-                        for(int v=0;v<arrays.length();v++){
+                        JSONArray nurses=jsonObject.getJSONArray("nurses");
+
+                        JSONArray doctors=jsonObject.getJSONArray("doctors");
+
+                        for(int v=0;v<doctors.length();v++){
 
                             Map<String,String> map=new HashMap<String, String>();
 
-                            map.put("name",arrays.getJSONObject(v).getString("name"));
-                            map.put("title",arrays.getJSONObject(v).getString("title"));
-                            map.put("path",arrays.getJSONObject(v).getString("path"));
+                            map.put("name",doctors.getJSONObject(v).getString("name"));
+                            map.put("title",doctors.getJSONObject(v).getString("title"));
+                            map.put("path",doctors.getJSONObject(v).getString("path"));
+                            map.put("kind","doctors");
+                            map.put("id",doctors.getJSONObject(v).getString("id"));
+
+                            datas.add(map);
+
+                        }
+
+                        for(int v=0;v<nurses.length();v++){
+
+                            Map<String,String> map=new HashMap<String, String>();
+
+                            map.put("name",nurses.getJSONObject(v).getString("name"));
+                            map.put("title",nurses.getJSONObject(v).getString("title"));
+                            map.put("path",nurses.getJSONObject(v).getString("path"));
+                            map.put("kind","nurses");
+                            map.put("id",doctors.getJSONObject(v).getString("id"));
 
                             datas.add(map);
 
