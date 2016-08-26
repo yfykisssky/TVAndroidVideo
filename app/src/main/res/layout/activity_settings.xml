@@ -85,13 +85,27 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
     </LinearLayout>
-    <Button
-        android:background="@drawable/button_selector"
-        android:textColor="#FFFFFF"
+    <LinearLayout
         android:layout_alignParentBottom="true"
-        android:id="@+id/confirm"
-        android:text="保存"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="100px" />
+        android:layout_height="wrap_content">
+        <Button
+            android:background="@drawable/button_selector"
+            android:textColor="#FFFFFF"
+            android:id="@+id/tvsettings"
+            android:text="TV系统设置"
+            android:layout_width="match_parent"
+            android:layout_height="100px" />
+        <Button
+            android:layout_marginTop="10px"
+            android:background="@drawable/button_selector"
+            android:textColor="#FFFFFF"
+            android:id="@+id/confirm"
+            android:text="保存"
+            android:layout_width="match_parent"
+            android:layout_height="100px" />
+    </LinearLayout>
+
 
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.android.tvvideo.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +33,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     private EditText serverPortEdit;
 
     private String serverPort;
+
+    private Button settingsTvBnt;
 
     private Button confirmBnt;
 
@@ -101,6 +104,10 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
         SystemUtil.setHideKeyBoard(this,serverPortEdit);
 
+        settingsTvBnt=(Button)findViewById(R.id.tvsettings);
+
+        settingsTvBnt.setOnClickListener(this);
+
         confirmBnt=(Button)findViewById(R.id.confirm);
 
         confirmBnt.setOnClickListener(this);
@@ -147,6 +154,11 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                 setResult(0x11,intent);
 
                 finish();
+
+                break;
+            case R.id.tvsettings:
+
+                startActivity(new Intent(Settings.ACTION_SETTINGS));
 
                 break;
         }
