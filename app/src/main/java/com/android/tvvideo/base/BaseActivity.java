@@ -125,7 +125,7 @@ public class BaseActivity extends Activity {
 
     private void resetOnOffTime() {
 
-        VLCApplication.getInstance().getOnOffTime();
+        VLCApplication.getInstance().resertOnOffTime();
 
     }
 

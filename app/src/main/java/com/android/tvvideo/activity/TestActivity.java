@@ -2,7 +2,6 @@ package com.android.tvvideo.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.EditText;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.tools.ShaPreHelper;
+import com.android.tvvideo.view.ComplainDialog;
 
 import org.videolan.vlc.video.VideoPlayerActivity;
 
@@ -38,7 +38,11 @@ public class TestActivity extends Activity {
 
         setContentView(R.layout.activity_test);
 
-        startActivity(new Intent(this,ComplainActivity.class));
+        ComplainDialog complainDialog=new ComplainDialog(this);
+
+        complainDialog.show();
+
+       // startActivity(new Intent(this,ComplainActivity.class));
         ((EditText)findViewById(R.id.url)).setText("rtmp://live.hkstv.hk.lxdns.com/live/hks");
         //((EditText)findViewById(R.id.url)).setText("http://bbs.tvhuan.com/");
 

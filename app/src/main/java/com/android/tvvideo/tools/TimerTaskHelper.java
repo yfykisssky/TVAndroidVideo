@@ -136,29 +136,37 @@ public class TimerTaskHelper {
 
         for(int y=0;y<timeModels.size();y++){
 
-            Calendar calendar=formatToCanlendar(timeModels.get(y).startTime);
+            if(timeModels.get(y).startTime!=null){
 
-            Intent intent = new Intent();
-            intent.putExtra("index",alarmId);
-            intent.putExtra("kind", "start");
-            intent.setAction(broadcastAction);
+                Calendar calendar=formatToCanlendar(timeModels.get(y).startTime);
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-            am.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), pendingIntent);
+                Intent intent = new Intent();
+                intent.putExtra("index",alarmId);
+                intent.putExtra("kind", "start");
+                intent.setAction(broadcastAction);
 
-            alarmId++;
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                am.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), pendingIntent);
 
-            calendar=formatToCanlendar(timeModels.get(y).endTime);
+                alarmId++;
 
-            intent = new Intent();
-            intent.putExtra("index",alarmId);
-            intent.putExtra("kind", "end");
-            intent.setAction(broadcastAction);
+            }
 
-            pendingIntent = PendingIntent.getBroadcast(context,alarmId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-            am.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), pendingIntent);
+            if(timeModels.get(y).endTime!=null){
 
-            alarmId++;
+                Calendar calendar=formatToCanlendar(timeModels.get(y).endTime);
+
+                Intent intent = new Intent();
+                intent.putExtra("index",alarmId);
+                intent.putExtra("kind", "end");
+                intent.setAction(broadcastAction);
+
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                am.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), pendingIntent);
+
+                alarmId++;
+
+            }
 
         }
 

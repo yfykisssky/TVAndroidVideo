@@ -58,8 +58,6 @@ public class NetDataConstants {
 
     public static final String SATISFACTION_FEED_BACK="/app/satisfactionFeedBack";
 
-
-
     public static final String GET_COMPLAIN_LIST="/app/getComplainList";
 
     public static final String SEND_COMPLAIN="/app/sendComplain";

@@ -105,7 +105,7 @@ public class VLCApplication extends Application {
 
     }
 
-    public void getOnOffTime(){
+    public void resertOnOffTime(){
 
         JSONObject postData = new JSONObject();
         try {
@@ -120,7 +120,7 @@ public class VLCApplication extends Application {
 
                         TimerTaskHelper.TimeModel timeModel=new TimerTaskHelper.TimeModel();
 
-                        timeModel.startTime=jsonObject.getString("startTime");
+                        //timeModel.startTime=jsonObject.getString("startTime");
 
                         timeModel.endTime=jsonObject.getString("endTime");
 
@@ -159,6 +159,8 @@ public class VLCApplication extends Application {
             public void onStartOrEnd(boolean startOrEnd, int index) {
 
                 if(!startOrEnd){
+
+                    SystemUtil.shutDown(VLCApplication.getAppContext());
 
                 }
 
