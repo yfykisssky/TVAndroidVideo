@@ -26,7 +26,7 @@
     <application
         android:configChanges="keyboard|keyboardHidden|navigation"
         android:largeHeap="true"
-        android:name="org.videolan.vlc.VLCApplication"
+        android:name="org.videolan.libvlc.VLCApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
@@ -84,7 +84,7 @@
 
         <!--suppress AndroidDomInspection -->
         <activity
-            android:name="org.videolan.vlc.video.VideoPlayerActivity"
+            android:name="com.android.tvvideo.video.VideoPlayerActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true"
             android:launchMode="singleTop">
@@ -418,7 +418,7 @@
         </activity>
         <!--suppress AndroidDomInspection -->
         <activity
-            android:name="org.videolan.vlc.video.TVPlayerActivity"
+            android:name="com.android.tvvideo.video.TVPlayerActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true"
             android:launchMode="singleTop">

@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,8 +22,7 @@ import com.android.tvvideo.view.RemindDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.videolan.vlc.VLCApplication;
-import org.videolan.vlc.video.VideoPlayerActivity;
+import org.videolan.libvlc.VLCApplication;
 
 import java.util.List;
 
@@ -140,7 +138,7 @@ public class BaseActivity extends Activity {
     }
 
     private void playVideo(String url){
-        VideoPlayerActivity.start(BaseActivity.this, Uri.parse(url));
+        //VideoPlayerActivity.start(BaseActivity.this, Uri.parse(url));
     }
 
     private void showRemindDialog(String remind){

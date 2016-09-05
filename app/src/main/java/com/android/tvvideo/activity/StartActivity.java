@@ -19,7 +19,8 @@ import com.android.tvvideo.tools.UpdateHelpter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.videolan.vlc.VLCApplication;
+import org.videolan.libvlc.VLCApplication;
+
 
 /**
  * Created by yangfengyuan on 16/7/18.

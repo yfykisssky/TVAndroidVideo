@@ -25,7 +25,7 @@ import com.android.tvvideo.view.ReFousListView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.videolan.vlc.VLCApplication;
+import org.videolan.libvlc.VLCApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -274,7 +274,7 @@ public class OrderMealActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                OrderConfirm(gridData.get(i),VLCApplication.getInstance().getPatientNum(),VLCApplication.getInstance().getPatientPhoneNum());
+                OrderConfirm(gridData.get(i), VLCApplication.getInstance().getPatientNum(),VLCApplication.getInstance().getPatientPhoneNum());
 
             }
         });

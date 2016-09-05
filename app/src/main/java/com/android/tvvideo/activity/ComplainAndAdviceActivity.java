@@ -18,7 +18,8 @@ import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.tools.ViewTool;
 
-import org.videolan.vlc.VLCApplication;
+import org.videolan.libvlc.VLCApplication;
+
 
 /**
  * Created by yangfengyuan on 16/8/22.

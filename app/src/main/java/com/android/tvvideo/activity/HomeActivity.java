@@ -9,13 +9,13 @@ import android.widget.TextView;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
+import com.android.tvvideo.video.TVPlayerActivity;
 import com.android.tvvideo.view.ValidateDialog;
 import com.android.tvvideo.view.page.Image3DModel;
 import com.android.tvvideo.view.page.PagerViewAdapter;
 import com.android.tvvideo.view.page.ZoomCardPageTransformer;
 
-import org.videolan.vlc.VLCApplication;
-import org.videolan.vlc.video.TVPlayerActivity;
+import org.videolan.libvlc.VLCApplication;
 
 
 public class HomeActivity extends BaseActivity {

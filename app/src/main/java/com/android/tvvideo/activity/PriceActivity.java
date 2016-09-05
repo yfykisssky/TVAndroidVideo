@@ -22,7 +22,7 @@ import com.android.tvvideo.tools.SystemUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.videolan.vlc.VLCApplication;
+import org.videolan.libvlc.VLCApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;

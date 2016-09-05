@@ -1,8 +1,8 @@
 package com.android.tvvideo.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +26,7 @@ import com.android.tvvideo.view.ReFousListView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.videolan.vlc.video.VideoPlayerActivity;
+import org.videolan.libvlc.VideoPlayerActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -282,9 +282,11 @@ public class VideoSelectActivity extends BaseActivity {
 
                 String url=gridData.get(i).getVideoUrl();
 
-                Uri uri= Uri.parse(url);
+                Intent intent=new Intent(VideoSelectActivity.this,VideoPlayerActivity.class);
 
-                VideoPlayerActivity.start(VideoSelectActivity.this,uri);
+                intent.putExtra("data",url);
+
+                startActivity(intent);
 
             }
         });
