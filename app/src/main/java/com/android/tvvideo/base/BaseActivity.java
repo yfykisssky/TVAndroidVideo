@@ -23,6 +23,7 @@ import com.android.tvvideo.view.RemindDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.videolan.libvlc.VLCApplication;
+import org.videolan.libvlc.VideoPlayerActivity;
 
 import java.util.List;
 
@@ -138,7 +139,7 @@ public class BaseActivity extends Activity {
     }
 
     private void playVideo(String url){
-        //VideoPlayerActivity.start(BaseActivity.this, Uri.parse(url));
+        VideoPlayerActivity.start(BaseActivity.this,url);
     }
 
     private void showRemindDialog(String remind){
