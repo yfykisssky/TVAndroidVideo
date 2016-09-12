@@ -392,6 +392,18 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         listView.setAdapter(myAdapter);
 
+        listView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+
+                if(keyEvent.getKeyCode()==KeyEvent.KEYCODE_DPAD_RIGHT||keyEvent.getKeyCode()==KeyEvent.KEYCODE_DPAD_LEFT){
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
         listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -648,10 +660,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     public final static String TAG = "VLC/VideoPlayerActivity";
 
-    // Internal intent identifier to distinguish between internal launch and
-    // external intent.
-    private final static String PLAY_FROM_VIDEOGRID = "org.videolan.vlc.gui.video.PLAY_FROM_VIDEOGRID";
-
     private SurfaceView mSurface;
     private SurfaceHolder mSurfaceHolder;
     private FrameLayout mSurfaceFrame;
@@ -751,8 +759,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
         //noinspection WrongConstant
         setRequestedOrientation(getScreenOrientation());
-
-        startPlayback();
 
     }
 

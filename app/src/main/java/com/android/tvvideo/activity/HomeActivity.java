@@ -23,9 +23,13 @@ public class HomeActivity extends BaseActivity {
     int index=0;
     TextView titleTex;
 
-    final String[] titles={"医院介绍","科室介绍","住院告知","健康宣教","电视直播","系统设置"};
+   /* final String[] titles={"医院介绍","科室介绍","住院告知","健康宣教","电视直播","系统设置"};
 
-    final int[] pageViewIds={R.drawable.hosipital,R.drawable.exams,R.drawable.inhospital,R.drawable.teach,R.drawable.tv,R.drawable.settings};
+    final int[] pageViewIds={R.drawable.hosipital,R.drawable.exams,R.drawable.inhospital,R.drawable.teach,R.drawable.tv,R.drawable.settings};*/
+
+    final String[] titles={"医院介绍","科室介绍","住院告知","健康宣教","电视直播","日常服务","投诉建议","系统设置"};
+
+    final int[] pageViewIds={R.drawable.hosipital,R.drawable.exams,R.drawable.inhospital,R.drawable.teach,R.drawable.tv,R.drawable.server,R.drawable.feedback,R.drawable.settings};
 /*
     final String[] titles={"医院介绍","科室介绍","住院告知","健康宣教","电视直播","日常服务","患者服务","投诉建议","系统设置"};
 
@@ -104,7 +108,7 @@ public class HomeActivity extends BaseActivity {
                         case 4:
                             toTV();
                             break;
-                        case 6:
+                        case 5:
 
                             validateDialog.setValidateListener(new ValidateDialog.ValidateListener() {
                                 @Override
@@ -121,7 +125,7 @@ public class HomeActivity extends BaseActivity {
                             validateDialog.show();
 
                             break;
-                        case 7:
+                       /* case 6:
 
                             validateDialog.setValidateListener(new ValidateDialog.ValidateListener() {
                                 @Override
@@ -137,8 +141,8 @@ public class HomeActivity extends BaseActivity {
 
                             validateDialog.show();
 
-                            break;
-                        case 8:
+                            break;*/
+                        case 6:
 
                             validateDialog.setValidateListener(new ValidateDialog.ValidateListener() {
                                 @Override
@@ -156,7 +160,7 @@ public class HomeActivity extends BaseActivity {
 
                             break;
 
-                        case 5:
+                        case 7:
                             toSettings();
                             break;
                     }

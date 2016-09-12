@@ -21,12 +21,12 @@ import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
 import com.android.tvvideo.tools.SystemUtil;
+import com.android.tvvideo.video.VideoPlayerActivity;
 import com.android.tvvideo.view.ReFousListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.videolan.libvlc.VideoPlayerActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
