@@ -18,12 +18,12 @@ import android.widget.Toast;
 
 import com.android.tvvideo.tools.PushService;
 import com.android.tvvideo.tools.SystemUtil;
+import com.android.tvvideo.video.VideoPlayerActivity;
 import com.android.tvvideo.view.RemindDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.videolan.libvlc.VLCApplication;
-import org.videolan.libvlc.VideoPlayerActivity;
 
 import java.util.List;
 
@@ -139,7 +139,13 @@ public class BaseActivity extends Activity {
     }
 
     private void playVideo(String url){
-        VideoPlayerActivity.start(BaseActivity.this,url);
+
+        Intent intent=new Intent(BaseActivity.this,VideoPlayerActivity.class);
+
+        intent.putExtra("data",url);
+
+        startActivity(intent);
+
     }
 
     private void showRemindDialog(String remind){

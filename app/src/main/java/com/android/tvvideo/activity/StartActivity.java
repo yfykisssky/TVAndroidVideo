@@ -12,8 +12,6 @@ import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
-import com.android.tvvideo.tools.CrashHandler;
-import com.android.tvvideo.tools.ImageLoad;
 import com.android.tvvideo.tools.ShaPreHelper;
 import com.android.tvvideo.tools.UpdateHelpter;
 
@@ -37,22 +35,12 @@ public class StartActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initAll();
-
         setContentView(R.layout.activity_start);
 
         initView();
 
         initData();
 
-
-    }
-
-    private void initAll(){
-
-        CrashHandler.getInstance().init(this.getApplicationContext());
-
-        ImageLoad.init(this);
 
     }
 

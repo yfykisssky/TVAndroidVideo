@@ -29,6 +29,8 @@ import android.os.IBinder;
 
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
+import com.android.tvvideo.tools.CrashHandler;
+import com.android.tvvideo.tools.ImageLoad;
 import com.android.tvvideo.tools.PushService;
 import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.tools.TimerTaskHelper;
@@ -57,6 +59,15 @@ public class VLCApplication extends Application {
     String patientNum;
 
     String patientPhoneNum;
+
+
+    private void initAll(){
+
+        CrashHandler.getInstance().init(this.getApplicationContext());
+
+        ImageLoad.init(this);
+
+    }
 
     public String getPatientNum() {
         return patientNum;
@@ -101,6 +112,8 @@ public class VLCApplication extends Application {
         maxVolumeTaskHelper=new TimerTaskHelper(this);
 
         instance = this;
+
+        initAll();
 
     }
 

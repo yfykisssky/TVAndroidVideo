@@ -136,6 +136,31 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         destroyVideo();
     }
 
+    Handler viewHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch(msg.what){
+                case 0:
+                    hideMsg();
+                    break;
+                case 1:
+                    String msgData= (String) msg.obj;
+                    showMsg(msgData);
+                    break;
+                case 2:
+                    hideAd();
+                    break;
+                case 3:
+                    String msgAd= (String) msg.obj;
+                    showAd(msgAd);
+                    break;
+            }
+
+        }
+    };
+
 
     private void getShowMsg() {
 
@@ -149,7 +174,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     msgTex.clear();
 
-                    hideMsg();
+                    viewHandler.sendEmptyMessage(0);
 
                     msgTimerTaskHelper.stopAndRemove();
 
@@ -208,7 +233,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     adData.clear();
 
-                    hideAd();
+                    viewHandler.sendEmptyMessage(2);
 
                     adTimerTaskHelper.stopAndRemove();
 
@@ -299,11 +324,21 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         adTimerTaskHelper.startAndListener("ad", new TimerTaskHelper.OnStartOrEndListener() {
             @Override
             public void onStartOrEnd(boolean startOrEnd,int index) {
+
                 if(startOrEnd){
-                    showAd(adData.get(index));
+
+                    Message msg=new Message();
+
+                    msg.obj=msgTex.get(index);
+
+                    msg.what=3;
+
+                    viewHandler.sendMessage(msg);
+
                 }else{
-                    hideAd();
+                    viewHandler.sendEmptyMessage(2);
                 }
+
             }
         });
 
@@ -347,9 +382,17 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
             @Override
             public void onStartOrEnd(boolean startOrEnd,int index) {
                 if(startOrEnd){
-                    showMsg(msgTex.get(index));
+
+                    Message msg=new Message();
+
+                    msg.obj=msgTex.get(index);
+
+                    msg.what=1;
+
+                    viewHandler.sendMessage(msg);
+
                 }else{
-                    hideMsg();
+                    viewHandler.sendEmptyMessage(0);
                 }
             }
         });
@@ -417,9 +460,13 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                     relativeLayout.show();
                 }
 
-                String playUrl=listData.get(i).get("playurl");
+                if(listData!=null&&listData.size()>0){
 
-                resetTvPlay(playUrl);
+                    String playUrl=listData.get(i).get("playurl");
+
+                    resetTvPlay(playUrl);
+
+                }
 
             }
 
@@ -524,7 +571,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
             myHolder.indexTex.setText(String.valueOf(i+1));
 
-           ImageLoad.loadDefultImage(imgUrl,myHolder.img);
+            ImageLoad.loadDefultImage(imgUrl,myHolder.img);
 
             if(indexList==i){
                 view.setBackgroundColor(Color.parseColor("#ccFF0000"));

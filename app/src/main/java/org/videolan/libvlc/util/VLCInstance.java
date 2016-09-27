@@ -27,7 +27,6 @@ import android.preference.PreferenceManager;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.LibVlcException;
 import org.videolan.libvlc.VLCApplication;
-import org.videolan.libvlc.VLCCrashHandler;
 
 
 public class VLCInstance {
@@ -37,7 +36,7 @@ public class VLCInstance {
     public static LibVLC getLibVlcInstance() throws LibVlcException {
         LibVLC instance = LibVLC.getExistingInstance();
         if (instance == null) {
-            Thread.setDefaultUncaughtExceptionHandler(new VLCCrashHandler());
+            //Thread.setDefaultUncaughtExceptionHandler(new VLCCrashHandler());
 
             instance = LibVLC.getInstance();
             final Context context = VLCApplication.getAppContext();
