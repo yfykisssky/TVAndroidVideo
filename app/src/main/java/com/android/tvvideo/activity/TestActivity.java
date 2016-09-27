@@ -11,8 +11,8 @@ import android.widget.EditText;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.tools.ShaPreHelper;
+import com.android.tvvideo.video.TVPlayerActivity;
 import com.android.tvvideo.video.VideoPlayerActivity;
-import com.android.tvvideo.view.ComplainDialog;
 
 
 
@@ -38,10 +38,14 @@ public class TestActivity extends Activity {
         writeSettings();
 
         setContentView(R.layout.activity_test);
-
+/*
         ComplainDialog complainDialog=new ComplainDialog(this);
 
-        complainDialog.show();
+        complainDialog.show();*/
+
+        Intent intent=new Intent(TestActivity.this, TVPlayerActivity.class);
+
+        startActivity(intent);
 
        // startActivity(new Intent(this,ComplainActivity.class));
         ((EditText)findViewById(R.id.url)).setText("rtmp://live.hkstv.hk.lxdns.com/live/hks");

@@ -1,6 +1,7 @@
 package com.android.tvvideo.tools;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -16,7 +17,6 @@ import android.widget.TextView;
 
 import com.android.tvvideo.view.ShutDownDialog;
 
-import java.io.DataOutputStream;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -211,8 +211,6 @@ public class SystemUtil {
         getLocalTime.time(year,month,day,hour,minute,second);
     }
 
-    //关机 reboot -p
-    //重启 reboot
     public static void shutDown(Context context){
 
         ShutDownDialog shutDownDialog=new ShutDownDialog(context);
@@ -221,7 +219,19 @@ public class SystemUtil {
 
     }
 
-    public static boolean execCmd(String command) {
+    public static void shutDownSystem(Context context){
+
+        final String SHUTDOWN_ACTION="com.hisense.action.powerdown";
+
+        Intent intent = new Intent();
+        intent.setAction(SHUTDOWN_ACTION);
+        context.sendBroadcast(intent);
+
+    }
+
+
+
+/*    public static boolean execCmd(String command) {
         Process process = null;
         DataOutputStream os = null;
         try {
@@ -246,7 +256,7 @@ public class SystemUtil {
             }
         }
         return true;
-    }
+    }*/
 
 }
 

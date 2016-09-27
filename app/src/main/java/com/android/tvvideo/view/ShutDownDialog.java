@@ -42,7 +42,7 @@ public class ShutDownDialog extends Dialog {
             remindTex.setText("还有"+String.valueOf(msg.what)+"秒后关机");
 
             if(msg.what==0){
-                SystemUtil.execCmd("reboot -p");
+                SystemUtil.shutDownSystem(getContext());
             }else{
 
                 Message message=new Message();

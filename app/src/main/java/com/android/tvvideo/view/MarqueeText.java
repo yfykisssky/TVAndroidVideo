@@ -61,21 +61,26 @@ public class MarqueeText extends TextView implements Runnable {
 
         super.onDraw(canvas);
 
-        Paint mPaint = new Paint();
-        mPaint.setStrokeWidth(5);
-        mPaint.setTextSize(50);
-        mPaint.setColor(Color.BLACK);
-        mPaint.setTextAlign(Paint.Align.LEFT);
+        if(text!=null){
 
-        Rect bounds = new Rect();
-        mPaint.getTextBounds(text, 0,text.length(), bounds);
+            Paint mPaint = new Paint();
+            mPaint.setStrokeWidth(5);
+            mPaint.setTextSize(50);
+            mPaint.setColor(Color.BLACK);
+            mPaint.setTextAlign(Paint.Align.LEFT);
 
-        Paint.FontMetricsInt fontMetrics = mPaint.getFontMetricsInt();
-        int baseline = (getMeasuredHeight() - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top;
+            Rect bounds = new Rect();
+            mPaint.getTextBounds(text, 0,text.length(), bounds);
 
-        canvas.drawText(text,0,baseline,mPaint);
+            Paint.FontMetricsInt fontMetrics = mPaint.getFontMetricsInt();
+            int baseline = (getMeasuredHeight() - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top;
 
-        textWidth =bounds.width();
+            canvas.drawText(text,0,baseline,mPaint);
+
+            textWidth =bounds.width();
+
+        }
+
     }
 
     @Override
