@@ -22,8 +22,6 @@ import java.text.SimpleDateFormat;
 
 public class CrashHandler implements UncaughtExceptionHandler {
 
-    private String TAG="V2.0.0 9-27";
-
     private static CrashHandler INSTANCE = new CrashHandler();
     private Context mContext;
     private UncaughtExceptionHandler mDefaultHandler;
@@ -48,7 +46,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 
             try {
                 jsonObject.put("time",date);
-                jsonObject.put("content",TAG+"\n"+data);
+                jsonObject.put("content",data);
 
                 new NetDataTool(mContext).sendNoShowPost(NetDataConstants.APP_INFO, jsonObject.toString(), new NetDataTool.IResponse() {
                     @Override

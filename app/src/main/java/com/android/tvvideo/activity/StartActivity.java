@@ -1,12 +1,15 @@
 package com.android.tvvideo.activity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
@@ -14,6 +17,7 @@ import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ShaPreHelper;
 import com.android.tvvideo.tools.UpdateHelpter;
+import com.android.tvvideo.tools.ViewTool;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +48,12 @@ public class StartActivity extends BaseActivity {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void initView() {
+
+        RelativeLayout relativeLayout=(RelativeLayout)findViewById(R.id.start_bg);
+
+        relativeLayout.setBackground(ViewTool.getDrawble(this,R.drawable.start_bg));
 
         settingsButton=(Button) findViewById(R.id.settings);
 

@@ -97,6 +97,16 @@
             android:text="TV系统设置"
             android:layout_width="match_parent"
             android:layout_height="100px" />
+
+        <Button
+            android:layout_marginTop="10px"
+            android:background="@drawable/button_selector"
+            android:textColor="#FFFFFF"
+            android:id="@+id/log"
+            android:text="错误日志"
+            android:layout_width="match_parent"
+            android:layout_height="100px" />
+
         <Button
             android:layout_marginTop="10px"
             android:background="@drawable/button_selector"
