@@ -36,8 +36,6 @@ public class VLCInstance {
     public static LibVLC getLibVlcInstance() throws LibVlcException {
         LibVLC instance = LibVLC.getExistingInstance();
         if (instance == null) {
-            //Thread.setDefaultUncaughtExceptionHandler(new VLCCrashHandler());
-
             instance = LibVLC.getInstance();
             final Context context = VLCApplication.getAppContext();
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -45,11 +43,8 @@ public class VLCInstance {
             instance.init(context);
             instance.setOnNativeCrashListener(new LibVLC.OnNativeCrashListener() {
                 @Override
-                public void onNativeCrash() {
-                /*    Intent i = new Intent(context, NativeCrashActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    i.putExtra("PID", android.os.Process.myPid());
-                    context.startActivity(i);*/
+                public void onNativeCrash() throws Exception {
+                    throw new Exception("VLC Native Exception"+android.os.Process.myPid());
                 }
             });
         }

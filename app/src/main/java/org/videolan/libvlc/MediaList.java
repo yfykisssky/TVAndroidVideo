@@ -30,6 +30,9 @@ import java.util.ArrayList;
 public class MediaList {
     private static final String TAG = "VLC/LibVLC/MediaList";
 
+    LibVlcException libVlcException=new LibVlcException();
+
+
     /* Since the libvlc_media_t is not created until the media plays, we have
      * to cache them here. */
     private static class MediaHolder {

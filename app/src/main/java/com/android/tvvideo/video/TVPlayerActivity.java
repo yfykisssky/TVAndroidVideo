@@ -91,6 +91,8 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     List<Map<String,String>> listData=new ArrayList<>();
 
+    int indexPlay;
+
     int indexList;
 
     WebView adWebView;
@@ -443,6 +445,20 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                     return true;
                 }
 
+                if(keyEvent.getKeyCode()==KeyEvent.KEYCODE_DPAD_CENTER){
+
+                    indexPlay=indexList;
+
+                    if(listData!=null&&listData.size()>0){
+
+                        String playUrl=listData.get(i).get("playurl");
+
+                        resetTvPlay(playUrl);
+
+                    }
+
+                }
+
                 return false;
             }
         });
@@ -458,14 +474,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                 if (!relativeLayout.isShow()) {
                     relativeLayout.show();
-                }
-
-                if(listData!=null&&listData.size()>0){
-
-                    String playUrl=listData.get(i).get("playurl");
-
-                    resetTvPlay(playUrl);
-
                 }
 
             }
@@ -534,6 +542,8 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         mLibVLC.stop();
 
+        mLibVLC.destroy();
+
     }
 
     class MyAdapter extends BaseAdapter {
@@ -578,6 +588,14 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
             }else{
                 view.setBackgroundColor(Color.parseColor("#cc000000"));
             }
+
+            if(indexPlay==i){
+                view.setBackgroundColor(Color.parseColor("#ccFF6100"));
+            }else{
+                view.setBackgroundColor(Color.parseColor("#cc000000"));
+            }
+
+
 
             return view;
         }
@@ -848,6 +866,9 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     }
 
     private void startPlayback() {
+
+        initVideoPlayer();
+
         loadMedia();
     }
 

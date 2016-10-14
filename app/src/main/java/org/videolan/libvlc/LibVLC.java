@@ -730,7 +730,7 @@ public class LibVLC {
     public native float[] getPreset(int index);
 
     public static interface OnNativeCrashListener {
-        public void onNativeCrash();
+        public void onNativeCrash() throws Exception;
     }
 
     public void setOnNativeCrashListener(OnNativeCrashListener l) {
@@ -739,7 +739,11 @@ public class LibVLC {
 
     private void onNativeCrash() {
         if (mOnNativeCrashListener != null)
-            mOnNativeCrashListener.onNativeCrash();
+            try {
+                mOnNativeCrashListener.onNativeCrash();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 
     public String getCachePath() {

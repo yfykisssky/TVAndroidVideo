@@ -47,6 +47,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
@@ -536,18 +537,13 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer {
     }
 
     private void encounteredError() {
-     /*   *//* Encountered Error, exit player with a message *//*
-        AlertDialog dialog = new AlertDialog.Builder(VideoPlayerActivity.this)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        finish();
-                    }
-                })
-                .setTitle(R.string.encountered_error_title)
-                .setMessage(R.string.encountered_error_message)
-                .create();
-        dialog.show();*/
+
+        stopLoading();
+
+        Toast.makeText(this,"播放发生错误!",Toast.LENGTH_SHORT).show();
+
+        finish();
+
     }
 
     private void handleHardwareAccelerationError() {

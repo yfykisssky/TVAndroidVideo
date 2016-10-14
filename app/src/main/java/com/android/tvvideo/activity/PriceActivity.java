@@ -156,7 +156,7 @@ public class PriceActivity extends BaseActivity {
 
             map.put("kind","0");
             map.put("name",String.valueOf(b));
-            map.put("number",String.valueOf(b));
+            map.put("safestkind",String.valueOf(b));
             map.put("unit",String.valueOf(b));
             map.put("price",String.valueOf(b));
 
@@ -272,7 +272,7 @@ public class PriceActivity extends BaseActivity {
 
             holder.kind.setText(listData.get(i).get("kind"));
             holder.name.setText(listData.get(i).get("name"));
-            holder.number.setText(listData.get(i).get("number"));
+            holder.number.setText(listData.get(i).get("safestkind"));
             holder.unit.setText(listData.get(i).get("unit"));
             holder.price.setText(listData.get(i).get("price"));
 
