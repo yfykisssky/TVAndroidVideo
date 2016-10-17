@@ -441,6 +441,14 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
 
+                if(loadingDialog!=null){
+
+                    if(loadingDialog.isShowing()){
+                        return true;
+                    }
+
+                }
+
                 if(keyEvent.getKeyCode()==KeyEvent.KEYCODE_DPAD_RIGHT||keyEvent.getKeyCode()==KeyEvent.KEYCODE_DPAD_LEFT){
                     return true;
                 }
@@ -457,6 +465,8 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     }
 
+                    myAdapter.notifyDataSetChanged();
+
                 }
 
                 return false;
@@ -466,6 +476,14 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(loadingDialog!=null){
+
+                    if(loadingDialog.isShowing()){
+                        return;
+                    }
+
+                }
 
                 indexList=i;
                 myAdapter.notifyDataSetChanged();
@@ -541,8 +559,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     private void stopPlayback() {
 
         mLibVLC.stop();
-
-        mLibVLC.destroy();
 
     }
 
@@ -867,9 +883,8 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     private void startPlayback() {
 
-        initVideoPlayer();
-
         loadMedia();
+
     }
 
     @Override
