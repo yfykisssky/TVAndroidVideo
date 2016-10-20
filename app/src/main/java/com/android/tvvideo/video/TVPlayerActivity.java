@@ -54,7 +54,6 @@ import org.videolan.libvlc.IVideoPlayer;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.LibVlcException;
 import org.videolan.libvlc.LibVlcUtil;
-import org.videolan.libvlc.Media;
 import org.videolan.libvlc.WeakHandler;
 import org.videolan.libvlc.util.VLCInstance;
 
@@ -65,6 +64,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import static com.android.tvvideo.R.id.index;
 
 /**
  * Created by yangfengyuan on 16/7/29.
@@ -119,9 +120,13 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         setContentView(R.layout.activity_tvplayer);
 
+        initVideoView();
+
         initVideoPlayer();
 
         context = this;
+
+        indexPlay=0;
 
         initView();
 
@@ -132,6 +137,12 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        mLibVLC.getMediaList().clear();
+
+        mLibVLC=null;
+
+        indexPlay=0;
 
         destoryTimer();
 
@@ -303,7 +314,21 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     myAdapter.notifyDataSetChanged();
 
-                    resetTvPlay(listData.get(0).get("playurl"));
+                    List<String> tvPlayUrls=new ArrayList<String>();
+
+                    for(int t=0;t<listData.size();t++){
+
+                        tvPlayUrls.add(listData.get(0).get("playurl"));
+
+                    }
+
+                    if(tvPlayUrls.size()>0){
+
+                        indexPlay=0;
+
+                        playMrl(tvPlayUrls.get(0));
+
+                    }
 
                     startCountTimeThread();
 
@@ -455,17 +480,17 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                 if(keyEvent.getKeyCode()==KeyEvent.KEYCODE_DPAD_CENTER){
 
-                    indexPlay=indexList;
-
-                    if(listData!=null&&listData.size()>0){
-
-                        String playUrl=listData.get(i).get("playurl");
-
-                        resetTvPlay(playUrl);
-
+                    if(indexPlay==indexList){
+                        return true;
                     }
 
+                    indexPlay=indexList;
+
+                    resetTvPlay(listData.get(indexPlay).get("playurl"));
+
                     myAdapter.notifyDataSetChanged();
+
+                    countTimeThread.reset();
 
                 }
 
@@ -544,23 +569,55 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         adTimerTaskHelper.stopAndRemove();
     }
 
-    private void resetTvPlay(String playUrl) {
+    String playUrl;
+
+    private void resetTvPlay(final String url) {
 
         startLoading();
 
-        mUri=playUrl;
-
         stopPlayback();
 
-        startPlayback();
+        playUrl=url;
 
     }
 
-    private void stopPlayback() {
+    private Handler playHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            if(playUrl!=null){
+                playMrl(playUrl);
+            }
+
+        }
+    };
+
+   private void stopPlayback() {
 
         mLibVLC.stop();
 
     }
+
+    private void playMrl(String url) {
+
+        /* WARNING: hack to avoid a crash in mediacodec on KitKat.
+         * Disable hardware acceleration if the media has a ts extension. */
+        if (url!= null && LibVlcUtil.isKitKatOrLater()) {
+            String locationLC =url.toLowerCase(Locale.ENGLISH);
+            if (locationLC.endsWith(".ts")
+                    || locationLC.endsWith(".tts")
+                    || locationLC.endsWith(".m2t")
+                    || locationLC.endsWith(".mts")
+                    || locationLC.endsWith(".m2ts")) {
+                mLibVLC.setHardwareAcceleration(LibVLC.HW_ACCELERATION_DISABLED);
+            }
+        }
+
+        mLibVLC.playMRL(url);
+
+    }
+
 
     class MyAdapter extends BaseAdapter {
 
@@ -586,7 +643,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
             if (view == null) {
                 view = LayoutInflater.from(context).inflate(R.layout.item_tv_list, null);
                 myHolder = new MyHolder();
-                myHolder.indexTex = (TextView) view.findViewById(R.id.index);
+                myHolder.indexTex = (TextView) view.findViewById(index);
                 myHolder.img = (ImageView) view.findViewById(R.id.img);
                 view.setTag(myHolder);
             } else {
@@ -600,13 +657,13 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
             ImageLoad.loadDefultImage(imgUrl,myHolder.img);
 
             if(indexList==i){
-                view.setBackgroundColor(Color.parseColor("#ccFF0000"));
+                view.setBackgroundColor(Color.parseColor("#FF0000FF"));
             }else{
                 view.setBackgroundColor(Color.parseColor("#cc000000"));
             }
 
             if(indexPlay==i){
-                view.setBackgroundColor(Color.parseColor("#ccFF6100"));
+                view.setBackgroundColor(Color.parseColor("#FF00FF00"));
             }else{
                 view.setBackgroundColor(Color.parseColor("#cc000000"));
             }
@@ -701,33 +758,12 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         }
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        switch(keyCode){
-            case KeyEvent.KEYCODE_DPAD_UP:
-
-                break;
-            case KeyEvent.KEYCODE_DPAD_DOWN:
-
-                break;
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-
-    private boolean mIsLoading;
     private LoadingDialog loadingDialog;
     private void startLoading() {
-        mIsLoading = true;
-
         loadingDialog.show();
     }
 
     private void stopLoading() {
-        mIsLoading = false;
-
         loadingDialog.dismiss();
     }
 
@@ -737,15 +773,12 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     //############################################################################################################################################################################
     //############################################################################################################################################################################
 
-    private String mUri;
-
     public final static String TAG = "VLC/VideoPlayerActivity";
 
     private SurfaceView mSurface;
     private SurfaceHolder mSurfaceHolder;
     private FrameLayout mSurfaceFrame;
     private LibVLC mLibVLC;
-    //private String mLocation;
 
     private static final int SURFACE_BEST_FIT = 0;
     private static final int SURFACE_FIT_HORIZONTAL = 1;
@@ -758,8 +791,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     private SharedPreferences mSettings;
 
-    private static final int OVERLAY_TIMEOUT = 4000;
-    private static final int OVERLAY_INFINITE = 3600000;
     private static final int FADE_OUT = 1;
     private static final int SHOW_PROGRESS = 2;
     private static final int SURFACE_SIZE = 3;
@@ -767,9 +798,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     private static final int AUDIO_SERVICE_CONNECTION_FAILED = 6;
     private static final int FADE_OUT_INFO = 4;
     private int mUiVisibility = -1;
-
-    // Playlist
-    private int savedIndexPosition = -1;
 
     // size of the video
     private int mVideoHeight;
@@ -779,17 +807,23 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     private int mSarNum;
     private int mSarDen;
 
-    // Whether fallback from HW acceleration to SW decoding was done.
-    private boolean mDisabledHardwareAcceleration = false;
-    private int mPreviousHardwareAccelerationMode;
-
-    private void initVideoPlayer(){
+    private void initVideoView(){
 
         mSettings = PreferenceManager.getDefaultSharedPreferences(this);
 
-        setContentView(R.layout.activity_tvplayer);
-
         loadingDialog=new LoadingDialog(this);
+
+        mSurface = (SurfaceView) findViewById(R.id.player_surface);
+        mSurfaceFrame = (FrameLayout) findViewById(R.id.player_surface_frame);
+
+        //noinspection WrongConstant
+        setRequestedOrientation(getScreenOrientation());
+
+    }
+
+    private void initVideoPlayer(){
+
+        mLibVLC=null;
 
         if (LibVlcUtil.isICSOrLater())
             getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(
@@ -799,9 +833,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                             if (visibility == mUiVisibility)
                                 return;
                             setSurfaceSize(mVideoWidth, mVideoHeight, mVideoVisibleWidth, mVideoVisibleHeight, mSarNum, mSarDen);
-                          /*  if (visibility == View.SYSTEM_UI_FLAG_VISIBLE && !mShowing && !isFinishing()) {
-                                //showOverlay();
-                            }*/
                             mUiVisibility = visibility;
                         }
                     }
@@ -816,9 +847,8 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         mLibVLC.setSpuTrack(-1);
 
-        mSurface = (SurfaceView) findViewById(R.id.player_surface);
         mSurfaceHolder = mSurface.getHolder();
-        mSurfaceFrame = (FrameLayout) findViewById(R.id.player_surface_frame);
+
         String chroma = mSettings.getString("chroma_format", "RV32");
         if(LibVlcUtil.isGingerbreadOrLater() && chroma.equals("YV12")) {
             mSurfaceHolder.setFormat(ImageFormat.YV12);
@@ -838,52 +868,18 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         em.addHandler(eventHandler);
 
         this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        //noinspection WrongConstant
-        setRequestedOrientation(getScreenOrientation());
 
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        /*
-         * Pausing here generates errors because the vout is constantly
-         * trying to refresh itself every 80ms while the surface is not
-         * accessible anymore.
-         * To workaround that, we keep the last known position in the playlist
-         * in savedIndexPosition to be able to restore it during onResume().
-         */
-        mLibVLC.stop();
-
-        mSurface.setKeepScreenOn(false);
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     private void destroyVideo() {
+
+        mSurfaceCallback.surfaceDestroyed(mSurfaceHolder);
 
         EventHandler em = EventHandler.getInstance();
         em.removeHandler(eventHandler);
 
         // MediaCodec opaque direct rendering should not be used anymore since there is no surface to attach.
         mLibVLC.eventVideoPlayerActivityCreated(false);
-        // HW acceleration was temporarily disabled because of an error, restore the previous value.
-        if (mDisabledHardwareAcceleration)
-            mLibVLC.setHardwareAcceleration(mPreviousHardwareAccelerationMode);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    private void startPlayback() {
-
-        loadMedia();
 
     }
 
@@ -910,25 +906,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     }
 
     /**
-     * Show text in the info view for "duration" milliseconds
-     * @param text
-     * @param duration
-     */
-    private void showInfo(String text, int duration) {
-   /*     mInfo.setVisibility(View.VISIBLE);
-        mInfo.setText(text);*/
-        mHandler.removeMessages(FADE_OUT_INFO);
-        mHandler.sendEmptyMessageDelayed(FADE_OUT_INFO, duration);
-    }
-
-    private void showInfo(int textid, int duration) {
-     /*   mInfo.setVisibility(View.VISIBLE);
-        mInfo.setText(textid);*/
-        mHandler.removeMessages(FADE_OUT_INFO);
-        mHandler.sendEmptyMessageDelayed(FADE_OUT_INFO, duration);
-    }
-
-    /**
      *  Handle libvlc asynchronous events
      */
     private final Handler eventHandler = new VideoPlayerEventHandler(this);
@@ -943,66 +920,40 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
             TVPlayerActivity activity = getOwner();
             if(activity == null) return;
             // Do not handle events if we are leaving the VideoPlayerActivity
-            //if (activity.mSwitchingView) return;
-
             switch (msg.getData().getInt("event")) {
                 case EventHandler.MediaParsedChanged:
-                    Log.i(TAG, "MediaParsedChanged");
-                    //activity.updateNavStatus();
-                 /*   if (!activity.mHasMenu && activity.mLibVLC.getVideoTracksCount() < 1) {
-                        Log.i(TAG, "No video track, open in audio mode");
-                        //activity.switchToAudioMode();
-                    }*/
                     break;
                 case EventHandler.MediaPlayerPlaying:
-                    Log.i(TAG, "MediaPlayerPlaying");
-                    activity.stopLoading();
-                    //activity.showOverlay();
-                    /** FIXME: update the track list when it changes during the
-                     *  playback. (#7540) */
-                    //activity.setESTrackLists(true);
-                    // activity.setESTracks();
-                    //activity.changeAudioFocus(true);
-                    // activity.updateNavStatus();
                     break;
                 case EventHandler.MediaPlayerPaused:
-                    Log.i(TAG, "MediaPlayerPaused");
                     break;
                 case EventHandler.MediaPlayerStopped:
-                    Log.i(TAG, "MediaPlayerStopped");
-                    //activity.changeAudioFocus(false);
+                    activity.playHandler.sendEmptyMessage(0);
                     break;
                 case EventHandler.MediaPlayerEndReached:
-                    Log.i(TAG, "MediaPlayerEndReached");
-                    //activity.changeAudioFocus(false);
-                    //activity.endReached();
                     break;
                 case EventHandler.MediaPlayerVout:
-                 /*   activity.updateNavStatus();
-                    if (!activity.mHasMenu)
-                        activity.handleVout(msg);*/
+                    activity.stopLoading();
                     break;
                 case EventHandler.MediaPlayerPositionChanged:
-                 /*   if (!activity.mCanSeek)
-                        activity.mCanSeek = true;*/
-                    //don't spam the logs
                     break;
                 case EventHandler.MediaPlayerEncounteredError:
-                    Log.i(TAG, "MediaPlayerEncounteredError");
-                    activity.encounteredError();
+                    try {
+                        activity.encounteredError();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case EventHandler.HardwareAccelerationError:
-                    Log.i(TAG, "HardwareAccelerationError");
                     activity.handleHardwareAccelerationError();
                     break;
                 case EventHandler.MediaPlayerTimeChanged:
                     // avoid useless error logs
                     break;
                 default:
-                    Log.e(TAG, String.format("Event not handled (0x%x)", msg.getData().getInt("event")));
+                    //Log.e(TAG, String.format("Event not handled (0x%x)", msg.getData().getInt("event")));
                     break;
             }
-            //activity.updateOverlayPausePlay();
         }
     };
 
@@ -1024,23 +975,15 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
             switch (msg.what) {
                 case FADE_OUT:
-                    //activity.hideOverlay(false);
                     break;
                 case SHOW_PROGRESS:
-               /*     int pos = activity.setOverlayProgress();
-                    if (activity.canShowProgress()) {
-                        msg = obtainMessage(SHOW_PROGRESS);
-                        sendMessageDelayed(msg, 1000 - (pos % 1000));
-                    }
-                    break;*/
+                    break;
                 case SURFACE_SIZE:
                     activity.changeSurfaceSize();
                     break;
                 case FADE_OUT_INFO:
-                    //activity.fadeOutInfo();
                     break;
                 case AUDIO_SERVICE_CONNECTION_SUCCESS:
-                    activity.startPlayback();
                     break;
                 case AUDIO_SERVICE_CONNECTION_FAILED:
                     activity.finish();
@@ -1049,19 +992,8 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         }
     };
 
-    private void encounteredError() {
-     /*   *//* Encountered Error, exit player with a message *//*
-        AlertDialog dialog = new AlertDialog.Builder(VideoPlayerActivity.this)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        finish();
-                    }
-                })
-                .setTitle(R.string.encountered_error_title)
-                .setMessage(R.string.encountered_error_message)
-                .create();
-        dialog.show();*/
+    private void encounteredError() throws Exception {
+        throw new Exception("VLC Native Exception"+android.os.Process.myPid());
     }
 
     private void handleHardwareAccelerationError() {
@@ -1213,40 +1145,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     private void pause() {
         mLibVLC.pause();
         mSurface.setKeepScreenOn(false);
-    }
-
-    /**
-     * External extras:
-     * - position (long) - position of the video to start with (in ms)
-     */
-    @SuppressWarnings({ "unchecked" })
-    private void loadMedia() {
-
-        mSurface.setKeepScreenOn(true);
-
-        if(mLibVLC == null)
-            return;
-
-        /* WARNING: hack to avoid a crash in mediacodec on KitKat.
-         * Disable hardware acceleration if the media has a ts extension. */
-        if (mUri!= null && LibVlcUtil.isKitKatOrLater()) {
-            String locationLC =mUri.toLowerCase(Locale.ENGLISH);
-            if (locationLC.endsWith(".ts")
-                    || locationLC.endsWith(".tts")
-                    || locationLC.endsWith(".m2t")
-                    || locationLC.endsWith(".mts")
-                    || locationLC.endsWith(".m2ts")) {
-                mDisabledHardwareAcceleration = true;
-                mPreviousHardwareAccelerationMode = mLibVLC.getHardwareAcceleration();
-                mLibVLC.setHardwareAcceleration(LibVLC.HW_ACCELERATION_DISABLED);
-            }
-        }
-
-        mLibVLC.setMediaList();
-        mLibVLC.getMediaList().add(new Media(mLibVLC,mUri));
-        savedIndexPosition = mLibVLC.getMediaList().size() - 1;
-        mLibVLC.playIndex(savedIndexPosition);
-
     }
 
     @SuppressWarnings("deprecation")
