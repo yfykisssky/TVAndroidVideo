@@ -138,7 +138,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     protected void onDestroy() {
         super.onDestroy();
 
-        mLibVLC.getMediaList().clear();
+        destroyVideo();
 
         mLibVLC=null;
 
@@ -146,7 +146,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         destoryTimer();
 
-        destroyVideo();
     }
 
     Handler viewHandler=new Handler(){

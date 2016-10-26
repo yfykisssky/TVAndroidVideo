@@ -49,7 +49,7 @@ public class TestActivity extends Activity {
        // startActivity(new Intent(this,ComplainActivity.class));
         //((EditText)findViewById(R.id.url)).setText("rtmp://live.hkstv.hk.lxdns.com/live/hks");
 
-        ((EditText)findViewById(R.id.url)).setText("rtsp://218.204.223.237:554/live/1/67A7572844E51A64/f68g2mj7wjua3la7.sdp");
+        ((EditText)findViewById(R.id.url)).setText("rtsp://218.204.223.237:554/live/1/67A7572844E51A64/f68g2mj7wjua3la7.ts");
 
         //((EditText)findViewById(R.id.url)).setText("http://bbs.tvhuan.com/");
 
