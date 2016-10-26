@@ -148,6 +148,8 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         destoryTimer();
 
+        System.gc();
+
     }
 
     Handler viewHandler=new Handler(){

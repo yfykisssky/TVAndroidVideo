@@ -337,6 +337,8 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer {
         // HW acceleration was temporarily disabled because of an error, restore the previous value.
         if (mDisabledHardwareAcceleration)
             mLibVLC.setHardwareAcceleration(mPreviousHardwareAccelerationMode);
+
+        System.gc();
     }
 
     @Override
