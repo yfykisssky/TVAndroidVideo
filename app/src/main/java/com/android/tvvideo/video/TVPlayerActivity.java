@@ -138,6 +138,8 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     protected void onDestroy() {
         super.onDestroy();
 
+        mLibVLC.stop();
+
         destroyVideo();
 
         mLibVLC=null;
