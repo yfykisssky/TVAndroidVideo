@@ -112,6 +112,10 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     final int changeWidth=1440;
 
+    String playUrl;
+
+    static boolean isExit=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +127,8 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         initVideoView();
 
         initVideoPlayer();
+
+        isExit=false;
 
         context = this;
 
@@ -137,19 +143,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        mLibVLC.stop();
-
-        destroyVideo();
-
-        mLibVLC=null;
-
-        indexPlay=0;
-
-        destoryTimer();
-
-        System.gc();
-
     }
 
     Handler viewHandler=new Handler(){
@@ -572,15 +565,41 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         adTimerTaskHelper.stopAndRemove();
     }
 
-    String playUrl;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if(isExit){
+            return true;
+        }
+
+        if(event.getKeyCode()==KeyEvent.KEYCODE_BACK){
+
+            isExit=true;
+
+            startLoading();
+
+            destoryTimer();
+
+            indexPlay=0;
+
+            playUrl=null;
+
+            mLibVLC.stop();
+
+            return true;
+
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 
     private void resetTvPlay(final String url) {
 
         startLoading();
 
-        stopPlayback();
-
         playUrl=url;
+
+        stopPlayback();
 
     }
 
@@ -592,6 +611,22 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
             if(playUrl!=null){
                 playMrl(playUrl);
             }
+
+        }
+    };
+
+    private Handler destoryHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            destroyVideo();
+
+            System.gc();
+
+            stopLoading();
+
+            finish();
 
         }
     };
@@ -876,7 +911,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     private void destroyVideo() {
 
-        mSurfaceCallback.surfaceDestroyed(mSurfaceHolder);
+        mSurface.setKeepScreenOn(false);
 
         EventHandler em = EventHandler.getInstance();
         em.removeHandler(eventHandler);
@@ -931,7 +966,13 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                 case EventHandler.MediaPlayerPaused:
                     break;
                 case EventHandler.MediaPlayerStopped:
-                    activity.playHandler.sendEmptyMessage(0);
+
+                    if(isExit){
+                        activity.destoryHandler.sendEmptyMessage(0);
+                    }else{
+                        activity.playHandler.sendEmptyMessage(0);
+                    }
+
                     break;
                 case EventHandler.MediaPlayerEndReached:
                     break;
