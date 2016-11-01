@@ -64,7 +64,6 @@ public class NetDataConstants {
 
 
 
-
     public static final String GET_ADVICE="/app/getAdvice";
 
     public static final String GET_FEE="/app/getFee";

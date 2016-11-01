@@ -82,22 +82,6 @@ public class AdviceActivity extends BaseActivity {
 
         listAllData.clear();
 
-        for(int b=0;b<20;b++){
-
-            Map<String,String> map=new HashMap<>();
-
-            map.put("kind","0");
-            map.put("name",String.valueOf(b));
-            map.put("use",String.valueOf(b));
-            map.put("usetime",String.valueOf(b));
-            map.put("unit",String.valueOf(b));
-            map.put("usequlaty",String.valueOf(b));
-            map.put("useunit",String.valueOf(b));
-
-            listAllData.add(map);
-
-        }
-
         JSONObject postData=new JSONObject();
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
@@ -108,9 +92,39 @@ public class AdviceActivity extends BaseActivity {
                 @Override
                 public void onSuccess(String data) {
 
+                    if(TextUtils.isEmpty(data)){
+
+                        showToast("获取数据失败");
+
+                        return;
+
+                    }
+
                     try {
 
                         JSONArray array=new JSONArray(data);
+
+                        for(int b=0;b<array.length();b++){
+
+                            JSONObject jsonObject=array.getJSONObject(b);
+
+                            Map<String,String> map=new HashMap<>();
+
+                            map.put("kind",jsonObject.getString("kind"));
+                            map.put("name",jsonObject.getString("name"));
+                            map.put("use",jsonObject.getString("use"));
+                            map.put("usetime",jsonObject.getString("usetime"));
+                            map.put("unit",jsonObject.getString("unit"));
+                            map.put("usequlaty",jsonObject.getString("usequlaty"));
+                            map.put("useunit",jsonObject.getString("useunit"));
+
+                            listAllData.add(map);
+
+                        }
+
+                        listData=getIndexPageData(pageIndex,pageSize);
+
+                        listAdapter.notifyDataSetChanged();
 
                     } catch (JSONException e) {
                         e.printStackTrace();

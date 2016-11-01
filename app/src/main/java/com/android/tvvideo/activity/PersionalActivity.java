@@ -2,6 +2,7 @@ package com.android.tvvideo.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +80,14 @@ public class PersionalActivity extends BaseActivity {
                 @Override
                 public void onSuccess(String data) {
 
+                    if(TextUtils.isEmpty(data)){
+
+                        showToast("获取数据失败");
+
+                        return;
+
+                    }
+
                     try {
 
                         JSONObject jsonObject=new JSONObject(data);
@@ -110,7 +119,6 @@ public class PersionalActivity extends BaseActivity {
                         deposit.setText(jsonObject.getString(""));
 
                         allFee.setText(jsonObject.getString(""));
-
 
                     } catch (JSONException e) {
                         e.printStackTrace();

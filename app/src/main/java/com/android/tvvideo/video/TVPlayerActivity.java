@@ -725,8 +725,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                 view.setBackgroundColor(Color.parseColor("#cc000000"));
             }
 
-
-
             return view;
         }
     }

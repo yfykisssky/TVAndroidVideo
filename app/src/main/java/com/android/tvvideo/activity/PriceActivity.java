@@ -175,9 +175,35 @@ public class PriceActivity extends BaseActivity {
                 @Override
                 public void onSuccess(String data) {
 
+                    if(TextUtils.isEmpty(data)){
+
+                        showToast("获取数据失败");
+
+                        return;
+
+                    }
+
                     try {
 
                         JSONArray array=new JSONArray(data);
+
+                        for(int b=0;b<array.length();b++){
+
+                            JSONObject jsonObject=array.getJSONObject(b);
+
+                            Map<String,String> map=new HashMap<>();
+
+                            map.put("kind",jsonObject.getString("kind"));
+                            map.put("name",jsonObject.getString("name"));
+                            map.put("safestkind",jsonObject.getString("safestkind"));
+                            map.put("unit",jsonObject.getString("unit"));
+                            map.put("price",jsonObject.getString("price"));
+
+                            listAllData.add(map);
+
+                        }
+
+                        listAdapter.notifyDataSetChanged();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
