@@ -143,6 +143,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
     }
 
     Handler viewHandler=new Handler(){
@@ -350,16 +351,23 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                 if(startOrEnd){
 
+                    int indexNew=index/2;
+
                     Message msg=new Message();
 
-                    msg.obj=msgTex.get(index);
+                    msg.obj=msgTex.get(indexNew);
 
                     msg.what=3;
 
                     viewHandler.sendMessage(msg);
 
                 }else{
-                    viewHandler.sendEmptyMessage(2);
+
+                    Message msg=new Message();
+
+                    msg.what=2;
+
+                    viewHandler.sendMessage(msg);
                 }
 
             }
@@ -406,16 +414,23 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
             public void onStartOrEnd(boolean startOrEnd,int index) {
                 if(startOrEnd){
 
+                    int indexNew=index/2;
+
                     Message msg=new Message();
 
-                    msg.obj=msgTex.get(index);
+                    msg.obj=msgTex.get(indexNew);
 
                     msg.what=1;
 
                     viewHandler.sendMessage(msg);
 
                 }else{
-                    viewHandler.sendEmptyMessage(0);
+
+                    Message msg=new Message();
+
+                    msg.what=0;
+
+                    viewHandler.sendMessage(msg);
                 }
             }
         });
@@ -539,7 +554,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                 }
 
-                if(kind.equals("showchange")){
+                if(kind.equals("msgchange")){
 
                     getShowMsg();
 
@@ -550,7 +565,11 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         msgTimerTaskHelper=new TimerTaskHelper(this);
 
+        msgTimerTaskHelper.setStartInt(TimerTaskHelper.START_INT_3);
+
         adTimerTaskHelper=new TimerTaskHelper(this);
+
+        msgTimerTaskHelper.setStartInt(TimerTaskHelper.START_INT_4);
 
         getTVListData();
 
@@ -695,13 +714,13 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
             ImageLoad.loadDefultImage(imgUrl,myHolder.img);
 
             if(indexList==i){
-                view.setBackgroundColor(Color.parseColor("#FF0000FF"));
+                view.setBackgroundColor(Color.parseColor("#FFFFFF00"));
             }else{
                 view.setBackgroundColor(Color.parseColor("#cc000000"));
             }
 
             if(indexPlay==i){
-                view.setBackgroundColor(Color.parseColor("#FF00FF00"));
+                view.setBackgroundColor(Color.parseColor("#FF0000FF"));
             }else{
                 view.setBackgroundColor(Color.parseColor("#cc000000"));
             }

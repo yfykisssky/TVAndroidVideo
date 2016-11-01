@@ -18,11 +18,21 @@ import java.util.List;
  */
 public class TimerTaskHelper {
 
+    public static final int START_INT_1=0;
+
+    public static final int START_INT_2=500000000;
+
+    public static final int START_INT_3=1000000000;
+
+    public static final int START_INT_4=1500000000;
+
     AlarmManager am;
 
     String broadcastAction="com.android.tvvideo.alarmtimer.";
 
     Context context;
+
+    int startInt=0;
 
     int alarmId=0;
 
@@ -48,6 +58,16 @@ public class TimerTaskHelper {
 
         }
     };
+
+    public int getStartInt() {
+        return startInt;
+    }
+
+    public void setStartInt(int startInt) {
+        this.startInt = startInt;
+
+        alarmId=startInt;
+    }
 
     public static class TimeModel{
         public String startTime;
@@ -141,7 +161,7 @@ public class TimerTaskHelper {
                 Calendar calendar=formatToCanlendar(timeModels.get(y).startTime);
 
                 Intent intent = new Intent();
-                intent.putExtra("index",alarmId);
+                intent.putExtra("index",alarmId-startInt);
                 intent.putExtra("kind", "start");
                 intent.setAction(broadcastAction);
 
@@ -157,7 +177,7 @@ public class TimerTaskHelper {
                 Calendar calendar=formatToCanlendar(timeModels.get(y).endTime);
 
                 Intent intent = new Intent();
-                intent.putExtra("index",alarmId);
+                intent.putExtra("index",alarmId-startInt);
                 intent.putExtra("kind", "end");
                 intent.setAction(broadcastAction);
 
@@ -174,7 +194,7 @@ public class TimerTaskHelper {
 
     private void removeTimer(){
 
-        for(int v=0;v<alarmId;v++){
+        for(int v=startInt;v<alarmId;v++){
             Intent intent = new Intent();
             intent.setAction(broadcastAction);
             PendingIntent pi=PendingIntent.getBroadcast(context,alarmId, intent,PendingIntent.FLAG_UPDATE_CURRENT);

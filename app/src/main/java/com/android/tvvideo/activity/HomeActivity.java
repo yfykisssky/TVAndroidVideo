@@ -38,6 +38,8 @@ public class HomeActivity extends BaseActivity {
 
         VLCApplication.getInstance().initPushService();
 
+        initUseData();
+
         titleTex=(TextView)findViewById(R.id.title);
 
         customViewPager= (CustomViewPager) findViewById(R.id.view_pager);
@@ -162,6 +164,14 @@ public class HomeActivity extends BaseActivity {
                 return false;
             }
         });
+
+    }
+
+    private void initUseData() {
+
+        VLCApplication.getInstance().resertOnOffTime();
+
+        VLCApplication.getInstance().setMaxVolumeTimer();
 
     }
 

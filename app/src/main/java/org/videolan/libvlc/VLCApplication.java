@@ -109,7 +109,11 @@ public class VLCApplication extends Application {
 
         onOffTaskHelper=new TimerTaskHelper(this);
 
+        onOffTaskHelper.setStartInt(TimerTaskHelper.START_INT_1);
+
         maxVolumeTaskHelper=new TimerTaskHelper(this);
+
+        maxVolumeTaskHelper.setStartInt(TimerTaskHelper.START_INT_2);
 
         instance = this;
 

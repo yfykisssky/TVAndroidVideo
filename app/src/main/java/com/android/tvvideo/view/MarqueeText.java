@@ -67,7 +67,7 @@ public class MarqueeText extends TextView implements Runnable {
             mPaint.setStrokeWidth(5);
             mPaint.setTextSize(50);
             mPaint.setColor(Color.BLACK);
-            mPaint.setTextAlign(Paint.Align.LEFT);
+            mPaint.setTextAlign(Paint.Align.CENTER);
 
             Rect bounds = new Rect();
             mPaint.getTextBounds(text, 0,text.length(), bounds);

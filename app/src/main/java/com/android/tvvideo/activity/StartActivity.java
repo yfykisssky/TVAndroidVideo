@@ -21,7 +21,6 @@ import com.android.tvvideo.tools.ViewTool;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.videolan.libvlc.VLCApplication;
 
 
 /**
@@ -128,12 +127,6 @@ public class StartActivity extends BaseActivity {
                     String url=jsonObject.getString("address");
 
                     if(!new UpdateHelpter().checkUpdate(StartActivity.this,version,url,"TeachVideo.apk")){
-
-                        //VLCApplication.getInstance().getOnOffTime();
-
-                        VLCApplication vlcApplication= (VLCApplication) getApplication();
-
-                        vlcApplication.setMaxVolumeTimer();
 
                         new Thread(new Runnable() {
                             @Override
