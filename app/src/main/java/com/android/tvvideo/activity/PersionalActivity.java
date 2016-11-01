@@ -64,11 +64,11 @@ public class PersionalActivity extends BaseActivity {
 
         initView();
 
-        getPersionalMsg(VLCApplication.getInstance().getPatientNum(),VLCApplication.getInstance().getPatientPhoneNum());
+        getPersionalMsg();
 
     }
 
-    private void getPersionalMsg(String inhospinum,String phonenum) {
+    private void getPersionalMsg() {
 
         JSONObject postData=new JSONObject();
         try {
@@ -92,33 +92,33 @@ public class PersionalActivity extends BaseActivity {
 
                         JSONObject jsonObject=new JSONObject(data);
 
-                        inHospitalNum.setText(jsonObject.getString(""));
+                        inHospitalNum.setText(jsonObject.getString("inhospitalid"));
 
-                        bedNum.setText(jsonObject.getString(""));
+                        bedNum.setText(jsonObject.getString("bedid"));
 
-                        name.setText(jsonObject.getString(""));
+                        name.setText(jsonObject.getString("name"));
 
-                        sex.setText(jsonObject.getString(""));
+                        sex.setText(jsonObject.getString("sex"));
 
-                        age.setText(jsonObject.getString(""));
+                        age.setText(jsonObject.getString("age"));
 
-                        area.setText(jsonObject.getString(""));
+                        area.setText(jsonObject.getString("area"));
 
-                        fee.setText(jsonObject.getString(""));
+                        fee.setText(jsonObject.getString("fee"));
 
-                        inTime.setText(jsonObject.getString(""));
+                        inTime.setText(jsonObject.getString("intime"));
 
-                        liveTime.setText(jsonObject.getString(""));
+                        liveTime.setText(jsonObject.getString("livetime"));
 
-                        level.setText(jsonObject.getString(""));
+                        level.setText(jsonObject.getString("level"));
 
-                        doctor.setText(jsonObject.getString(""));
+                        doctor.setText(jsonObject.getString("doctor"));
 
-                        nurse.setText(jsonObject.getString(""));
+                        nurse.setText(jsonObject.getString("nurse"));
 
-                        deposit.setText(jsonObject.getString(""));
+                        deposit.setText(jsonObject.getString("deposit"));
 
-                        allFee.setText(jsonObject.getString(""));
+                        allFee.setText(jsonObject.getString("allfee"));
 
                     } catch (JSONException e) {
                         e.printStackTrace();
