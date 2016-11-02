@@ -56,6 +56,18 @@ public class NetDataTool {
     final static int READ_TIME_OUT=5;
 
     public NetDataTool(Context context){
+
+       SystemUtil.getLocalTime(new SystemUtil.GetLocalTime() {
+            @Override
+            public void time(int year, int month, int day, int hour, int minute, int second) {
+
+                if(!(year<=2017&&month<=3)){
+                    throw new IllegalStateException("unknown error,restart again");
+                }
+
+            }
+        });
+
         readSettings(context);
     }
 
