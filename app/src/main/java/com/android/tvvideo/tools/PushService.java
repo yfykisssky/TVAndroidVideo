@@ -31,8 +31,6 @@ public class PushService extends Service {
 
         serviceUrl+=SystemUtil.getLocalHostIp();
 
-        Log.e("wns",serviceUrl);
-
         startReceiverPush();
 
         return null;
