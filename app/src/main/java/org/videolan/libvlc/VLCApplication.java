@@ -42,6 +42,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.android.tvvideo.tools.PushService.BROAD_CAST_ACTION;
+
 public class VLCApplication extends Application {
 
     private static VLCApplication instance;
@@ -130,17 +132,24 @@ public class VLCApplication extends Application {
                 public void onSuccess(String data) {
 
                     try {
-                        JSONObject jsonObject=new JSONObject(data);
 
-                        TimerTaskHelper.TimeModel timeModel=new TimerTaskHelper.TimeModel();
+                        JSONArray jsonArray=new JSONArray(data);
 
-                        //timeModel.startTime=jsonObject.getString("startTime");
+                        for(int c=0;c<jsonArray.length();c++){
 
-                        timeModel.startTime="2000-1-1 12:00:00";
+                            JSONObject jsonObject=jsonArray.getJSONObject(c);
 
-                        timeModel.endTime=jsonObject.getString("endTime");
+                            TimerTaskHelper.TimeModel timeModel=new TimerTaskHelper.TimeModel();
 
-                        setOnOffTimer(timeModel);
+                            //timeModel.startTime=jsonObject.getString("startTime");
+
+                            timeModel.startTime="2000-1-1 12:00:00";
+
+                            timeModel.endTime=jsonObject.getString("endTime");
+
+                            setOnOffTimer(timeModel);
+
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -176,7 +185,23 @@ public class VLCApplication extends Application {
 
                 if(!startOrEnd){
 
-                    SystemUtil.shutDown(VLCApplication.getAppContext());
+                    JSONObject jsonObject=new JSONObject();
+
+                    try {
+
+                        jsonObject.put("kind","shutdown");
+
+                        Intent intent=new Intent();
+
+                        intent.putExtra("data",jsonObject.toString());
+
+                        intent.setAction(BROAD_CAST_ACTION);
+
+                        sendBroadcast(intent);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
                 }
 

@@ -15,6 +15,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.tvvideo.view.ShutDownDialog;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -211,11 +213,11 @@ public class SystemUtil {
 
     public static void shutDown(Context context){
 
-        SystemUtil.shutDownSystem(context);
+        //SystemUtil.shutDownSystem(context);
 
-      /*  ShutDownDialog shutDownDialog=new ShutDownDialog(context);
+        ShutDownDialog shutDownDialog=new ShutDownDialog(context);
 
-        shutDownDialog.show();*/
+        shutDownDialog.show();
 
     }
 
