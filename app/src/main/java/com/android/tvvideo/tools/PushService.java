@@ -6,6 +6,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.android.tvvideo.net.NetDataConstants;
+
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_17;
@@ -30,6 +32,8 @@ public class PushService extends Service {
         serviceUrl=SystemUtil.getServerWs(this);
 
         serviceUrl+=SystemUtil.getLocalHostIp();
+
+        serviceUrl+=NetDataConstants.PROJECT_NAME;
 
         startReceiverPush();
 

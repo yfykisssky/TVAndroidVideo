@@ -14,7 +14,9 @@ public class NetDataConstants {
 
     }
 
-    public static final String ALL_SERVER_URL="/app/";
+    public static final String PROJECT_NAME="";
+
+    public static final String ALL_SERVER_URL=PROJECT_NAME+"/app/";
 
     public static final String GET_VERSION=ALL_SERVER_URL+"getVersionAddress";
 

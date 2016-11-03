@@ -1,6 +1,7 @@
 package com.android.tvvideo.activity;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -10,9 +11,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.android.tvvideo.R;
-import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ShaPreHelper;
@@ -26,7 +27,7 @@ import org.json.JSONObject;
 /**
  * Created by yangfengyuan on 16/7/18.
  */
-public class StartActivity extends BaseActivity {
+public class StartActivity extends Activity {
 
     int settingsIntent=0x11;
     private String serverIp;
@@ -128,6 +129,8 @@ public class StartActivity extends BaseActivity {
 
                     if(!new UpdateHelpter().checkUpdate(StartActivity.this,version,url,"TeachVideo.apk")){
 
+                        Toast.makeText(StartActivity.this,"已经是最新版本",Toast.LENGTH_LONG).show();
+
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -141,7 +144,6 @@ public class StartActivity extends BaseActivity {
                                 Intent intent=new Intent(StartActivity.this,HomeActivity.class);
                                 startActivity(intent);
                                 finish();
-                                System.gc();
 
                             }
                         }).start();
@@ -158,7 +160,7 @@ public class StartActivity extends BaseActivity {
             @Override
             public void onFailed(String error) {
 
-                showToast(error);
+                Toast.makeText(StartActivity.this,error,Toast.LENGTH_LONG).show();
 
             }
         });

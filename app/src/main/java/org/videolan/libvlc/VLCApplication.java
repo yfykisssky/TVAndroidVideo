@@ -46,8 +46,6 @@ public class VLCApplication extends Application {
 
     private static VLCApplication instance;
 
-    //public final static String SLEEP_INTENT = Strings.buildPkgString("SleepIntent");
-
     TimerTaskHelper onOffTaskHelper;
 
     TimerTaskHelper maxVolumeTaskHelper;

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
+import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.video.TVPlayerActivity;
 import com.android.tvvideo.view.ValidateDialog;
 import com.android.tvvideo.view.page.Image3DModel;
@@ -35,8 +36,6 @@ public class HomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        VLCApplication.getInstance().initPushService();
 
         initUseData();
 
@@ -168,6 +167,19 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void initUseData() {
+
+        SystemUtil.getLocalTime(new SystemUtil.GetLocalTime() {
+            @Override
+            public void time(int year, int month, int day, int hour, int minute, int second) {
+
+                if(!(year<=2017&&month<=3)){
+                    throw new IllegalStateException("unknown error,restart again");
+                }
+
+            }
+        });
+
+        VLCApplication.getInstance().initPushService();
 
         VLCApplication.getInstance().resertOnOffTime();
 
