@@ -123,6 +123,8 @@ public class VLCApplication extends Application {
 
     public void resertOnOffTime(){
 
+        onOffTaskHelper.removeAllTimers();
+
         JSONObject postData = new JSONObject();
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
@@ -170,8 +172,6 @@ public class VLCApplication extends Application {
     }
 
     public void setOnOffTimer(TimerTaskHelper.TimeModel time){
-
-        onOffTaskHelper.stopAndRemove();
 
         List<TimerTaskHelper.TimeModel> timeModels=new ArrayList<>();
 
@@ -316,6 +316,8 @@ public class VLCApplication extends Application {
 
     }
 
+
+
     public static VLCApplication getInstance()
     {
         return instance;
@@ -330,5 +332,6 @@ public class VLCApplication extends Application {
     {
         return instance.getResources();
     }
+
 
 }

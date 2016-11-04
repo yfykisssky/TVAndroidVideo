@@ -110,6 +110,10 @@ public class TimerTaskHelper {
         removeTimer();
     }
 
+    public void removeAllTimers(){
+        removeTimer();
+    }
+
     private void registerReceiver(){
 
         if(!isRegister){
@@ -201,7 +205,9 @@ public class TimerTaskHelper {
             am.cancel(pi);
         }
 
-        alarmId=0;
+        this.timeModels.clear();
+
+        alarmId=startInt;
 
     }
 

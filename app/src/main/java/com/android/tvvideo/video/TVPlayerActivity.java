@@ -186,7 +186,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     viewHandler.sendEmptyMessage(0);
 
-                    msgTimerTaskHelper.stopAndRemove();
+                    msgTimerTaskHelper.removeAllTimers();
 
                     List<TimerTaskHelper.TimeModel> timeModels=new ArrayList<TimerTaskHelper.TimeModel>();
 
@@ -245,7 +245,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     viewHandler.sendEmptyMessage(2);
 
-                    adTimerTaskHelper.stopAndRemove();
+                    adTimerTaskHelper.removeAllTimers();
 
                     List<TimerTaskHelper.TimeModel> timeModels = new ArrayList<TimerTaskHelper.TimeModel>();
 
