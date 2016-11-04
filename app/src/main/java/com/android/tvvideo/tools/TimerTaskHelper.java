@@ -38,7 +38,7 @@ public class TimerTaskHelper {
 
     boolean isRegister=false;
 
-    List<TimeModel> timeModels;
+    //List<TimeModel> timeModels=new ArrayList<>();
 
     OnStartOrEndListener onStartOrEndListener;
 
@@ -94,7 +94,7 @@ public class TimerTaskHelper {
 
     public void setData(List<TimeModel> timeModels){
 
-        this.timeModels=timeModels;
+        addTimer(timeModels);
 
     }
 
@@ -102,7 +102,6 @@ public class TimerTaskHelper {
         broadcastAction+=receiverAction;
         this.onStartOrEndListener=onStartOrEndListener;
         registerReceiver();
-        addTimer(timeModels);
     }
 
     public void stopAndRemove(){
@@ -205,7 +204,7 @@ public class TimerTaskHelper {
             am.cancel(pi);
         }
 
-        this.timeModels.clear();
+        //this.timeModels.clear();
 
         alarmId=startInt;
 

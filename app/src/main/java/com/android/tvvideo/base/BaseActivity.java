@@ -116,15 +116,13 @@ public class BaseActivity extends Activity {
 
     private void resetVolumePercent() {
 
-        VLCApplication vlcApplication= (VLCApplication) getApplication();
-
-        vlcApplication.setMaxVolumeTimer();
+        VLCApplication.getInstance().resetMaxVolumeTimer();
 
     }
 
     private void resetOnOffTime() {
 
-        VLCApplication.getInstance().resertOnOffTime();
+        VLCApplication.getInstance().resetOnOffTime();
 
     }
 

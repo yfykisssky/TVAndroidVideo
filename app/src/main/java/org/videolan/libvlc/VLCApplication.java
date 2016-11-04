@@ -63,6 +63,18 @@ public class VLCApplication extends Application {
 
     private void initAll(){
 
+        onOffTaskHelper=new TimerTaskHelper(this);
+
+        onOffTaskHelper.setStartInt(TimerTaskHelper.START_INT_1);
+
+        initOnOffTimer();
+
+        maxVolumeTaskHelper=new TimerTaskHelper(this);
+
+        maxVolumeTaskHelper.setStartInt(TimerTaskHelper.START_INT_2);
+
+        initMaxVolumeTimer();
+
         CrashHandler.getInstance().init(this.getApplicationContext());
 
         ImageLoad.init(this);
@@ -107,23 +119,13 @@ public class VLCApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        onOffTaskHelper=new TimerTaskHelper(this);
-
-        onOffTaskHelper.setStartInt(TimerTaskHelper.START_INT_1);
-
-        maxVolumeTaskHelper=new TimerTaskHelper(this);
-
-        maxVolumeTaskHelper.setStartInt(TimerTaskHelper.START_INT_2);
-
         instance = this;
 
         initAll();
 
     }
 
-    public void resertOnOffTime(){
-
-        onOffTaskHelper.removeAllTimers();
+    public void resetOnOffTime(){
 
         JSONObject postData = new JSONObject();
         try {
@@ -132,6 +134,8 @@ public class VLCApplication extends Application {
             new NetDataTool(this).sendNoShowPost(NetDataConstants.GET_ONOFF_TIME, postData.toString(), new NetDataTool.IResponse() {
                 @Override
                 public void onSuccess(String data) {
+
+                    onOffTaskHelper.removeAllTimers();
 
                     try {
 
@@ -171,13 +175,8 @@ public class VLCApplication extends Application {
 
     }
 
-    public void setOnOffTimer(TimerTaskHelper.TimeModel time){
 
-        List<TimerTaskHelper.TimeModel> timeModels=new ArrayList<>();
-
-        timeModels.add(time);
-
-        onOffTaskHelper.setData(timeModels);
+    void initOnOffTimer(){
 
         onOffTaskHelper.startAndListener("onoff", new TimerTaskHelper.OnStartOrEndListener() {
             @Override
@@ -210,7 +209,17 @@ public class VLCApplication extends Application {
 
     }
 
-    public void setMaxVolumeTimer(){
+    public void setOnOffTimer(TimerTaskHelper.TimeModel time){
+
+        List<TimerTaskHelper.TimeModel> timeModels=new ArrayList<>();
+
+        timeModels.add(time);
+
+        onOffTaskHelper.setData(timeModels);
+
+    }
+
+    public void resetMaxVolumeTimer(){
 
         JSONObject postData = new JSONObject();
 
@@ -248,40 +257,13 @@ public class VLCApplication extends Application {
                         }
 
 
-                        maxVolumeTaskHelper.stopAndRemove();
+                        maxVolumeTaskHelper.removeAllTimers();
 
                         maxVolumeTaskHelper.setData(timeModels);
-
-                        maxVolumeTaskHelper.startAndListener("maxvolume", new TimerTaskHelper.OnStartOrEndListener() {
-                            @Override
-                            public void onStartOrEnd(boolean startOrEnd, int index) {
-
-                                if(startOrEnd){
-
-                                    setMaxVolume(Double.parseDouble(maxVolumePercents.get(index)));
-
-                                    if(maxVolumeListener!=null){
-                                        maxVolumeListener.onMaxVolumeChange();
-                                    }
-
-                                }else{
-
-                                    setMaxVolume(-1);
-
-                                    if(maxVolumeListener!=null){
-                                        maxVolumeListener.onMaxVolumeChange();
-                                    }
-
-                                }
-
-                            }
-                        });
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-
                 }
 
                 @Override
@@ -293,6 +275,35 @@ public class VLCApplication extends Application {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+    }
+
+    void initMaxVolumeTimer(){
+
+        maxVolumeTaskHelper.startAndListener("maxvolume", new TimerTaskHelper.OnStartOrEndListener() {
+            @Override
+            public void onStartOrEnd(boolean startOrEnd, int index) {
+
+                if(startOrEnd){
+
+                    setMaxVolume(Double.parseDouble(maxVolumePercents.get(index)));
+
+                    if(maxVolumeListener!=null){
+                        maxVolumeListener.onMaxVolumeChange();
+                    }
+
+                }else{
+
+                    setMaxVolume(-1);
+
+                    if(maxVolumeListener!=null){
+                        maxVolumeListener.onMaxVolumeChange();
+                    }
+
+                }
+
+            }
+        });
 
     }
 

@@ -192,9 +192,9 @@ public class HomeActivity extends BaseActivity {
 
         VLCApplication.getInstance().initPushService();
 
-        VLCApplication.getInstance().resertOnOffTime();
+        VLCApplication.getInstance().resetMaxVolumeTimer();
 
-        VLCApplication.getInstance().setMaxVolumeTimer();
+        VLCApplication.getInstance().resetOnOffTime();
 
     }
 

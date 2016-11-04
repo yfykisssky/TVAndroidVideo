@@ -211,8 +211,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                         msgTimerTaskHelper.setData(timeModels);
 
-                        startMsgListening();
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -269,8 +267,6 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                         }
 
                         adTimerTaskHelper.setData(timeModels);
-
-                        startAdListening();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -567,9 +563,13 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         msgTimerTaskHelper.setStartInt(TimerTaskHelper.START_INT_3);
 
+        startMsgListening();
+
         adTimerTaskHelper=new TimerTaskHelper(this);
 
-        msgTimerTaskHelper.setStartInt(TimerTaskHelper.START_INT_4);
+        adTimerTaskHelper.setStartInt(TimerTaskHelper.START_INT_4);
+
+        startAdListening();
 
         getTVListData();
 
