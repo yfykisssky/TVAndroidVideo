@@ -14,7 +14,7 @@ public class NetDataConstants {
 
     }
 
-    public static final String PROJECT_NAME="";
+    public static final String PROJECT_NAME="/videoedu";
 
     public static final String ALL_SERVER_URL=PROJECT_NAME+"/app/";
 

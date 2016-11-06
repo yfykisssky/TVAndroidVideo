@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
 
 
@@ -23,11 +22,11 @@ public class CrashLogActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crash_log);
+    /*    setContentView(R.layout.activity_crash_log);
 
         initView();
 
-        initData();
+        initData();*/
 
     }
 
@@ -49,12 +48,12 @@ public class CrashLogActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initView() {
-
+/*
         logText=(TextView)findViewById(R.id.log);
 
         exitBnt=(Button)findViewById(R.id.exit);
 
-        exitBnt.setOnClickListener(this);
+        exitBnt.setOnClickListener(this);*/
 
     }
 
@@ -62,11 +61,11 @@ public class CrashLogActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+   /*     switch (view.getId()){
             case R.id.exit:
                 finish();
                 break;
-        }
+        }*/
     }
 
 }

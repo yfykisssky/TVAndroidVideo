@@ -34,7 +34,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
     private String serverPort;
 
-    private Button logBnt;
+    //private Button logBnt;
 
     private Button settingsTvBnt;
 
@@ -114,9 +114,9 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
         confirmBnt.setOnClickListener(this);
 
-        logBnt=(Button)findViewById(R.id.log);
+        /*logBnt=(Button)findViewById(R.id.log);
 
-        logBnt.setOnClickListener(this);
+        logBnt.setOnClickListener(this);*/
 
     }
 
@@ -168,11 +168,11 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
                 break;
 
-            case R.id.log:
+          /*  case R.id.log:
 
                 startActivity(new Intent(this,CrashLogActivity.class));
 
-                break;
+                break;*/
 
         }
     }

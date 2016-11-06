@@ -71,7 +71,7 @@
         <activity android:name=".activity.SatisfactionActivity"/>
         <activity android:name=".activity.ServerInHospitalActivity"/>
 
-        <activity android:name=".activity.CrashLogActivity"/>
+     <!--   <activity android:name=".activity.CrashLogActivity"/>-->
 
         <service android:name=".tools.PushService"/>
 
