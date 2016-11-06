@@ -194,7 +194,7 @@ public class HomeActivity extends BaseActivity {
 
         VLCApplication.getInstance().resetMaxVolumeTimer();
 
-        VLCApplication.getInstance().resetOnOffTime();
+        VLCApplication.getInstance().resetOnOffTimer();
 
     }
 

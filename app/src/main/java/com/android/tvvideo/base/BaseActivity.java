@@ -122,7 +122,7 @@ public class BaseActivity extends Activity {
 
     private void resetOnOffTime() {
 
-        VLCApplication.getInstance().resetOnOffTime();
+        VLCApplication.getInstance().resetOnOffTimer();
 
     }
 

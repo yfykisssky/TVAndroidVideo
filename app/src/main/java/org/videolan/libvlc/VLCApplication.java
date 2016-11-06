@@ -125,7 +125,7 @@ public class VLCApplication extends Application {
 
     }
 
-    public void resetOnOffTime(){
+    public void resetOnOffTimer(){
 
         JSONObject postData = new JSONObject();
         try {
