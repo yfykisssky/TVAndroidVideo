@@ -714,7 +714,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
             ImageLoad.loadDefultImage(imgUrl,myHolder.img);
 
             if(indexList==i){
-                view.setBackgroundColor(Color.parseColor("#FFFFFF00"));
+                view.setBackgroundColor(Color.parseColor("#FF00FF00"));
             }else{
                 view.setBackgroundColor(Color.parseColor("#cc000000"));
             }
