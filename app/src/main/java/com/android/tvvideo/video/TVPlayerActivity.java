@@ -650,7 +650,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         }
     };
 
-   private void stopPlayback() {
+    private void stopPlayback() {
 
         mLibVLC.stop();
 
@@ -713,16 +713,16 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
             ImageLoad.loadDefultImage(imgUrl,myHolder.img);
 
-            if(indexList==i){
-                view.setBackgroundColor(Color.parseColor("#FF00FF00"));
-            }else{
+            if(i!=indexList&&i!=indexPlay){
                 view.setBackgroundColor(Color.parseColor("#cc000000"));
             }
 
             if(indexPlay==i){
-                view.setBackgroundColor(Color.parseColor("#FF0000FF"));
-            }else{
-                view.setBackgroundColor(Color.parseColor("#cc000000"));
+                view.setBackgroundColor(Color.parseColor("#FF00FF00"));
+            }
+
+            if(indexList==i){
+                view.setBackgroundColor(Color.parseColor("#FFFFFF00"));
             }
 
             return view;

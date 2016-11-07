@@ -151,6 +151,7 @@ public class VideoSelectActivity extends BaseActivity {
                         videoModel.setTitle(jsonObject.getString("name"));
                         videoModel.setRemark(jsonObject.getString("remark"));
                         videoModel.setVideoUrl(jsonObject.getString("videoPath"));
+                        videoModel.setVideoId(jsonObject.getString("id"));
 
                         gridAllData.add(videoModel);
 
@@ -282,6 +283,8 @@ public class VideoSelectActivity extends BaseActivity {
 
                 String url=gridData.get(i).getVideoUrl();
 
+                sendStatistical(gridData.get(i).getVideoId());
+
                 Intent intent=new Intent(VideoSelectActivity.this,VideoPlayerActivity.class);
 
                 intent.putExtra("data",url);
@@ -292,6 +295,30 @@ public class VideoSelectActivity extends BaseActivity {
         });
 
 
+    }
+
+    private void sendStatistical(String id){
+
+        JSONObject postData=new JSONObject();
+        try {
+            postData.put("ipaddress", SystemUtil.getLocalHostIp());
+            postData.put("videoid",id);
+
+            new NetDataTool(this).sendNoShowPost(NetDataConstants.STATIS_VIDEO,postData.toString(), new NetDataTool.IResponse() {
+                @Override
+                public void onSuccess(String data) {
+
+                }
+
+                @Override
+                public void onFailed(String error) {
+                    showToast(error);
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     class ListAdapter extends BaseAdapter {

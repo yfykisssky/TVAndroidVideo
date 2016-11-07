@@ -76,4 +76,6 @@ public class NetDataConstants {
 
     public static final String GET_ONOFF_TIME=ALL_SERVER_URL+"getOnOffTime";
 
+    public static final String STATIS_VIDEO=ALL_SERVER_URL+"videoStatistical";
+
 }

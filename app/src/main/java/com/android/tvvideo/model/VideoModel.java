@@ -13,6 +13,8 @@ public class VideoModel {
 
     String videoUrl;
 
+    String videoId;
+
     public String getImgUrl() {
         return imgUrl;
     }
@@ -43,5 +45,13 @@ public class VideoModel {
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
+    }
+
+    public String getVideoId() {
+        return videoId;
+    }
+
+    public void setVideoId(String videoId) {
+        this.videoId = videoId;
     }
 }
