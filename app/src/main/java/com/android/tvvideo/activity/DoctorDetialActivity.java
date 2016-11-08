@@ -30,6 +30,9 @@ public class DoctorDetialActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        super.setActivityName(this.getClass().getName());
+
         setContentView(R.layout.activity_doctor_detial);
 
         initView();

@@ -71,6 +71,9 @@ public class VideoSelectActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        super.setActivityName(this.getClass().getName());
+
         setContentView(R.layout.activity_video_select);
 
         context=this;

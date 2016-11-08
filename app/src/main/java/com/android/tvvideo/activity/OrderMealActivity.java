@@ -72,6 +72,9 @@ public class OrderMealActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        super.setActivityName(this.getClass().getName());
+
         setContentView(R.layout.activity_order_meal);
 
         context=this;

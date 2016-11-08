@@ -45,6 +45,9 @@ public class DoctorsSelectActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        super.setActivityName(this.getClass().getName());
+
         setContentView(R.layout.activity_doctors_select);
 
         context=this;

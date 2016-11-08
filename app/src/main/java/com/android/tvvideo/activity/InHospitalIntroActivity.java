@@ -29,6 +29,9 @@ public class InHospitalIntroActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        super.setActivityName(this.getClass().getName());
+
         setContentView(R.layout.activity_in_hospital_detial);
 
         initView();
