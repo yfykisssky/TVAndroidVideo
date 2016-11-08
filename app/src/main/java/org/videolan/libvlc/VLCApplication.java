@@ -148,7 +148,9 @@ public class VLCApplication extends Application {
 
                             timeModel.startTime="2100-1-1 12:00:00";
 
-                            timeModel.endTime=jsonObject.getString("shutdown");
+                            //timeModel.endTime=jsonObject.getString("shutdown");
+
+                            timeModel.endTime="2100-1-1 12:00:00";
 
                             setOnOffTimer(timeModel);
 
@@ -345,11 +347,8 @@ public class VLCApplication extends Application {
                     case "volumechange":
                         resetMaxVolumeTimer();
                         break;
-                    case "onoff":
-                        resetOnOffTimer();
-                        break;
                     case "shutdown":
-                        sendToUIBroadcast(jsonObject);
+                        resetOnOffTimer();
                         break;
                     case "msgchange":
                         sendToUIBroadcast(jsonObject);
