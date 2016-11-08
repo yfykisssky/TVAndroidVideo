@@ -182,11 +182,11 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                 @Override
                 public void onSuccess(String data) {
 
+                    msgTimerTaskHelper.removeAllTimers();
+
                     msgTex.clear();
 
                     viewHandler.sendEmptyMessage(0);
-
-                    msgTimerTaskHelper.removeAllTimers();
 
                     List<TimerTaskHelper.TimeModel> timeModels=new ArrayList<TimerTaskHelper.TimeModel>();
 
@@ -239,11 +239,11 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                 @Override
                 public void onSuccess(String data) {
 
+                    adTimerTaskHelper.removeAllTimers();
+
                     adData.clear();
 
                     viewHandler.sendEmptyMessage(2);
-
-                    adTimerTaskHelper.removeAllTimers();
 
                     List<TimerTaskHelper.TimeModel> timeModels = new ArrayList<TimerTaskHelper.TimeModel>();
 
@@ -351,11 +351,15 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     Message msg=new Message();
 
-                    msg.obj=msgTex.get(indexNew);
+                    if(adData.size()==indexNew){
 
-                    msg.what=3;
+                        msg.obj=adData.get(indexNew);
 
-                    viewHandler.sendMessage(msg);
+                        msg.what=3;
+
+                        viewHandler.sendMessage(msg);
+
+                    }
 
                 }else{
 
@@ -414,11 +418,15 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     Message msg=new Message();
 
-                    msg.obj=msgTex.get(indexNew);
+                    if(msgTex.size()==indexNew){
 
-                    msg.what=1;
+                        msg.obj=msgTex.get(indexNew);
 
-                    viewHandler.sendMessage(msg);
+                        msg.what=1;
+
+                        viewHandler.sendMessage(msg);
+
+                    }
 
                 }else{
 

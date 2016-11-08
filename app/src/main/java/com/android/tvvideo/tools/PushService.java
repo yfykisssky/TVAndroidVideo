@@ -31,9 +31,9 @@ public class PushService extends Service {
 
         serviceUrl=SystemUtil.getServerWs(this);
 
-        serviceUrl+=SystemUtil.getLocalHostIp();
+        serviceUrl+= NetDataConstants.PROJECT_NAME+"/ws/";
 
-        serviceUrl+=NetDataConstants.PROJECT_NAME;
+        serviceUrl+=SystemUtil.getLocalHostIp();
 
         startReceiverPush();
 

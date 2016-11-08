@@ -148,7 +148,7 @@ public class SystemUtil {
 
         ip="ws"+ip;
 
-        return ip+":"+serverPort+"/ws/";
+        return ip+":"+serverPort;
 
     }
 

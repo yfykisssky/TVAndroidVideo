@@ -11,8 +11,8 @@ import android.widget.EditText;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.tools.ShaPreHelper;
-import com.android.tvvideo.video.TVPlayerActivity;
 
+import org.videolan.libvlc.VLCApplication;
 
 
 /**
@@ -42,12 +42,14 @@ public class TestActivity extends Activity {
 
         complainDialog.show();*/
 
-       Intent intent=new Intent(TestActivity.this, TVPlayerActivity.class);
+       //Intent intent=new Intent(TestActivity.this, TVPlayerActivity.class);
 
         //startActivity(intent);
 
        // startActivity(new Intent(this,ComplainActivity.class));
         //((EditText)findViewById(R.id.url)).setText("rtmp://live.hkstv.hk.lxdns.com/live/hks");
+
+        VLCApplication.getInstance().initPushService();
 
         ((EditText)findViewById(R.id.url)).setText("rtsp://218.204.223.237:554/live/1/67A7572844E51A64/f68g2mj7wjua3la7.ts");
 
