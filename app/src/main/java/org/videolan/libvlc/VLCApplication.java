@@ -28,6 +28,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
@@ -237,7 +238,7 @@ public class VLCApplication extends Application {
 
                             String percent=jsonObject.getString("percent");
 
-                            maxVolumePercents.add(percent);
+                            maxVolumePercents.add(String.valueOf((((double)Integer.parseInt(percent)/100))));
 
                             timeModel.startTime=jsonObject.getString("startTime");
 
