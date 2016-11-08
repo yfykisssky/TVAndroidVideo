@@ -1,16 +1,18 @@
 package com.android.tvvideo.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.tvvideo.R;
+import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.tools.ShaPreHelper;
+import com.android.tvvideo.tools.SystemUtil;
 
 import org.videolan.libvlc.VLCApplication;
 
@@ -18,7 +20,7 @@ import org.videolan.libvlc.VLCApplication;
 /**
  * Created by yfykisssky on 16/7/25.
  */
-public class TestActivity extends Activity {
+public class TestActivity extends BaseActivity {
 
     private void writeSettings() {
 
@@ -32,11 +34,17 @@ public class TestActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        super.setActivityName(this.getClass().getName());
+
+        Log.e("istop", String.valueOf(SystemUtil.isTopActivity(this,this.getClass().getName())));
+
         Context context=this;
 
         writeSettings();
 
         setContentView(R.layout.activity_test);
+
+        VLCApplication.getInstance().initPushService();
 /*
         ComplainDialog complainDialog=new ComplainDialog(this);
 
@@ -49,7 +57,9 @@ public class TestActivity extends Activity {
        // startActivity(new Intent(this,ComplainActivity.class));
         //((EditText)findViewById(R.id.url)).setText("rtmp://live.hkstv.hk.lxdns.com/live/hks");
 
-        VLCApplication.getInstance().initPushService();
+        //VLCApplication.getInstance().initPushService();
+
+        Log.e("url", SystemUtil.getServerAdPath(this));
 
         ((EditText)findViewById(R.id.url)).setText("rtsp://218.204.223.237:554/live/1/67A7572844E51A64/f68g2mj7wjua3la7.ts");
 

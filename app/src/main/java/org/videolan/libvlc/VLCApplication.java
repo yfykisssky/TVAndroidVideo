@@ -20,9 +20,11 @@
 package org.videolan.libvlc;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.os.IBinder;
@@ -42,19 +44,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.android.tvvideo.base.BaseActivity.BROAD_CAST_ACTION_UI;
 import static com.android.tvvideo.tools.PushService.BROAD_CAST_ACTION;
 
 public class VLCApplication extends Application {
 
     private static VLCApplication instance;
 
+
     TimerTaskHelper onOffTaskHelper;
 
     TimerTaskHelper maxVolumeTaskHelper;
 
-    MaxVolumeChangeListener maxVolumeListener;
-
     List<String> maxVolumePercents=new ArrayList<>();
+
 
     String patientNum;
 
@@ -79,6 +82,8 @@ public class VLCApplication extends Application {
 
         ImageLoad.init(this);
 
+        registerPushReceiver();
+
     }
 
     public String getPatientNum() {
@@ -95,14 +100,6 @@ public class VLCApplication extends Application {
 
     public void setPatientPhoneNum(String patientPhoneNum) {
         this.patientPhoneNum = patientPhoneNum;
-    }
-
-    public interface MaxVolumeChangeListener{
-        void onMaxVolumeChange();
-    }
-
-    public void setMaxVolumeListener(MaxVolumeChangeListener maxVolumeListener){
-        this.maxVolumeListener=maxVolumeListener;
     }
 
     private static double MAX_VOLUME=-1;
@@ -184,19 +181,13 @@ public class VLCApplication extends Application {
 
                 if(!startOrEnd){
 
-                    JSONObject jsonObject=new JSONObject();
-
                     try {
+
+                        JSONObject jsonObject=new JSONObject();
 
                         jsonObject.put("kind","shutdown");
 
-                        Intent intent=new Intent();
-
-                        intent.putExtra("data",jsonObject.toString());
-
-                        intent.setAction(BROAD_CAST_ACTION);
-
-                        sendBroadcast(intent);
+                        sendToUIBroadcast(jsonObject);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -286,24 +277,30 @@ public class VLCApplication extends Application {
 
                 if(startOrEnd){
 
-                    setMaxVolume(Double.parseDouble(maxVolumePercents.get(index)));
+                    resetCurrentVolume(Double.parseDouble(maxVolumePercents.get(index)));
 
-                    if(maxVolumeListener!=null){
-                        maxVolumeListener.onMaxVolumeChange();
-                    }
+                    setMaxVolume(Double.parseDouble(maxVolumePercents.get(index)));
 
                 }else{
 
                     setMaxVolume(-1);
 
-                    if(maxVolumeListener!=null){
-                        maxVolumeListener.onMaxVolumeChange();
-                    }
-
                 }
 
             }
         });
+
+    }
+
+    private void resetCurrentVolume(double percent){
+
+        int volume= (int)(SystemUtil.getMaxVolume(this)*percent);
+
+        if(SystemUtil.getCurrentVolume(this)>volume){
+
+            SystemUtil.setCurrentVolume(volume,this);
+
+        }
 
     }
 
@@ -327,7 +324,69 @@ public class VLCApplication extends Application {
 
     }
 
+    BroadcastReceiver pushReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
 
+            String data=intent.getStringExtra("data");
+
+            try {
+                JSONObject jsonObject=new JSONObject(data);
+
+                String kind=jsonObject.getString("kind");
+
+                switch(kind){
+                    case "remind":
+                        sendToUIBroadcast(jsonObject);
+                        break;
+                    case "playvideo":
+                        sendToUIBroadcast(jsonObject);
+                        break;
+                    case "volumechange":
+                        resetMaxVolumeTimer();
+                        break;
+                    case "onoff":
+                        resetOnOffTimer();
+                        break;
+                    case "shutdown":
+                        sendToUIBroadcast(jsonObject);
+                        break;
+                    case "msgchange":
+                        sendToUIBroadcast(jsonObject);
+                        break;
+                    case "adchange":
+                        sendToUIBroadcast(jsonObject);
+                        break;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    };
+
+    private void sendToUIBroadcast(JSONObject data) {
+
+        Intent intent=new Intent();
+
+        intent.putExtra("data",data.toString());
+
+        intent.setAction(BROAD_CAST_ACTION_UI);
+
+        sendBroadcast(intent);
+
+    }
+
+
+    private void registerPushReceiver(){
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BROAD_CAST_ACTION);
+        registerReceiver(pushReceiver, filter);
+    }
+
+    private void unregisterPushReceiver(){
+        unregisterReceiver(pushReceiver);
+    }
 
     public static VLCApplication getInstance()
     {
@@ -343,6 +402,5 @@ public class VLCApplication extends Application {
     {
         return instance.getResources();
     }
-
 
 }

@@ -1,13 +1,18 @@
 package com.android.tvvideo.tools;
 
+import android.app.ActivityManager;
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -23,6 +28,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Calendar;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -158,7 +164,7 @@ public class SystemUtil {
 
         String serverPort= ShaPreHelper.readShaPre("settings","server_port",context);
 
-        return serverIp+":"+serverPort+"/ad/";
+        return serverIp+":"+serverPort+"/videoedu/ad/";
 
     }
 
@@ -216,8 +222,8 @@ public class SystemUtil {
         //SystemUtil.shutDownSystem(context);
 
         ShutDownDialog shutDownDialog=new ShutDownDialog(context);
-
         shutDownDialog.show();
+        shutDownDialog.start();
 
     }
 
@@ -231,7 +237,38 @@ public class SystemUtil {
 
     }
 
+    public static int getMaxVolume(Context context){
+        AudioManager audio=(AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
+        return audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+    }
 
+    public static int getCurrentVolume(Context context){
+        AudioManager audio=(AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
+        return audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+    }
+
+    public static void setCurrentVolume(int tempVolume, Context context){
+        AudioManager audio=(AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
+        audio.setStreamVolume(AudioManager.STREAM_MUSIC, tempVolume, 0);
+    }
+
+    public static boolean isTopActivity(Context context, String className)
+    {
+        if (context == null || TextUtils.isEmpty(className)) {
+            return false;
+        }
+
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
+        if (list != null && list.size() > 0) {
+            ComponentName cpn = list.get(0).topActivity;
+            if (className.equals(cpn.getClassName())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 /*    public static boolean execCmd(String command) {
         Process process = null;

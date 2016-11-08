@@ -1,10 +1,8 @@
 package com.android.tvvideo.base;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -12,11 +10,9 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
-import com.android.tvvideo.tools.PushService;
 import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.video.VideoPlayerActivity;
 import com.android.tvvideo.view.RemindDialog;
@@ -25,16 +21,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.videolan.libvlc.VLCApplication;
 
-import java.util.List;
-
 /**
  * Created by yangfengyuan on 16/7/22.
  */
 public class BaseActivity extends Activity {
 
-    AudioManager audio;
+    public static final String BROAD_CAST_ACTION_UI="com.teachvideo.msg.push.ui";
 
-    int maxVolume;
+    AudioManager audio;
 
     double maxVolumePercent=-1;
 
@@ -84,21 +78,17 @@ public class BaseActivity extends Activity {
 
                 switch(kind){
                     case "remind":
-                        if(isTopActivity(context,activityName)){
+                        if(SystemUtil.isTopActivity(BaseActivity.this,activityName)){
                             showRemindDialog(jsonObject.getString("data"));
                         }
                         break;
                     case "playvideo":
                         playVideo(jsonObject.getString("data"));
                         break;
-                    case "volumechange":
-                        resetVolumePercent();
-                        break;
-                    case "onoff":
-                        resetOnOffTime();
-                        break;
                     case "shutdown":
-                        SystemUtil.shutDown(BaseActivity.this);
+                        if(SystemUtil.isTopActivity(BaseActivity.this,activityName)) {
+                            SystemUtil.shutDown(BaseActivity.this);
+                        }
                         break;
                     case "msgchange":
                     case "adchange":
@@ -114,36 +104,24 @@ public class BaseActivity extends Activity {
         }
     };
 
-    private void resetVolumePercent() {
-
-        VLCApplication.getInstance().resetMaxVolumeTimer();
-
-    }
-
-    private void resetOnOffTime() {
-
-        VLCApplication.getInstance().resetOnOffTimer();
-
-    }
-
-    private void registerPushReceiver(){
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(PushService.BROAD_CAST_ACTION);
-        registerReceiver(pushReceiver, filter);
-    }
-
-    private void unregisterPushReceiver(){
-        unregisterReceiver(pushReceiver);
-    }
-
     private void playVideo(String url){
 
-        Intent intent=new Intent(BaseActivity.this,VideoPlayerActivity.class);
+        Intent intent=new Intent(this,VideoPlayerActivity.class);
 
         intent.putExtra("data",url);
 
         startActivity(intent);
 
+    }
+
+    private void registerPushReceiver(){
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BROAD_CAST_ACTION_UI);
+        registerReceiver(pushReceiver, filter);
+    }
+
+    private void unregisterPushReceiver(){
+        unregisterReceiver(pushReceiver);
     }
 
     private void showRemindDialog(String remind){
@@ -181,29 +159,9 @@ public class BaseActivity extends Activity {
 
         remindDialog=new RemindDialog(this);
 
-        registerPushReceiver();
-
         audio = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
 
-        maxVolume=getMaxVolume();
-
-        maxVolumePercent=VLCApplication.getInstance().getMaxVolume();
-
-        resetCurrentVolume(maxVolumePercent);
-
-        VLCApplication vlcApplication= (VLCApplication) getApplication();
-
-        vlcApplication.setMaxVolumeListener(new VLCApplication.MaxVolumeChangeListener() {
-
-            @Override
-            public void onMaxVolumeChange() {
-
-                maxVolumePercent=VLCApplication.getInstance().getMaxVolume();
-
-                resetCurrentVolume(maxVolumePercent);
-
-            }
-        });
+        registerPushReceiver();
 
     }
 
@@ -216,6 +174,9 @@ public class BaseActivity extends Activity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        maxVolumePercent=VLCApplication.getInstance().getMaxVolume();
+
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
 
@@ -223,7 +184,7 @@ public class BaseActivity extends Activity {
                     return false;
                 }
 
-                if (getCurrentVolume() < (maxVolume*maxVolumePercent)) {
+                if (SystemUtil.getCurrentVolume(this) < (SystemUtil.getMaxVolume(this)*maxVolumePercent)) {
                     audio.adjustStreamVolume(
                             AudioManager.STREAM_MUSIC,
                             AudioManager.ADJUST_RAISE,
@@ -243,48 +204,6 @@ public class BaseActivity extends Activity {
                 break;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    private void resetCurrentVolume(double percent){
-
-        int volume= (int)(maxVolume*percent);
-
-        if(getCurrentVolume()>volume){
-
-            setCurrentVolume(volume);
-
-        }
-
-    }
-
-    private void setCurrentVolume(int tempVolume){
-        audio.setStreamVolume(AudioManager.STREAM_MUSIC, tempVolume, 0);
-    }
-
-    protected int getMaxVolume(){
-        return audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-    }
-
-    protected int getCurrentVolume(){
-        return audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-    }
-
-    private static boolean isTopActivity(Context context, String className)
-    {
-        if (context == null || TextUtils.isEmpty(className)) {
-            return false;
-        }
-
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
-        if (list != null && list.size() > 0) {
-            ComponentName cpn = list.get(0).topActivity;
-            if (className.equals(cpn.getClassName())) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
 }

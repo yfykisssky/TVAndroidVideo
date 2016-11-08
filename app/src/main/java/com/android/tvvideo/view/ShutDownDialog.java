@@ -55,7 +55,7 @@ public class ShutDownDialog extends Dialog {
         }
     };
 
-    public void setData() {
+    public void start() {
 
         Message message=new Message();
 
