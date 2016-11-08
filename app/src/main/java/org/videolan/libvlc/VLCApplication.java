@@ -146,7 +146,7 @@ public class VLCApplication extends Application {
 
                             //timeModel.startTime=jsonObject.getString("startTime");
 
-                            timeModel.startTime="2000-1-1 12:00:00";
+                            timeModel.startTime="2100-1-1 12:00:00";
 
                             timeModel.endTime=jsonObject.getString("shutdown");
 
