@@ -28,7 +28,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
@@ -149,7 +148,7 @@ public class VLCApplication extends Application {
 
                             timeModel.startTime="2000-1-1 12:00:00";
 
-                            timeModel.endTime=jsonObject.getString("endTime");
+                            timeModel.endTime=jsonObject.getString("shutdown");
 
                             setOnOffTimer(timeModel);
 
