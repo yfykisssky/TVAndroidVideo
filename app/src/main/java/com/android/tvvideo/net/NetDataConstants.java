@@ -78,4 +78,6 @@ public class NetDataConstants {
 
     public static final String STATIS_VIDEO=ALL_SERVER_URL+"videoStatistical";
 
+    public static final String GET_SYS_TIME=ALL_SERVER_URL+"getCurrentTime";
+
 }

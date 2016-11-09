@@ -167,6 +167,25 @@ public class StartActivity extends Activity {
 
     }
 
+    private void getSystemTime(){
+
+        new NetDataTool(this).sendGet(NetDataConstants.GET_SYS_TIME, new NetDataTool.IResponse() {
+
+            @Override
+            public void onSuccess(String data) {
+
+            }
+
+            @Override
+            public void onFailed(String error) {
+
+                Toast.makeText(StartActivity.this,error,Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
+
     private void playSound(String url){
         MediaPlayer player = MediaPlayer.create(this, Uri.parse(url));
         player.setLooping(false);//设置不循环播放
