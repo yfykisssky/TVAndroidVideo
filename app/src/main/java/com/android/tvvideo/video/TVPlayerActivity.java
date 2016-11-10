@@ -143,7 +143,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     }
 
-    Handler viewHandler=new Handler(){
+    Handler viewMsgHandler=new Handler(){
 
         @Override
         public void handleMessage(Message msg) {
@@ -157,6 +157,18 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                     String msgData= (String) msg.obj;
                     showMsg(msgData);
                     break;
+            }
+
+        }
+    };
+
+    Handler viewAdHandler=new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch(msg.what){
                 case 2:
                     hideAd();
                     break;
@@ -184,7 +196,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     msg.what=0;
 
-                    viewHandler.sendMessage(msg);
+                    viewMsgHandler.sendMessage(msg);
 
                     msgTimerTaskHelper.removeAllTimers();
 
@@ -245,7 +257,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     msg.what=2;
 
-                    viewHandler.sendMessage(msg);
+                    viewAdHandler.sendMessage(msg);
 
                     adTimerTaskHelper.removeAllTimers();
 
@@ -363,7 +375,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                         msg.what=3;
 
-                        viewHandler.sendMessage(msg);
+                        viewAdHandler.sendMessage(msg);
 
                     }
 
@@ -373,7 +385,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     msg.what=2;
 
-                    viewHandler.sendMessage(msg);
+                    viewAdHandler.sendMessage(msg);
                 }
 
             }
@@ -439,7 +451,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                         msg.what=1;
 
-                        viewHandler.sendMessage(msg);
+                        viewMsgHandler.sendMessage(msg);
 
                     }
 
@@ -449,7 +461,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     msg.what=0;
 
-                    viewHandler.sendMessage(msg);
+                    viewMsgHandler.sendMessage(msg);
                 }
 
             }
