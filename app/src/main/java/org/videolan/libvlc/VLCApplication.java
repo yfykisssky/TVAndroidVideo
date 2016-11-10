@@ -64,6 +64,8 @@ public class VLCApplication extends Application {
     String patientPhoneNum;
 
 
+    private static double MAX_VOLUME=-1;
+
     private void initAll(){
 
         onOffTaskHelper=new TimerTaskHelper(this);
@@ -101,8 +103,6 @@ public class VLCApplication extends Application {
     public void setPatientPhoneNum(String patientPhoneNum) {
         this.patientPhoneNum = patientPhoneNum;
     }
-
-    private static double MAX_VOLUME=-1;
 
     public double getMaxVolume() {
         return MAX_VOLUME;
