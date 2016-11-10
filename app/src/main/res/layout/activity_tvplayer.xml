@@ -47,15 +47,16 @@
         android:textSize="50px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <WebView
+    <ImageView
+        android:background="#FFFFFF"
         android:focusable="false"
         android:layout_alignParentRight="true"
         android:layerType="software"
         android:hardwareAccelerated="true"
-        android:id="@+id/adwebview"
+        android:id="@+id/adview"
         android:visibility="gone"
         android:layout_width="480px"
-        android:layout_height="match_parent"></WebView>
+        android:layout_height="match_parent"></ImageView>
     <com.android.tvvideo.view.ScrollRelativeLayout
         android:id="@+id/relative"
         android:layout_width="wrap_content"

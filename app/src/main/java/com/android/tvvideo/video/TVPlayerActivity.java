@@ -2,7 +2,6 @@ package com.android.tvvideo.video;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -25,8 +24,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
@@ -96,7 +93,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     int indexList;
 
-    WebView adWebView;
+    ImageView adView;
 
     List<String> adData=new ArrayList<>();
 
@@ -182,11 +179,11 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                 @Override
                 public void onSuccess(String data) {
 
+                    viewHandler.sendEmptyMessage(0);
+
                     msgTimerTaskHelper.removeAllTimers();
 
                     msgTex.clear();
-
-                    viewHandler.sendEmptyMessage(0);
 
                     List<TimerTaskHelper.TimeModel> timeModels=new ArrayList<TimerTaskHelper.TimeModel>();
 
@@ -239,11 +236,11 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                 @Override
                 public void onSuccess(String data) {
 
+                    viewHandler.sendEmptyMessage(2);
+
                     adTimerTaskHelper.removeAllTimers();
 
                     adData.clear();
-
-                    viewHandler.sendEmptyMessage(2);
 
                     List<TimerTaskHelper.TimeModel> timeModels = new ArrayList<TimerTaskHelper.TimeModel>();
 
@@ -381,8 +378,9 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         String url=SystemUtil.getServerAdPath(this)+adUrl;
 
-        adWebView.loadUrl(url);
-        adWebView.setVisibility(View.VISIBLE);
+        ImageLoad.loadDefultImage(url,adView);
+
+        adView.setVisibility(View.VISIBLE);
     }
 
     private void showAdFrameLocation(){
@@ -406,7 +404,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     }
 
     private void hideAd(){
-        adWebView.setVisibility(View.GONE);
+        adView.setVisibility(View.GONE);
 
         hideAdFrameLocation();
     }
@@ -466,12 +464,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         showMsgTex=(MarqueeText)findViewById(R.id.showmsg);
 
-        adWebView=(WebView)findViewById(R.id.adwebview);
-
-        adWebView.getSettings().setJavaScriptEnabled(true);
-        adWebView.getSettings().setAllowFileAccess(true);
-        adWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
-        adWebView.setBackgroundColor(0);
+        adView=(ImageView)findViewById(R.id.adview);
 
         relativeLayout = (ScrollRelativeLayout) findViewById(R.id.relative);
 
@@ -552,20 +545,26 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         super.setOnPushMsgListener(new PushMsgListener() {
             @Override
-            public void onMsgReceive(Intent data) {
+            public void onMsgReceive(JSONObject jsonObject) {
 
-                String kind=data.getStringExtra("kind");
+                try {
 
-                if(kind.equals("adchange")){
+                    String kind = jsonObject.getString("kind");
 
-                    getAdData();
+                    if(kind.equals("adchange")){
 
-                }
+                        getAdData();
 
-                if(kind.equals("msgchange")){
+                    }
 
-                    getShowMsg();
+                    if(kind.equals("msgchange")){
 
+                        getShowMsg();
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
             }

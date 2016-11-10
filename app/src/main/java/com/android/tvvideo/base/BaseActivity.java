@@ -39,7 +39,7 @@ public class BaseActivity extends Activity {
     RemindDialog remindDialog;
 
     public interface PushMsgListener{
-        void onMsgReceive(Intent data);
+        void onMsgReceive(JSONObject jsonObject);
     }
 
     protected void setOnPushMsgListener(PushMsgListener pushMsgListener){
@@ -93,7 +93,7 @@ public class BaseActivity extends Activity {
                     case "msgchange":
                     case "adchange":
                         if(pushMsgListener!=null){
-                            pushMsgListener.onMsgReceive(intent);
+                            pushMsgListener.onMsgReceive(jsonObject);
                         }
                         break;
                 }
