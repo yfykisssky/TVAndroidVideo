@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.view.ShutDownDialog;
 
 import java.net.Inet4Address;
@@ -164,7 +165,7 @@ public class SystemUtil {
 
         String serverPort= ShaPreHelper.readShaPre("settings","server_port",context);
 
-        return serverIp+":"+serverPort+"/videoedu/ad/";
+        return serverIp+":"+serverPort+ NetDataConstants.PROJECT_NAME+"/ad/";
 
     }
 
