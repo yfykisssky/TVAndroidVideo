@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -39,6 +40,7 @@ import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
 import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.tools.TimerTaskHelper;
+import com.android.tvvideo.tools.ViewTool;
 import com.android.tvvideo.view.LoadingDialog;
 import com.android.tvvideo.view.MarqueeText;
 import com.android.tvvideo.view.ScrollRelativeLayout;
@@ -107,7 +109,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     RelativeLayout playRelative;
 
-    final int changeWidth=1440;
+    final int CHANGE_WIDTH=1440;
 
     String playUrl;
 
@@ -144,6 +146,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     }
 
     Handler viewHandler=new Handler(){
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -372,22 +375,25 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void showAd(String adUrl){
 
         showAdFrameLocation();
 
         String url=SystemUtil.getServerAdPath(this)+adUrl;
 
-        ImageLoad.loadDefultImage(url,adView);
+        //ImageLoad.loadDefultImage(url,adView);
+
+        adView.setBackground(ViewTool.getDrawble(this,R.drawable.start_bg));
 
         adView.setVisibility(View.VISIBLE);
     }
 
     private void showAdFrameLocation(){
 
-        playRelative.setLayoutParams(new RelativeLayout.LayoutParams(changeWidth,RelativeLayout.LayoutParams.MATCH_PARENT));
+        playRelative.setLayoutParams(new RelativeLayout.LayoutParams(CHANGE_WIDTH,RelativeLayout.LayoutParams.MATCH_PARENT));
 
-        mSurfaceFrame.setLayoutParams(new RelativeLayout.LayoutParams(changeWidth,RelativeLayout.LayoutParams.MATCH_PARENT));
+        mSurfaceFrame.setLayoutParams(new RelativeLayout.LayoutParams(CHANGE_WIDTH,RelativeLayout.LayoutParams.MATCH_PARENT));
 
         mCurrentSize = SURFACE_BEST_FIT;
         setSurfaceSize(playRelative.getWidth(),playRelative.getHeight(),playRelative.getWidth(),playRelative.getHeight(),1,1);
@@ -395,9 +401,9 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     private void hideAdFrameLocation(){
 
-        playRelative.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.MATCH_PARENT));
+        playRelative.setLayoutParams(new RelativeLayout.LayoutParams(SystemUtil.getWindowWidth(this),RelativeLayout.LayoutParams.MATCH_PARENT));
 
-        mSurfaceFrame.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.MATCH_PARENT));
+        mSurfaceFrame.setLayoutParams(new RelativeLayout.LayoutParams(SystemUtil.getWindowWidth(this),RelativeLayout.LayoutParams.MATCH_PARENT));
 
         mCurrentSize = SURFACE_BEST_FIT;
         setSurfaceSize(playRelative.getWidth(),playRelative.getHeight(),playRelative.getWidth(),playRelative.getHeight(),1,1);

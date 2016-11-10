@@ -36,8 +36,6 @@ public class TestActivity extends BaseActivity {
 
         super.setActivityName(this.getClass().getName());
 
-        Log.e("istop", String.valueOf(SystemUtil.isTopActivity(this,this.getClass().getName())));
-
         Context context=this;
 
         writeSettings();
@@ -50,9 +48,11 @@ public class TestActivity extends BaseActivity {
 
         complainDialog.show();*/
 
-       //Intent intent=new Intent(TestActivity.this, TVPlayerActivity.class);
+        /*Intent intent=new Intent(TestActivity.this, TVPlayerActivity.class);
 
-        //startActivity(intent);
+        startActivity(intent);*/
+
+
 
        // startActivity(new Intent(this,ComplainActivity.class));
         //((EditText)findViewById(R.id.url)).setText("rtmp://live.hkstv.hk.lxdns.com/live/hks");
