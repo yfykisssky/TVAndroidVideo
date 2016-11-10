@@ -40,7 +40,6 @@ import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
 import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.tools.TimerTaskHelper;
-import com.android.tvvideo.tools.ViewTool;
 import com.android.tvvideo.view.LoadingDialog;
 import com.android.tvvideo.view.MarqueeText;
 import com.android.tvvideo.view.ScrollRelativeLayout;
@@ -359,7 +358,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     Message msg=new Message();
 
-                    if(adData.size()==indexNew){
+                    if(adData.size()>=indexNew){
 
                         msg.obj=adData.get(indexNew);
 
@@ -390,9 +389,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         String url=SystemUtil.getServerAdPath(this)+adUrl;
 
-        //ImageLoad.loadDefultImage(url,adView);
-
-        adView.setBackground(ViewTool.getDrawble(this,R.drawable.start_bg));
+        ImageLoad.loadDefultImage(url,adView);
 
         adView.setVisibility(View.VISIBLE);
     }
@@ -434,7 +431,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     Message msg=new Message();
 
-                    if(msgTex.size()==indexNew){
+                    if(msgTex.size()>=indexNew){
 
                         msg.obj=msgTex.get(indexNew);
 
