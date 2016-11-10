@@ -414,9 +414,11 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     }
 
     private void hideAd(){
-        adView.setVisibility(View.GONE);
 
         hideAdFrameLocation();
+
+        adView.setVisibility(View.GONE);
+
     }
 
     private void startMsgListening(){
@@ -424,6 +426,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         msgTimerTaskHelper.startAndListener("msg", new TimerTaskHelper.OnStartOrEndListener() {
             @Override
             public void onStartOrEnd(boolean startOrEnd,int index) {
+
                 if(startOrEnd){
 
                     int indexNew=index/2;
@@ -448,6 +451,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     viewHandler.sendMessage(msg);
                 }
+
             }
         });
 

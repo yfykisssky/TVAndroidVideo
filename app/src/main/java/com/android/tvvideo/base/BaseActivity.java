@@ -177,7 +177,7 @@ public class BaseActivity extends Activity {
 
         maxVolumePercent=VLCApplication.getInstance().getMaxVolume();
 
-        switch (keyCode) {
+        switch (event.getKeyCode()) {
             case KeyEvent.KEYCODE_VOLUME_UP:
 
                 if(maxVolumePercent<0){
