@@ -358,7 +358,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     Message msg=new Message();
 
-                    if(adData.size()>=indexNew){
+                    if(adData.size()>indexNew){
 
                         msg.obj=adData.get(indexNew);
 
@@ -431,7 +431,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     Message msg=new Message();
 
-                    if(msgTex.size()>=indexNew){
+                    if(msgTex.size()>indexNew){
 
                         msg.obj=msgTex.get(indexNew);
 
