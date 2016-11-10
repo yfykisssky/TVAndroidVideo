@@ -93,6 +93,13 @@ public class ImageLoad {
 		ImageLoader.getInstance().displayImage(imageUrl, imageAware, options);
 	}
 
+	//加载imageloader默认配置
+	public static void loadImage(String imageUrl, ImageView imageAware){
+
+		ImageLoader.getInstance().displayImage(imageUrl, imageAware, options);
+
+	}
+
 	//设置列表滚动不闪烁
 	public static void setListScroll(ListView list, boolean pauseOnScroll, boolean pauseOnFling){
 		list.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), pauseOnScroll, pauseOnFling));

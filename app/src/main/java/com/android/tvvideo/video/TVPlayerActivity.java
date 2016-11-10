@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -145,7 +144,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     }
 
     Handler viewHandler=new Handler(){
-        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -382,14 +381,14 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+
     private void showAd(String adUrl){
 
         showAdFrameLocation();
 
         String url=SystemUtil.getServerAdPath(this)+adUrl;
 
-        ImageLoad.loadDefultImage(url,adView);
+        ImageLoad.loadImage(url,adView);
 
         adView.setVisibility(View.VISIBLE);
     }
