@@ -182,7 +182,11 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                 @Override
                 public void onSuccess(String data) {
 
-                    viewHandler.sendEmptyMessage(0);
+                    Message msg=new Message();
+
+                    msg.what=0;
+
+                    viewHandler.sendMessage(msg);
 
                     msgTimerTaskHelper.removeAllTimers();
 
@@ -239,7 +243,11 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                 @Override
                 public void onSuccess(String data) {
 
-                    viewHandler.sendEmptyMessage(2);
+                    Message msg=new Message();
+
+                    msg.what=2;
+
+                    viewHandler.sendMessage(msg);
 
                     adTimerTaskHelper.removeAllTimers();
 

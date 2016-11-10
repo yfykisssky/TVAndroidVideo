@@ -277,9 +277,11 @@ public class VLCApplication extends Application {
 
                 if(startOrEnd){
 
-                    resetCurrentVolume(Double.parseDouble(maxVolumePercents.get(index)));
+                    int indexNew=index/2;
 
-                    setMaxVolume(Double.parseDouble(maxVolumePercents.get(index)));
+                    resetCurrentVolume(Double.parseDouble(maxVolumePercents.get(indexNew)));
+
+                    setMaxVolume(Double.parseDouble(maxVolumePercents.get(indexNew)));
 
                 }else{
 
