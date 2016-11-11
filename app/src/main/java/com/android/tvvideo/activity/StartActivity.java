@@ -131,23 +131,7 @@ public class StartActivity extends Activity {
 
                         Toast.makeText(StartActivity.this,"已经是最新版本",Toast.LENGTH_LONG).show();
 
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                try {
-                                    Thread.sleep(3000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-
-                                Intent intent=new Intent(StartActivity.this,HomeActivity.class);
-                                startActivity(intent);
-                                finish();
-
-                            }
-                        }).start();
-
+                        toHome();
 
                     }
 
@@ -183,6 +167,27 @@ public class StartActivity extends Activity {
 
             }
         });
+
+    }
+
+    private void toHome(){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                Intent intent=new Intent(StartActivity.this,HomeActivity.class);
+                startActivity(intent);
+                finish();
+
+            }
+        }).start();
 
     }
 
