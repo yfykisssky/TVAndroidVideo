@@ -169,7 +169,7 @@ public class TimerTaskHelper {
                 intent.setAction(broadcastAction);
 
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-                am.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), pendingIntent);
+                am.set(AlarmManager.RTC,calendar.getTimeInMillis(), pendingIntent);
 
                 alarmId++;
 
@@ -185,7 +185,7 @@ public class TimerTaskHelper {
                 intent.setAction(broadcastAction);
 
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-                am.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), pendingIntent);
+                am.set(AlarmManager.RTC,calendar.getTimeInMillis(), pendingIntent);
 
                 alarmId++;
 
