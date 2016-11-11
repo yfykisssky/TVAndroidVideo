@@ -367,25 +367,16 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     int indexNew=index/2;
 
-                    Message msg=new Message();
-
                     if(adData.size()>indexNew){
 
-                        msg.obj=adData.get(indexNew);
-
-                        msg.what=3;
-
-                        viewAdHandler.sendMessage(msg);
+                        showAd(adData.get(indexNew));
 
                     }
 
                 }else{
 
-                    Message msg=new Message();
+                    hideAd();
 
-                    msg.what=2;
-
-                    viewAdHandler.sendMessage(msg);
                 }
 
             }
@@ -443,25 +434,15 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                     int indexNew=index/2;
 
-                    Message msg=new Message();
-
                     if(msgTex.size()>indexNew){
 
-                        msg.obj=msgTex.get(indexNew);
-
-                        msg.what=1;
-
-                        viewMsgHandler.sendMessage(msg);
-
+                        showMsg(msgTex.get(indexNew));
                     }
 
                 }else{
 
-                    Message msg=new Message();
+                    hideMsg();
 
-                    msg.what=0;
-
-                    viewMsgHandler.sendMessage(msg);
                 }
 
             }
