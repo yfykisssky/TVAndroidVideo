@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -192,6 +193,10 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                 @Override
                 public void onSuccess(String data) {
 
+                    if(TextUtils.isEmpty(data)){
+                        return;
+                    }
+
                     Message msg=new Message();
 
                     msg.what=0;
@@ -253,6 +258,10 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                 @Override
                 public void onSuccess(String data) {
 
+                    if(TextUtils.isEmpty(data)){
+                        return;
+                    }
+
                     Message msg=new Message();
 
                     msg.what=2;
@@ -309,6 +318,10 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
             @Override
             public void onSuccess(String data) {
 
+                if(TextUtils.isEmpty(data)){
+                    return;
+                }
+
                 try {
                     JSONArray array=new JSONArray(data);
 
@@ -323,23 +336,17 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                         listData.add(map);
                     }
 
-                    myAdapter.notifyDataSetChanged();
-
-                    List<String> tvPlayUrls=new ArrayList<String>();
-
-                    for(int t=0;t<listData.size();t++){
-
-                        tvPlayUrls.add(listData.get(0).get("playurl"));
-
-                    }
-
-                    if(tvPlayUrls.size()>0){
+                    if(listData.size()>0){
 
                         indexPlay=0;
 
-                        playMrl(tvPlayUrls.get(0));
+                        startLoading();
+
+                        playMrl(listData.get(0).get("playurl"));
 
                     }
+
+                    myAdapter.notifyDataSetChanged();
 
                     startCountTimeThread();
 
@@ -387,6 +394,10 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     private void showAd(String adUrl){
 
+        if(TextUtils.isEmpty(adUrl)){
+            return;
+        }
+
         showAdFrameLocation();
 
         String url=SystemUtil.getServerAdPath(this)+adUrl;
@@ -410,10 +421,14 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         playRelative.setLayoutParams(new RelativeLayout.LayoutParams(SystemUtil.getWindowWidth(this),RelativeLayout.LayoutParams.MATCH_PARENT));
 
-        mSurfaceFrame.setLayoutParams(new RelativeLayout.LayoutParams(SystemUtil.getWindowWidth(this),RelativeLayout.LayoutParams.MATCH_PARENT));
+        RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(SystemUtil.getWindowWidth(this),RelativeLayout.LayoutParams.MATCH_PARENT);
+
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+
+        mSurfaceFrame.setLayoutParams(layoutParams);
 
         mCurrentSize = SURFACE_BEST_FIT;
-        setSurfaceSize(playRelative.getWidth(),playRelative.getHeight(),playRelative.getWidth(),playRelative.getHeight(),1,1);
+        setSurfaceSize(mSurfaceFrame.getWidth(),mSurfaceFrame.getHeight(),mSurfaceFrame.getWidth(),mSurfaceFrame.getHeight(),1,1);
     }
 
     private void hideAd(){
