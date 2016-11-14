@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -92,6 +94,7 @@ public class TimerTaskHelper {
         am = (AlarmManager)context.getSystemService(context.ALARM_SERVICE);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setData(List<TimeModel> timeModels){
 
         addTimer(timeModels);
@@ -155,6 +158,7 @@ public class TimerTaskHelper {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void addTimer(List<TimeModel> timeModels){
 
         for(int y=0;y<timeModels.size();y++){
@@ -169,8 +173,8 @@ public class TimerTaskHelper {
                 intent.setAction(broadcastAction);
 
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-                am.set(AlarmManager.RTC,calendar.getTimeInMillis(), pendingIntent);
-
+                //am.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), pendingIntent);
+                am.setWindow(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),0, pendingIntent);
                 alarmId++;
 
             }
@@ -185,7 +189,8 @@ public class TimerTaskHelper {
                 intent.setAction(broadcastAction);
 
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-                am.set(AlarmManager.RTC,calendar.getTimeInMillis(), pendingIntent);
+                //am.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), pendingIntent);
+                am.setWindow(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),0, pendingIntent);
 
                 alarmId++;
 
