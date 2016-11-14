@@ -411,10 +411,14 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         playRelative.setLayoutParams(new RelativeLayout.LayoutParams(CHANGE_WIDTH,RelativeLayout.LayoutParams.MATCH_PARENT));
 
-        mSurfaceFrame.setLayoutParams(new RelativeLayout.LayoutParams(CHANGE_WIDTH,RelativeLayout.LayoutParams.MATCH_PARENT));
+        RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(CHANGE_WIDTH,RelativeLayout.LayoutParams.MATCH_PARENT);
+
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+
+        mSurfaceFrame.setLayoutParams(layoutParams);
 
         mCurrentSize = SURFACE_BEST_FIT;
-        setSurfaceSize(playRelative.getWidth(),playRelative.getHeight(),playRelative.getWidth(),playRelative.getHeight(),1,1);
+        setSurfaceSize(mSurfaceFrame.getWidth(),mSurfaceFrame.getHeight(),mSurfaceFrame.getWidth(),mSurfaceFrame.getHeight(),1,1);
     }
 
     private void hideAdFrameLocation(){
