@@ -194,6 +194,8 @@ public class ComplainDialog extends Dialog {
                         Toast.makeText(getContext(),"投诉成功",Toast.LENGTH_SHORT).show();
 
                         ComplainDialog.this.dismiss();
+                    }else{
+                        Toast.makeText(getContext(),"投诉失败",Toast.LENGTH_SHORT).show();
                     }
 
                 }
