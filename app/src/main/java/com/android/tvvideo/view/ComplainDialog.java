@@ -2,6 +2,7 @@ package com.android.tvvideo.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -85,6 +86,39 @@ public class ComplainDialog extends Dialog {
         checkBox1.setText(checkStr[0]);
         checkBox2.setText(checkStr[1]);
         checkBox3.setText(checkStr[2]);
+
+        checkBox1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    checkBox1.setBackgroundColor(Color.parseColor("#FF9900"));
+                }else{
+                    checkBox1.setBackgroundColor(Color.TRANSPARENT);
+                }
+            }
+        });
+
+        checkBox2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    checkBox2.setBackgroundColor(Color.parseColor("#FF9900"));
+                }else{
+                    checkBox2.setBackgroundColor(Color.TRANSPARENT);
+                }
+            }
+        });
+
+        checkBox3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    checkBox3.setBackgroundColor(Color.parseColor("#FF9900"));
+                }else{
+                    checkBox3.setBackgroundColor(Color.TRANSPARENT);
+                }
+            }
+        });
 
         confirmBnt.setOnClickListener(new View.OnClickListener() {
             @Override
