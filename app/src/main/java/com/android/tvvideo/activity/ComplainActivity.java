@@ -74,7 +74,6 @@ public class ComplainActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-
                 ComplainDialog complainDialog=new ComplainDialog(context);
 
                 complainDialog.setData(datas.get(i).get("id"),datas.get(i).get("kind"));
@@ -164,13 +163,13 @@ public class ComplainActivity extends BaseActivity {
                             map.put("title",doctors.getJSONObject(v).getString("title"));
                             map.put("path",doctors.getJSONObject(v).getString("path"));
                             map.put("kind","doctors");
-                            map.put("id",doctors.getJSONObject(v).getString("id"));
+                            map.put("id",String.valueOf(doctors.getJSONObject(v).getInt("id")));
 
                             datas.add(map);
 
                         }
 
-                        for(int v=0;v<nurses.length();v++){
+                       for(int v=0;v<nurses.length();v++){
 
                             Map<String,String> map=new HashMap<String, String>();
 
@@ -178,7 +177,7 @@ public class ComplainActivity extends BaseActivity {
                             map.put("title",nurses.getJSONObject(v).getString("title"));
                             map.put("path",nurses.getJSONObject(v).getString("path"));
                             map.put("kind","nurses");
-                            map.put("id",doctors.getJSONObject(v).getString("id"));
+                            map.put("id",String.valueOf(nurses.getJSONObject(v).getInt("id")));
 
                             datas.add(map);
 
