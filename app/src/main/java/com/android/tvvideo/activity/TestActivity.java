@@ -13,6 +13,7 @@ import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.tools.ShaPreHelper;
 import com.android.tvvideo.tools.SystemUtil;
+import com.android.tvvideo.video.TVPlayerActivity;
 
 import org.videolan.libvlc.VLCApplication;
 
@@ -48,9 +49,9 @@ public class TestActivity extends BaseActivity {
 
         complainDialog.show();*/
 
-        /*Intent intent=new Intent(TestActivity.this, TVPlayerActivity.class);
+        Intent intent=new Intent(TestActivity.this, TVPlayerActivity.class);
 
-        startActivity(intent);*/
+        startActivity(intent);
 
 
 

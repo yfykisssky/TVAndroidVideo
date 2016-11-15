@@ -35,6 +35,7 @@ import com.android.tvvideo.tools.CrashHandler;
 import com.android.tvvideo.tools.ImageLoad;
 import com.android.tvvideo.tools.PushService;
 import com.android.tvvideo.tools.SystemUtil;
+import com.android.tvvideo.tools.TimeTaskService;
 import com.android.tvvideo.tools.TimerTaskHelper;
 
 import org.json.JSONArray;
@@ -66,17 +67,17 @@ public class VLCApplication extends Application {
 
     private static double MAX_VOLUME=-1;
 
+    TimeTaskService timeTaskService;
+
     private void initAll(){
 
-        onOffTaskHelper=new TimerTaskHelper(this);
+        initTimeService();
 
-        onOffTaskHelper.setStartInt(TimerTaskHelper.START_INT_1);
+        onOffTaskHelper=new TimerTaskHelper(this);
 
         initOnOffTimer();
 
         maxVolumeTaskHelper=new TimerTaskHelper(this);
-
-        maxVolumeTaskHelper.setStartInt(TimerTaskHelper.START_INT_2);
 
         initMaxVolumeTimer();
 
@@ -326,6 +327,32 @@ public class VLCApplication extends Application {
 
     }
 
+    private void initTimeService(){
+
+        Intent intent=new Intent(this,TimeTaskService.class);
+
+        ServiceConnection conn=new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
+                if(iBinder!=null){
+
+                    timeTaskService=((TimeTaskService.LocalBinder)iBinder).getService();
+
+                }
+
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+
+            }
+        };
+
+        this.bindService(intent,conn,Context.BIND_AUTO_CREATE);
+
+    }
+
     BroadcastReceiver pushReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -390,6 +417,10 @@ public class VLCApplication extends Application {
     public static VLCApplication getInstance()
     {
         return instance;
+    }
+
+    public TimeTaskService getTimeTaskService() {
+        return timeTaskService;
     }
 
     public static Context getAppContext()

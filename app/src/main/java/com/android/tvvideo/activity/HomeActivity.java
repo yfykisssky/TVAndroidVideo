@@ -17,9 +17,6 @@ import com.android.tvvideo.view.page.ZoomCardPageTransformer;
 
 import org.videolan.libvlc.VLCApplication;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 
 public class HomeActivity extends BaseActivity {
 
@@ -171,27 +168,7 @@ public class HomeActivity extends BaseActivity {
 
     }
 
-    private void checkTime(){
-
-        try {
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            long checkTime=sdf.parse("2017-3-1 00:00:00").getTime();
-            long time = System.currentTimeMillis();
-
-            if(checkTime<time){
-                throw new IllegalStateException("unknown error,restart again");
-            }
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     private void initUseData() {
-
-        checkTime();
 
         VLCApplication.getInstance().initPushService();
 

@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import com.android.tvvideo.tools.ViewTool;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.videolan.libvlc.VLCApplication;
 
 
 /**
@@ -131,7 +133,12 @@ public class StartActivity extends Activity {
 
                         Toast.makeText(StartActivity.this,"已经是最新版本",Toast.LENGTH_LONG).show();
 
-                        toHome();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                getSystemTime();
+                            }
+                        },3000);
 
                     }
 
@@ -158,6 +165,14 @@ public class StartActivity extends Activity {
             @Override
             public void onSuccess(String data) {
 
+                if(TextUtils.isEmpty(data)){
+                    return;
+                }
+
+                VLCApplication.getInstance().getTimeTaskService().startTimeTask(data);
+
+                toHome();
+
             }
 
             @Override
@@ -172,22 +187,9 @@ public class StartActivity extends Activity {
 
     private void toHome(){
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                Intent intent=new Intent(StartActivity.this,HomeActivity.class);
-                startActivity(intent);
-                finish();
-
-            }
-        }).start();
+        Intent intent=new Intent(StartActivity.this,HomeActivity.class);
+        startActivity(intent);
+        finish();
 
     }
 

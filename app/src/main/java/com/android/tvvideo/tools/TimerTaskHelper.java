@@ -1,18 +1,12 @@
 package com.android.tvvideo.tools;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import org.videolan.libvlc.VLCApplication;
+
 import java.util.List;
 
 /**
@@ -20,17 +14,9 @@ import java.util.List;
  */
 public class TimerTaskHelper {
 
-    public static final int START_INT_1=0;
-
-    public static final int START_INT_2=500000000;
-
-    public static final int START_INT_3=1000000000;
-
-    public static final int START_INT_4=1500000000;
-
-    AlarmManager am;
-
     String broadcastAction="com.android.tvvideo.alarmtimer.";
+
+    String kind;
 
     Context context;
 
@@ -39,8 +25,6 @@ public class TimerTaskHelper {
     int alarmId=0;
 
     boolean isRegister=false;
-
-    //List<TimeModel> timeModels=new ArrayList<>();
 
     OnStartOrEndListener onStartOrEndListener;
 
@@ -91,10 +75,8 @@ public class TimerTaskHelper {
 
     public TimerTaskHelper(Context context){
         this.context=context;
-        am = (AlarmManager)context.getSystemService(context.ALARM_SERVICE);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setData(List<TimeModel> timeModels){
 
         addTimer(timeModels);
@@ -103,6 +85,7 @@ public class TimerTaskHelper {
 
     public void startAndListener(String receiverAction,OnStartOrEndListener onStartOrEndListener){
         broadcastAction+=receiverAction;
+        kind=receiverAction;
         this.onStartOrEndListener=onStartOrEndListener;
         registerReceiver();
     }
@@ -142,59 +125,23 @@ public class TimerTaskHelper {
 
     }
 
-    private Calendar formatToCanlendar(String time){
-
-        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = null;
-        try {
-            date = sdf.parse(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-
-        return calendar;
-
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void addTimer(List<TimeModel> timeModels){
 
         for(int y=0;y<timeModels.size();y++){
 
             if(timeModels.get(y).startTime!=null){
 
-                Calendar calendar=formatToCanlendar(timeModels.get(y).startTime);
-
-                Intent intent = new Intent();
-                intent.putExtra("index",alarmId-startInt);
-                intent.putExtra("kind", "start");
-                intent.setAction(broadcastAction);
-
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-                //am.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), pendingIntent);
-                am.setWindow(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),0, pendingIntent);
-                alarmId++;
+                VLCApplication.getInstance().getTimeTaskService().addToList(kind,"start",timeModels.get(y).startTime,String.valueOf(alarmId),broadcastAction);
 
             }
 
             if(timeModels.get(y).endTime!=null){
 
-                Calendar calendar=formatToCanlendar(timeModels.get(y).endTime);
-
-                Intent intent = new Intent();
-                intent.putExtra("index",alarmId-startInt);
-                intent.putExtra("kind", "end");
-                intent.setAction(broadcastAction);
-
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-                //am.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), pendingIntent);
-                am.setWindow(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),0, pendingIntent);
-
-                alarmId++;
+                VLCApplication.getInstance().getTimeTaskService().addToList(kind,"end",timeModels.get(y).endTime,String.valueOf(alarmId),broadcastAction);
 
             }
+
+            alarmId++;
 
         }
 
@@ -202,16 +149,9 @@ public class TimerTaskHelper {
 
     private void removeTimer(){
 
-        for(int v=startInt;v<alarmId;v++){
-            Intent intent = new Intent();
-            intent.setAction(broadcastAction);
-            PendingIntent pi=PendingIntent.getBroadcast(context,alarmId, intent,PendingIntent.FLAG_UPDATE_CURRENT);
-            am.cancel(pi);
-        }
+        alarmId=0;
 
-        //this.timeModels.clear();
-
-        alarmId=startInt;
+        VLCApplication.getInstance().getTimeTaskService().removeFromList(kind);
 
     }
 

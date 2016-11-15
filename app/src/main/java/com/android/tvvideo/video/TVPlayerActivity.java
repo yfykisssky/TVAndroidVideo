@@ -598,13 +598,9 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         msgTimerTaskHelper=new TimerTaskHelper(this);
 
-        msgTimerTaskHelper.setStartInt(TimerTaskHelper.START_INT_3);
-
         startMsgListening();
 
         adTimerTaskHelper=new TimerTaskHelper(this);
-
-        adTimerTaskHelper.setStartInt(TimerTaskHelper.START_INT_4);
 
         startAdListening();
 

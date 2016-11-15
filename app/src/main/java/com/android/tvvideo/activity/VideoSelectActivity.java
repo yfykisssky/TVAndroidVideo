@@ -176,6 +176,8 @@ public class VideoSelectActivity extends BaseActivity {
 
                     gridAdapter.notifyDataSetChanged();
 
+                    gridView.clearFocus();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -264,6 +266,7 @@ public class VideoSelectActivity extends BaseActivity {
                 gridData.clear();
                 gridAdapter.notifyDataSetChanged();
                 getVideoList(listData.get(indexList).get("id"));
+
             }
 
             @Override
