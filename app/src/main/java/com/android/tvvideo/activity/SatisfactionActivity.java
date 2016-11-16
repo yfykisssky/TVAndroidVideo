@@ -61,8 +61,35 @@ public class SatisfactionActivity extends BaseActivity {
 
         initView();
 
-        getFeedBackList();
+        //getFeedBackList();
+        testData();
 
+    }
+
+    private void testData(){
+
+        for(int x=0;x<20;x++){
+
+            Map<String,Object> map=new HashMap<String,Object>();
+
+            map.put("id","id");
+
+            map.put("question","1234567890");
+
+            List<String> list=new ArrayList<String>();
+
+            for(int k=0;k<3;k++){
+                list.add("123");
+            }
+
+            map.put("choices",list);
+
+            map.put("selectIndex","0");
+
+            listData.add(map);
+        }
+
+        myAdapter.notifyDataSetChanged();
     }
 
     private void getFeedBackList() {
@@ -206,7 +233,7 @@ public class SatisfactionActivity extends BaseActivity {
 
                 }else if(keyEvent.getKeyCode()==KeyEvent.KEYCODE_DPAD_RIGHT){
 
-                    if(indexRadioSelect<((List<String>)listData.get(i).get("choices")).size()){
+                    if(indexRadioSelect<((List<String>)listData.get(listSelect).get("choices")).size()){
                         indexRadioSelect++;
                     }
 
@@ -390,6 +417,12 @@ public class SatisfactionActivity extends BaseActivity {
                 }
 
 
+            }else{
+                myHolder.radioButton1.setBackgroundColor(Color.TRANSPARENT);
+                myHolder.radioButton2.setBackgroundColor(Color.TRANSPARENT);
+                myHolder.radioButton3.setBackgroundColor(Color.TRANSPARENT);
+                myHolder.radioButton4.setBackgroundColor(Color.TRANSPARENT);
+                myHolder.radioButton5.setBackgroundColor(Color.TRANSPARENT);
             }
 
             return view;
