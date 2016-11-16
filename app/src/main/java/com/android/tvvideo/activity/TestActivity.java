@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,9 +13,10 @@ import android.widget.EditText;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
+import com.android.tvvideo.net.NetDataConstants;
+import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ShaPreHelper;
 import com.android.tvvideo.tools.SystemUtil;
-import com.android.tvvideo.video.TVPlayerActivity;
 
 import org.videolan.libvlc.VLCApplication;
 
@@ -49,9 +52,39 @@ public class TestActivity extends BaseActivity {
 
         complainDialog.show();*/
 
-        Intent intent=new Intent(TestActivity.this, TVPlayerActivity.class);
+        new NetDataTool(this).sendGet(NetDataConstants.GET_SYS_TIME, new NetDataTool.IResponse() {
 
-        startActivity(intent);
+            @Override
+            public void onSuccess(String data) {
+
+                if(TextUtils.isEmpty(data)){
+                    return;
+                }
+
+                VLCApplication.getInstance().getTimeTaskService().startTimeTask(data);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent=new Intent(TestActivity.this, FeeActivity.class);
+
+                        startActivity(intent);
+
+                    }
+                },5000);
+
+
+            }
+
+            @Override
+            public void onFailed(String error) {
+
+                //Toast.makeText(StartActivity.this,error,Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+
 
 
 

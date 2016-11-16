@@ -120,6 +120,13 @@ public class VideoSelectActivity extends BaseActivity {
 
                     listAdapter.notifyDataSetChanged();
 
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            listView.requestFocus();
+                        }
+                    },500);
+
                 }
 
                 @Override
