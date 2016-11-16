@@ -3,7 +3,6 @@ package com.android.tvvideo.activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +19,12 @@ import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
+import com.android.tvvideo.tools.SystemUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.videolan.libvlc.VLCApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,12 +122,9 @@ public class SatisfactionActivity extends BaseActivity {
         JSONObject postData=new JSONObject();
         try {
 
-            //postData.put("ipaddress", SystemUtil.getLocalHostIp());
-            //postData.put("hospitalId",VLCApplication.getInstance().getPatientNum());
-            //postData.put("mobile",VLCApplication.getInstance().getPatientPhoneNum());
-            postData.put("ipaddress","192.168.2.117");
-            postData.put("hospitalId","123456");
-            postData.put("mobile","15936046693");
+            postData.put("ipaddress", SystemUtil.getLocalHostIp());
+            postData.put("hospitalId", VLCApplication.getInstance().getPatientNum());
+            postData.put("mobile",VLCApplication.getInstance().getPatientPhoneNum());
 
             JSONArray array=new JSONArray();
 
@@ -149,8 +147,6 @@ public class SatisfactionActivity extends BaseActivity {
             }
 
             postData.put("list",array);
-
-            Log.e("postJson",postData.toString());
 
             new NetDataTool(this).sendPost(NetDataConstants.SATISFACTION_FEED_BACK,postData.toString(), new NetDataTool.IResponse() {
                 @Override
