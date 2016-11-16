@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,12 +62,12 @@ public class SatisfactionActivity extends BaseActivity {
 
         initView();
 
-        //getFeedBackList();
-        testData();
+        getFeedBackList();
+        //testData();
 
     }
 
-    private void testData(){
+/*    private void testData(){
 
         for(int x=0;x<20;x++){
 
@@ -90,7 +91,14 @@ public class SatisfactionActivity extends BaseActivity {
         }
 
         myAdapter.notifyDataSetChanged();
-    }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                listView.requestFocus();
+            }
+        },500);
+    }*/
 
     private void getFeedBackList() {
 
@@ -128,6 +136,13 @@ public class SatisfactionActivity extends BaseActivity {
                     }
 
                     myAdapter.notifyDataSetChanged();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            listView.requestFocus();
+                        }
+                    },500);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -211,39 +226,13 @@ public class SatisfactionActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 listSelect=i;
+                myAdapter.notifyDataSetChanged();
+
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
-
-        listView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-
-                int indexRadioSelect=Integer.parseInt((String)listData.get(listSelect).get("selectIndex"));
-
-                if(keyEvent.getKeyCode()==KeyEvent.KEYCODE_DPAD_LEFT){
-
-                    if(indexRadioSelect>0){
-                        indexRadioSelect--;
-                    }
-
-                }else if(keyEvent.getKeyCode()==KeyEvent.KEYCODE_DPAD_RIGHT){
-
-                    if(indexRadioSelect<((List<String>)listData.get(listSelect).get("choices")).size()){
-                        indexRadioSelect++;
-                    }
-
-                }
-
-                listData.get(listSelect).remove("selectIndex");
-                listData.get(listSelect).put("selectIndex",String.valueOf(indexRadioSelect));
-                myAdapter.notifyDataSetChanged();
-
-                return false;
             }
         });
 
@@ -258,6 +247,35 @@ public class SatisfactionActivity extends BaseActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if(listView.hasFocus()){
+
+            int indexRadioSelect=Integer.parseInt((String)listData.get(listSelect).get("selectIndex"));
+            if(event.getKeyCode()==KeyEvent.KEYCODE_DPAD_LEFT){
+
+                if(indexRadioSelect>0){
+                    indexRadioSelect--;
+                }
+
+            }else if(event.getKeyCode()==KeyEvent.KEYCODE_DPAD_RIGHT){
+
+                if(indexRadioSelect<((List<String>)listData.get(listSelect).get("choices")).size()-1){
+                    indexRadioSelect++;
+                }
+
+            }
+
+            listData.get(listSelect).remove("selectIndex");
+            listData.get(listSelect).put("selectIndex",String.valueOf(indexRadioSelect));
+            myAdapter.notifyDataSetChanged();
+
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     class MyAdapter extends BaseAdapter {

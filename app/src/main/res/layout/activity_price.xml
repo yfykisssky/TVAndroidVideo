@@ -72,6 +72,7 @@
         </LinearLayout>
 
         <ListView
+            android:focusable="false"
             android:id="@+id/pricelist"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"

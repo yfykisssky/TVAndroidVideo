@@ -75,8 +75,6 @@ public class PriceActivity extends BaseActivity {
 
         initView();
 
-        searchData();
-
     }
 
 
@@ -149,23 +147,7 @@ public class PriceActivity extends BaseActivity {
 
     private void searchData() {
 
-
         listAllData.clear();
-
-        for(int b=0;b<20;b++){
-
-            Map<String,String> map=new HashMap<>();
-
-            map.put("kind","0");
-            map.put("name",String.valueOf(b));
-            map.put("safestkind",String.valueOf(b));
-            map.put("unit",String.valueOf(b));
-            map.put("price",String.valueOf(b));
-
-            listAllData.add(map);
-
-        }
-
 
         JSONObject postData=new JSONObject();
         try {

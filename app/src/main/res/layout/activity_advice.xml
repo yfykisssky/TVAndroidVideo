@@ -80,6 +80,7 @@
         </LinearLayout>
 
         <ListView
+            android:focusable="false"
             android:id="@+id/advicelist"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"

@@ -209,6 +209,10 @@ public class FeeActivity extends BaseActivity {
 
         endTimeBnt.setText(String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day));
 
+        startTime=String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day);
+
+        endTime=String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day);
+
         searchBnt=(Button)findViewById(R.id.search);
 
         searchBnt.setOnClickListener(new View.OnClickListener() {

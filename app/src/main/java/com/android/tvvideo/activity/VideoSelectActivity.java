@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -176,7 +177,12 @@ public class VideoSelectActivity extends BaseActivity {
 
                     gridAdapter.notifyDataSetChanged();
 
-                    gridView.clearFocus();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            listView.requestFocus();
+                        }
+                    },500);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

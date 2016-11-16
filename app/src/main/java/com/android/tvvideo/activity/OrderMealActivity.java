@@ -3,6 +3,7 @@ package com.android.tvvideo.activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -168,6 +169,13 @@ public class OrderMealActivity extends BaseActivity {
                     allTex.setText(String.valueOf(pageAll));
 
                     gridAdapter.notifyDataSetChanged();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            listView.requestFocus();
+                        }
+                    },500);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
