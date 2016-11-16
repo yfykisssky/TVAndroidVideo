@@ -206,7 +206,7 @@ public class TimeTaskService extends Service {
         try {
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            long checkTime=sdf.parse("2017-3-1 00:00:00").getTime();
+            long checkTime=sdf.parse("2017-1-1 00:00:00").getTime();
             if(checkTime<time){
                 throw new IllegalStateException("unknown error,restart again");
             }

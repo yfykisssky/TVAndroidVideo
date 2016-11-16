@@ -1,6 +1,7 @@
 package com.android.tvvideo.activity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -347,18 +348,43 @@ public class SatisfactionActivity extends BaseActivity {
 
                     case 0:
                         myHolder.radioGroup.check(R.id.radio1);
+                        myHolder.radioButton1.setBackgroundColor(Color.parseColor("#00FF00"));
+                        myHolder.radioButton2.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton3.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton4.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton5.setBackgroundColor(Color.TRANSPARENT);
                         break;
                     case 1:
                         myHolder.radioGroup.check(R.id.radio2);
+                        myHolder.radioButton1.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton2.setBackgroundColor(Color.parseColor("#00FF00"));
+                        myHolder.radioButton3.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton4.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton5.setBackgroundColor(Color.TRANSPARENT);
                         break;
                     case 2:
                         myHolder.radioGroup.check(R.id.radio3);
+                        myHolder.radioButton1.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton2.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton3.setBackgroundColor(Color.parseColor("#00FF00"));
+                        myHolder.radioButton4.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton5.setBackgroundColor(Color.TRANSPARENT);
                         break;
                     case 3:
                         myHolder.radioGroup.check(R.id.radio4);
+                        myHolder.radioButton1.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton2.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton3.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton4.setBackgroundColor(Color.parseColor("#00FF00"));
+                        myHolder.radioButton5.setBackgroundColor(Color.TRANSPARENT);
                         break;
                     case 4:
                         myHolder.radioGroup.check(R.id.radio5);
+                        myHolder.radioButton1.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton2.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton3.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton4.setBackgroundColor(Color.TRANSPARENT);
+                        myHolder.radioButton5.setBackgroundColor(Color.parseColor("#00FF00"));
                         break;
 
                 }
