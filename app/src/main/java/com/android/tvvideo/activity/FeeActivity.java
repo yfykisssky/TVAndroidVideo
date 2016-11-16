@@ -17,14 +17,17 @@ import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.SystemUtil;
-import com.android.tvvideo.view.TimeEditDialog;
+import com.android.tvvideo.view.TimeSelectDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.videolan.libvlc.VLCApplication;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,15 +132,35 @@ public class FeeActivity extends BaseActivity {
         });
 
 
+        Calendar calendar=VLCApplication.getInstance().getNowTime();
+
+        int year=SystemUtil.getYear(calendar);
+
+        int month=SystemUtil.getMonth(calendar);
+
+        int day=SystemUtil.getDay(calendar);
+
+
         startTimeBnt=(Button)findViewById(R.id.startTime);
 
         startTimeBnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                TimeEditDialog timeEditDialog=new TimeEditDialog(FeeActivity.this);
+                TimeSelectDialog timeSelectDialog=new TimeSelectDialog(FeeActivity.this);
 
-                timeEditDialog.setTimeChangeListener(new TimeEditDialog.TimeChangeListener() {
+                SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+
+                Calendar cal = Calendar.getInstance();
+                try {
+                    cal.setTime(ft.parse(startTime));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                timeSelectDialog.setNowTime(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH)+1,cal.get(Calendar.DAY_OF_MONTH));
+
+                timeSelectDialog.setTimeChangeListener(new TimeSelectDialog.TimeChangeListener() {
                     @Override
                     public void change(String date) {
                         startTime=date;
@@ -145,7 +168,7 @@ public class FeeActivity extends BaseActivity {
                     }
                 });
 
-                timeEditDialog.show();
+                timeSelectDialog.show();
 
             }
         });
@@ -156,9 +179,20 @@ public class FeeActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                TimeEditDialog timeEditDialog=new TimeEditDialog(FeeActivity.this);
+                TimeSelectDialog timeSelectDialog=new TimeSelectDialog(FeeActivity.this);
 
-                timeEditDialog.setTimeChangeListener(new TimeEditDialog.TimeChangeListener() {
+                SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+
+                Calendar cal = Calendar.getInstance();
+                try {
+                    cal.setTime(ft.parse(endTime));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                timeSelectDialog.setNowTime(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH)+1,cal.get(Calendar.DAY_OF_MONTH));
+
+                timeSelectDialog.setTimeChangeListener(new TimeSelectDialog.TimeChangeListener() {
                     @Override
                     public void change(String date) {
                         endTime=date;
@@ -166,10 +200,14 @@ public class FeeActivity extends BaseActivity {
                     }
                 });
 
-                timeEditDialog.show();
+                timeSelectDialog.show();
 
             }
         });
+
+        startTimeBnt.setText(String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day));
+
+        endTimeBnt.setText(String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day));
 
         searchBnt=(Button)findViewById(R.id.search);
 

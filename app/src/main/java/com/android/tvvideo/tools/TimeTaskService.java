@@ -195,6 +195,12 @@ public class TimeTaskService extends Service {
 
     }
 
+    public Calendar getNowTime(){
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(nowTime);
+        return calendar;
+    }
+
     private void checkTime(long time){
 
         try {

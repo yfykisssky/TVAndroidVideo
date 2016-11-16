@@ -271,6 +271,18 @@ public class SystemUtil {
         return false;
     }
 
+    public static int getYear(Calendar calendar){
+        return calendar.get(Calendar.YEAR);
+    }
+
+    public static int getMonth(Calendar calendar){
+        return calendar.get(Calendar.MONTH)+1;
+    }
+
+    public static int getDay(Calendar calendar){
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
 /*    public static boolean execCmd(String command) {
         Process process = null;
         DataOutputStream os = null;

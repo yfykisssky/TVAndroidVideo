@@ -43,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static com.android.tvvideo.base.BaseActivity.BROAD_CAST_ACTION_UI;
@@ -431,6 +432,11 @@ public class VLCApplication extends Application {
     public static Resources getAppResources()
     {
         return instance.getResources();
+    }
+
+    public Calendar getNowTime()
+    {
+        return timeTaskService.getNowTime();
     }
 
 }

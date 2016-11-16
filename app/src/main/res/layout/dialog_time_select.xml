@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="800px"
+    android:background="@drawable/bg_radius_transwhite"
+    android:layout_height="400px">
+    <LinearLayout
+        android:layout_marginTop="20px"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="700px"
+            android:layout_height="200px">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="200px"
+                android:layout_height="200px">
+                <Button
+                    android:id="@+id/year_up"
+                    android:background="@drawable/timebutton_selector_up"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="70px"
+                    android:layout_height="50px" />
+                <TextView
+                    android:textSize="50px"
+                    android:textColor="#000000"
+                    android:gravity="center"
+                    android:text="2016"
+                    android:id="@+id/year"
+                    android:imeOptions="actionDone"
+                    android:layout_width="match_parent"
+                    android:layout_height="100px" />
+                <Button
+                    android:id="@+id/year_down"
+                    android:background="@drawable/timebutton_selector_down"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="70px"
+                    android:layout_height="50px" />
+            </LinearLayout>
+            <TextView
+                android:gravity="center"
+                android:textColor="#000000"
+                android:text="年"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="200px"
+                android:layout_height="200px">
+                <Button
+                    android:id="@+id/month_up"
+                    android:background="@drawable/timebutton_selector_up"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="70px"
+                    android:layout_height="50px" />
+                <TextView
+                    android:textColor="#000000"
+                    android:gravity="center"
+                    android:text="2016"
+                    android:textSize="50px"
+                    android:id="@+id/month"
+                    android:imeOptions="actionDone"
+                    android:layout_width="match_parent"
+                    android:layout_height="100px" />
+                <Button
+                    android:id="@+id/month_down"
+                    android:background="@drawable/timebutton_selector_down"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="70px"
+                    android:layout_height="50px" />
+            </LinearLayout>
+            <TextView
+                android:gravity="center"
+                android:textColor="#000000"
+                android:text="月"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"  />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="200px"
+                android:layout_height="200px">
+                <Button
+                    android:id="@+id/day_up"
+                    android:background="@drawable/timebutton_selector_up"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="70px"
+                    android:layout_height="50px" />
+                <TextView
+                    android:textColor="#000000"
+                    android:gravity="center"
+                    android:text="2016"
+                    android:textSize="50px"
+                    android:id="@+id/day"
+                    android:imeOptions="actionDone"
+                    android:layout_width="match_parent"
+                    android:layout_height="100px" />
+                <Button
+                    android:id="@+id/day_down"
+                    android:background="@drawable/timebutton_selector_down"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="70px"
+                    android:layout_height="50px" />
+            </LinearLayout>
+            <TextView
+                android:gravity="center"
+                android:textColor="#000000"
+                android:text="日"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"  />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="40px"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="100px">
+            <Button
+                android:text="确认"
+                android:background="@drawable/button_selector_gray"
+                android:nextFocusRight="@+id/cancel"
+                android:id="@+id/ok"
+                android:layout_width="200px"
+                android:layout_height="match_parent" />
+            <Button
+                android:background="@drawable/button_selector_gray"
+                android:layout_marginLeft="100px"
+                android:text="取消"
+                android:nextFocusLeft="@+id/ok"
+                android:id="@+id/cancel"
+                android:layout_width="200px"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
