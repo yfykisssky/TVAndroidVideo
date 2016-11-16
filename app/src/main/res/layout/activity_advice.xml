@@ -102,7 +102,7 @@
                 android:textColor="#FFFFFF"
                 android:layout_marginLeft="10px"
                 android:layout_gravity="center_vertical"
-                android:text="收费项目名称"
+                android:text="医嘱项目名称"
                 android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />

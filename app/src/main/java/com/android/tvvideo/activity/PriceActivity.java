@@ -126,6 +126,8 @@ public class PriceActivity extends BaseActivity {
 
         searchEdit=(EditText)findViewById(R.id.data);
 
+        searchEdit.setFocusable(true);
+
         searchBnt=(Button)findViewById(R.id.search);
 
         searchBnt.setOnClickListener(new View.OnClickListener() {
