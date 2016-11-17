@@ -113,7 +113,6 @@ public class AdviceActivity extends BaseActivity {
                             map.put("name",jsonObject.getString("name"));
                             map.put("use",jsonObject.getString("use"));
                             map.put("usetime",jsonObject.getString("usetime"));
-                            map.put("unit",jsonObject.getString("unit"));
                             map.put("usequlaty",jsonObject.getString("usequlaty"));
                             map.put("useunit",jsonObject.getString("useunit"));
 
