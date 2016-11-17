@@ -74,8 +74,6 @@ public class AdviceActivity extends BaseActivity {
 
         initView();
 
-        searchData();
-
     }
 
     private void searchData() {
@@ -87,6 +85,7 @@ public class AdviceActivity extends BaseActivity {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
             postData.put("hospitalId", VLCApplication.getInstance().getPatientNum());
             postData.put("mobile",VLCApplication.getInstance().getPatientPhoneNum());
+            postData.put("searchdata",searchEdit.getText().toString());
 
             new NetDataTool(this).sendPost(NetDataConstants.GET_ADVICE,postData.toString(),new NetDataTool.IResponse() {
                 @Override

@@ -154,6 +154,7 @@ public class PriceActivity extends BaseActivity {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
             postData.put("hospitalId", VLCApplication.getInstance().getPatientNum());
             postData.put("mobile",VLCApplication.getInstance().getPatientPhoneNum());
+            postData.put("searchdata",searchEdit.getText().toString());
 
             new NetDataTool(this).sendPost(NetDataConstants.SEARCH_PRICE,postData.toString(),new NetDataTool.IResponse() {
                 @Override

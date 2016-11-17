@@ -83,8 +83,6 @@ public class FeeActivity extends BaseActivity {
 
         initView();
 
-        searchData();
-
     }
 
     private void initView() {
@@ -315,6 +313,8 @@ public class FeeActivity extends BaseActivity {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
             postData.put("hospitalId", VLCApplication.getInstance().getPatientNum());
             postData.put("mobile",VLCApplication.getInstance().getPatientPhoneNum());
+            postData.put("starttime",startTime);
+            postData.put("endtime",endTime);
 
             new NetDataTool(this).sendPost(NetDataConstants.GET_FEE,postData.toString(),new NetDataTool.IResponse() {
                 @Override
