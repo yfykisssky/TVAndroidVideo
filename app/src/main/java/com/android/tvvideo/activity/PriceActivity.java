@@ -75,8 +75,8 @@ public class PriceActivity extends BaseActivity {
 
         initView();
 
-    }
 
+    }
 
     private void initView() {
 
@@ -187,6 +187,8 @@ public class PriceActivity extends BaseActivity {
                             listAllData.add(map);
 
                         }
+
+                        listData=getIndexPageData(pageIndex,pageSize);
 
                         listAdapter.notifyDataSetChanged();
 
