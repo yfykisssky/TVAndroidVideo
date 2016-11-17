@@ -22,7 +22,6 @@ import com.android.tvvideo.view.SmoothGridView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.videolan.libvlc.VLCApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,8 +139,8 @@ public class ComplainActivity extends BaseActivity {
         JSONObject postData=new JSONObject();
         try {
             postData.put("ipaddress", SystemUtil.getLocalHostIp());
-            postData.put("hospitalId", VLCApplication.getInstance().getPatientNum());
-            postData.put("mobile", VLCApplication.getInstance().getPatientPhoneNum());
+        /*    postData.put("hospitalId", VLCApplication.getInstance().getPatientNum());
+            postData.put("mobile", VLCApplication.getInstance().getPatientPhoneNum());*/
 
             new NetDataTool(this).sendPost(NetDataConstants.GET_COMPLAIN_LIST,postData.toString(), new NetDataTool.IResponse() {
                 @Override
