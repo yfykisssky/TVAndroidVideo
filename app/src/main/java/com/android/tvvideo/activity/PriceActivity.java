@@ -180,7 +180,7 @@ public class PriceActivity extends BaseActivity {
 
                             map.put("kind",jsonObject.getString("kind"));
                             map.put("name",jsonObject.getString("name"));
-                            map.put("safestkind",jsonObject.getString("safestkind"));
+                            map.put("safestkind",jsonObject.getString("number"));
                             map.put("unit",jsonObject.getString("unit"));
                             map.put("price",jsonObject.getString("price"));
 
