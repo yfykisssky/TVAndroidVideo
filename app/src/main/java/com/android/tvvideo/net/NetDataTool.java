@@ -49,11 +49,11 @@ public class NetDataTool {
 
     }
 
-    final static int CONNECT_TIME_OUT=5;
+    final static int CONNECT_TIME_OUT=60;
 
-    final static int WRITE_TIME_OUT=5;
+    final static int WRITE_TIME_OUT=60;
 
-    final static int READ_TIME_OUT=5;
+    final static int READ_TIME_OUT=60;
 
     public NetDataTool(Context context){
 
