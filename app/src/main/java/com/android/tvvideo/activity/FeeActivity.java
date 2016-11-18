@@ -217,8 +217,27 @@ public class FeeActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                if(TextUtils.isEmpty(startTime)||TextUtils.isEmpty(endTime)){
-                    showToast("时间不能为空");
+                SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+
+                Calendar cal = Calendar.getInstance();
+                try {
+                    cal.setTime(ft.parse(startTime));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                long start=cal.getTimeInMillis();
+
+                try {
+                    cal.setTime(ft.parse(endTime));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                long end=cal.getTimeInMillis();
+
+                if(end<start){
+                    showToast("时间设置错误");
                 }else{
                     searchData();
                 }
