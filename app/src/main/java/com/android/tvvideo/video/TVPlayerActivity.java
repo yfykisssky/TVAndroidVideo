@@ -40,9 +40,9 @@ import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ImageLoad;
 import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.tools.TimerTaskHelper;
-import com.android.tvvideo.view.LoadingDialog;
 import com.android.tvvideo.view.MarqueeText;
 import com.android.tvvideo.view.ScrollRelativeLayout;
+import com.android.tvvideo.view.page.TVLoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -846,7 +846,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         }
     }
 
-    private LoadingDialog loadingDialog;
+    private TVLoadingDialog loadingDialog;
     private void startLoading() {
         loadingDialog.show();
     }
@@ -899,7 +899,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         mSettings = PreferenceManager.getDefaultSharedPreferences(this);
 
-        loadingDialog=new LoadingDialog(this);
+        loadingDialog=new TVLoadingDialog(this);
 
         mSurface = (SurfaceView) findViewById(R.id.player_surface);
         mSurfaceFrame = (FrameLayout) findViewById(R.id.player_surface_frame);
