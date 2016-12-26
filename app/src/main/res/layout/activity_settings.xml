@@ -99,6 +99,7 @@
             android:layout_height="100px" />
 
         <Button
+            android:visibility="gone"
             android:layout_marginTop="10px"
             android:background="@drawable/button_selector"
             android:textColor="#FFFFFF"
