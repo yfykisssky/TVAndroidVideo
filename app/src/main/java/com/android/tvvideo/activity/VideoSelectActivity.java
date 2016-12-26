@@ -162,7 +162,7 @@ public class VideoSelectActivity extends BaseActivity {
                         videoModel.setTitle(jsonObject.getString("name"));
                         videoModel.setRemark(jsonObject.getString("remark"));
                         videoModel.setVideoUrl(jsonObject.getString("videoPath"));
-                        //videoModel.setVideoId(jsonObject.getString("id"));
+                        videoModel.setVideoId(jsonObject.getString("id"));
 
                         gridAllData.add(videoModel);
 
@@ -302,7 +302,7 @@ public class VideoSelectActivity extends BaseActivity {
 
                 String url=gridData.get(i).getVideoUrl();
 
-                //sendStatistical(gridData.get(i).getVideoId());
+                sendStatistical(gridData.get(i).getVideoId());
 
                 Intent intent=new Intent(VideoSelectActivity.this,VideoPlayerActivity.class);
 

@@ -1,13 +1,11 @@
 package com.android.tvvideo.tools;
 
 import android.app.ActivityManager;
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -22,6 +20,7 @@ import android.widget.TextView;
 
 import com.android.tvvideo.net.NetDataConstants;
 import com.android.tvvideo.view.ShutDownDialog;
+import com.jamdeo.tv.AudioManager;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -238,7 +237,7 @@ public class SystemUtil {
 
     }
 
-    public static int getMaxVolume(Context context){
+  /*  public static int getMaxVolume(Context context){
         AudioManager audio=(AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
         return audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
     }
@@ -251,6 +250,19 @@ public class SystemUtil {
     public static void setCurrentVolume(int tempVolume, Context context){
         AudioManager audio=(AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
         audio.setStreamVolume(AudioManager.STREAM_MUSIC, tempVolume, 0);
+    }
+*/
+
+    public static int getMaxVolume(Context context){
+        return 100;
+    }
+
+    public static int getCurrentVolume(AudioManager audio){
+        return audio.getVolume();
+    }
+
+    public static void setCurrentVolume(int tempVolume,AudioManager audio){
+        audio.setVolume(tempVolume);
     }
 
     public static boolean isTopActivity(Context context, String className)

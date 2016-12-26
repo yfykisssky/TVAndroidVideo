@@ -2,23 +2,14 @@ package com.android.tvvideo.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
-import com.android.tvvideo.net.NetDataConstants;
-import com.android.tvvideo.net.NetDataTool;
 import com.android.tvvideo.tools.ShaPreHelper;
-import com.android.tvvideo.tools.SystemUtil;
-
-import org.videolan.libvlc.VLCApplication;
 
 
 /**
@@ -45,14 +36,14 @@ public class TestActivity extends BaseActivity {
         writeSettings();
 
         setContentView(R.layout.activity_test);
-
-        VLCApplication.getInstance().initPushService();
+/*
+        VLCApplication.getInstance().initPushService();*/
 /*
         ComplainDialog complainDialog=new ComplainDialog(this);
 
         complainDialog.show();*/
 
-        new NetDataTool(this).sendGet(NetDataConstants.GET_SYS_TIME, new NetDataTool.IResponse() {
+      /*  new NetDataTool(this).sendGet(NetDataConstants.GET_SYS_TIME, new NetDataTool.IResponse() {
 
             @Override
             public void onSuccess(String data) {
@@ -82,7 +73,7 @@ public class TestActivity extends BaseActivity {
                 //Toast.makeText(StartActivity.this,error,Toast.LENGTH_LONG).show();
 
             }
-        });
+        });*/
 
 
 
@@ -93,10 +84,6 @@ public class TestActivity extends BaseActivity {
 
         //VLCApplication.getInstance().initPushService();
 
-        Log.e("url", SystemUtil.getServerAdPath(this));
-
-        Log.e("url",String.valueOf((((double)Integer.parseInt("20")/100))));
-
         ((EditText)findViewById(R.id.url)).setText("rtsp://218.204.223.237:554/live/1/67A7572844E51A64/f68g2mj7wjua3la7.ts");
 
         //((EditText)findViewById(R.id.url)).setText("http://bbs.tvhuan.com/");
@@ -105,8 +92,6 @@ public class TestActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 String data=((EditText)findViewById(R.id.url)).getText().toString();
-
-                Uri uri= Uri.parse(data);
 
                 Intent intent=new Intent(TestActivity.this, HomeActivity.class);
 

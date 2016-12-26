@@ -37,6 +37,8 @@ import com.android.tvvideo.tools.PushService;
 import com.android.tvvideo.tools.SystemUtil;
 import com.android.tvvideo.tools.TimeTaskService;
 import com.android.tvvideo.tools.TimerTaskHelper;
+import com.jamdeo.tv.AudioManager;
+import com.jamdeo.tv.TvManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,7 +72,11 @@ public class VLCApplication extends Application {
 
     TimeTaskService timeTaskService;
 
+    AudioManager audio;
+
     private void initAll(){
+
+        audio= TvManager.getInstance().getAudioManager(this);
 
         initTimeService();
 
@@ -88,6 +94,14 @@ public class VLCApplication extends Application {
 
         registerPushReceiver();
 
+    }
+
+    public AudioManager getAudio() {
+        return audio;
+    }
+
+    public void disConnectAudio(){
+        audio.disConnect();
     }
 
     public String getPatientNum() {
@@ -300,9 +314,9 @@ public class VLCApplication extends Application {
 
         int volume= (int)(SystemUtil.getMaxVolume(this)*percent);
 
-        if(SystemUtil.getCurrentVolume(this)>volume){
+        if(SystemUtil.getCurrentVolume(audio)>volume){
 
-            SystemUtil.setCurrentVolume(volume,this);
+            SystemUtil.setCurrentVolume(volume,audio);
 
         }
 

@@ -83,7 +83,11 @@ public class BaseActivity extends Activity {
                         }
                         break;
                     case "playvideo":
-                        playVideo(jsonObject.getString("data"));
+
+                        if((!activityName.equals("TVPlayerActivity"))&&(!activityName.equals("VideoPlayerActivity"))){
+                            playVideo(jsonObject.getString("data"));
+                        }
+
                         break;
                     case "shutdown":
                         if(SystemUtil.isTopActivity(BaseActivity.this,activityName)) {
@@ -184,22 +188,14 @@ public class BaseActivity extends Activity {
                     return false;
                 }
 
-                if (SystemUtil.getCurrentVolume(this) < (SystemUtil.getMaxVolume(this)*maxVolumePercent)) {
-                    audio.adjustStreamVolume(
-                            AudioManager.STREAM_MUSIC,
-                            AudioManager.ADJUST_RAISE,
-                            AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
-
+                if (SystemUtil.getCurrentVolume(VLCApplication.getInstance().getAudio()) < (SystemUtil.getMaxVolume(this)*maxVolumePercent)) {
+                    return false;
                 }
 
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                audio.adjustStreamVolume(
-                        AudioManager.STREAM_MUSIC,
-                        AudioManager.ADJUST_LOWER,
-                        AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
 
-                return true;
+                return false;
             default:
                 break;
         }
