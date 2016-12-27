@@ -374,11 +374,9 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                 if(startOrEnd){
 
-                    int indexNew=index/2;
+                    if(adData.size()>index){
 
-                    if(adData.size()>indexNew){
-
-                        showAd(adData.get(indexNew));
+                        showAd(adData.get(index));
 
                     }
 
@@ -453,11 +451,9 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
                 if(startOrEnd){
 
-                    int indexNew=index/2;
+                    if(msgTex.size()>index){
 
-                    if(msgTex.size()>indexNew){
-
-                        showMsg(msgTex.get(indexNew));
+                        showMsg(msgTex.get(index));
                     }
 
                 }else{
