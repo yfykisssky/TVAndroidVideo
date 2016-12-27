@@ -43,6 +43,7 @@ import com.android.tvvideo.tools.TimerTaskHelper;
 import com.android.tvvideo.view.MarqueeText;
 import com.android.tvvideo.view.ScrollRelativeLayout;
 import com.android.tvvideo.view.page.TVLoadingDialog;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,6 +64,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.android.tvvideo.R.id.img;
 import static com.android.tvvideo.R.id.index;
 
 /**
@@ -402,7 +404,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         String url=SystemUtil.getServerAdPath(this)+adUrl;
 
-        ImageLoad.loadImage(url,adView);
+        Glide.with(this).load(url).centerCrop().placeholder(R.drawable.load_ing).crossFade().into(adView);
 
         adView.setVisibility(View.VISIBLE);
     }
@@ -734,7 +736,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                 view = LayoutInflater.from(context).inflate(R.layout.item_tv_list, null);
                 myHolder = new MyHolder();
                 myHolder.indexTex = (TextView) view.findViewById(index);
-                myHolder.img = (ImageView) view.findViewById(R.id.img);
+                myHolder.img = (ImageView) view.findViewById(img);
                 view.setTag(myHolder);
             } else {
                 myHolder = (MyHolder)view.getTag();
