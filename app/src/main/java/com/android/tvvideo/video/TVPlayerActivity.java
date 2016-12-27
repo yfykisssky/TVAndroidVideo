@@ -475,14 +475,15 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     private void showMsg(String msgData){
 
-        showMsgTex.setShowText(msgData);
-
-        showMsgTex.startFor0();
+        showMsgTex.startFor0(msgData);
 
         showMsgTex.setVisibility(View.VISIBLE);
+
     }
 
     private void hideMsg(){
+
+        showMsgTex.stopScroll();
 
         showMsgTex.setVisibility(View.GONE);
 

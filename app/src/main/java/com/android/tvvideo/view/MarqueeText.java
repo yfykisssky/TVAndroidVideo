@@ -47,7 +47,7 @@ public class MarqueeText extends TextView implements Runnable {
 
     }
 
-    public void setShowText(String text) {
+    private void setShowText(String text) {
         super.setText(text,BufferType.NORMAL);
 
         this.text=text;
@@ -108,9 +108,10 @@ public class MarqueeText extends TextView implements Runnable {
 
     public void stopScroll() {
         isStop = true;
+        setShowText("");
     }
 
-    public void startFor0() {
+    public void startFor0(final String text) {
 
         this.measure(0,0);
 
@@ -120,11 +121,14 @@ public class MarqueeText extends TextView implements Runnable {
             @Override
             public void run() {
 
-                MarqueeText.this.setVisibility(View.VISIBLE);
-
                 scrollTo(-width,0);
+
+                MarqueeText.this.setVisibility(View.VISIBLE);
+                MarqueeText.this.setShowText(text);
+
                 currentScrollX = -width;
                 startScroll();
+
             }
         },100);
 
