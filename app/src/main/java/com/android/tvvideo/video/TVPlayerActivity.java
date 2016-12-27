@@ -391,8 +391,12 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     }
 
+    private boolean isAdShow=false;
+
 
     private void showAd(String adUrl){
+
+        isAdShow=true;
 
         if(TextUtils.isEmpty(adUrl)){
             return;
@@ -436,6 +440,8 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
     }
 
     private void hideAd(){
+
+        isAdShow=false;
 
         hideAdFrameLocation();
 
@@ -1071,6 +1077,9 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
                 case SHOW_PROGRESS:
                     break;
                 case SURFACE_SIZE:
+                    if(activity.isAdShow){
+                        activity.mVideoVisibleWidth=activity.mSurfaceFrame.getWidth();
+                    }
                     activity.changeSurfaceSize();
                     break;
                 case FADE_OUT_INFO:
