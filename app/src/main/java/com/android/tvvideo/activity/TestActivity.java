@@ -10,6 +10,7 @@ import android.widget.EditText;
 import com.android.tvvideo.R;
 import com.android.tvvideo.base.BaseActivity;
 import com.android.tvvideo.tools.ShaPreHelper;
+import com.android.tvvideo.video.TVPlayerActivity;
 
 
 /**
@@ -93,7 +94,7 @@ public class TestActivity extends BaseActivity {
             public void onClick(View view) {
                 String data=((EditText)findViewById(R.id.url)).getText().toString();
 
-                Intent intent=new Intent(TestActivity.this, HomeActivity.class);
+                Intent intent=new Intent(TestActivity.this,TVPlayerActivity.class);
 
                 intent.putExtra("data",data);
 

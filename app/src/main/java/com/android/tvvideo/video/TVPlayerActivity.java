@@ -110,7 +110,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
     RelativeLayout playRelative;
 
-    final int CHANGE_WIDTH=1440;
+    int CHANGE_WIDTH=0;
 
     String playUrl;
 
@@ -123,6 +123,8 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         super.setActivityName(this.getClass().getName());
 
         setContentView(R.layout.activity_tvplayer);
+
+        CHANGE_WIDTH=SystemUtil.getWindowWidth(this)-480;
 
         initVideoView();
 
@@ -421,7 +423,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         mSurfaceFrame.setLayoutParams(layoutParams);
 
-        mCurrentSize = SURFACE_BEST_FIT;
+        mCurrentSize = SURFACE_FILL;
         setSurfaceSize(mSurfaceFrame.getWidth(),mSurfaceFrame.getHeight(),mSurfaceFrame.getWidth(),mSurfaceFrame.getHeight(),1,1);
     }
 
@@ -435,7 +437,7 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         mSurfaceFrame.setLayoutParams(layoutParams);
 
-        mCurrentSize = SURFACE_BEST_FIT;
+        mCurrentSize = SURFACE_FILL;
         setSurfaceSize(mSurfaceFrame.getWidth(),mSurfaceFrame.getHeight(),mSurfaceFrame.getWidth(),mSurfaceFrame.getHeight(),1,1);
     }
 
@@ -1108,7 +1110,8 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
         int sh;
 
         // get screen size
-        sw = getWindow().getDecorView().getWidth();
+        //sw = getWindow().getDecorView().getWidth();
+        sw=mSurfaceFrame.getWidth();
         sh = getWindow().getDecorView().getHeight();
 
         double dw = sw, dh = sh;
@@ -1191,8 +1194,11 @@ public class TVPlayerActivity extends BaseActivity implements IVideoPlayer{
 
         // set display size
         ViewGroup.LayoutParams lp = surface.getLayoutParams();
-        lp.width  = (int) Math.ceil(dw * mVideoWidth / mVideoVisibleWidth);
-        lp.height = (int) Math.ceil(dh * mVideoHeight / mVideoVisibleHeight);
+        //lp.width  = (int) Math.ceil(dw * mVideoWidth / mVideoVisibleWidth);
+        //lp.height = (int) Math.ceil(dh * mVideoHeight / mVideoVisibleHeight);
+
+        lp.width  = (int) Math.ceil(dw);
+        lp.height = (int) Math.ceil(dh);
         surface.setLayoutParams(lp);
 
         // set frame size (crop if necessary)
