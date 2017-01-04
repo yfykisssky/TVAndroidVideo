@@ -97,6 +97,7 @@ public class MarqueeText extends TextView implements Runnable {
             currentScrollX = -width;
         }
 
+        //数字越小,滚动越快
         postDelayed(this, 15);
     }
 
